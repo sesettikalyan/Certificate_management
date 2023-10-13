@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 export default function Principal() {
     const now = new Date();
@@ -42,22 +41,36 @@ export default function Principal() {
                     <AiOutlineSearch className="text-2xl" />
                 </div>
 
-                <div className="w-[100%]  my-3 flex flex-wrap mx-auto justify-between items-center">
-                    <div className="w-[160px] h-[160px] mx-2 shadow-sm shadow-[#000000] my-8 flex flex-col items-center justify-center rounded-lg bg-white">
-
-                    </div>
-                    <div className="w-[160px] h-[160px] mx-2 shadow-sm shadow-[#000000] my-8 flex flex-col items-center justify-center rounded-lg bg-white">
-
-                    </div>
-                    <div className="w-[160px] h-[160px] mx-2 shadow-sm shadow-[#000000] my-8 flex flex-col items-center justify-center rounded-lg bg-white">
-
-                    </div>
-                    <div className="w-[160px] h-[160px] mx-2 shadow-sm shadow-[#000000] my-8 flex flex-col items-center justify-center rounded-lg bg-white">
-
-                    </div>
-                </div>
 
             </div>
+            <div className="w-[100%]  my-3 flex flex-wrap mx-auto justify-between items-center">
+                    <div className="w-[45%] h-[200px] mx-auto pl-4 shadow-md shadow-[#000000] my-5 flex flex-col items-start py-2  rounded-lg bg-white">
+                        <div  className="w-16 h-16 rounded-full bg-secondary my-1"  > </div>
+                        <h1 className="text-lg pb-1">Mechanical Engineering</h1>
+                        <p className="text-base  text-secondary">Total Staff : 34</p>
+                        <p className="text-base pb-1 text-green-400">Total Students : 134</p>
+                    </div>
+                    <div className="w-[45%] h-[200px] mx-auto pl-4 shadow-md  shadow-[#000000] my-5 flex flex-col items-start py-2  rounded-lg bg-white">
+                        <div  className="w-16 h-16 rounded-full bg-secondary my-1"  > </div>
+                        <h1 className="text-lg pb-1">Electrical Engineering</h1>
+                        <p className="text-base  text-secondary">Total Staff : 34</p>
+                        <p className="text-base pb-1 text-green-400">Total Students : 134</p>
+                    </div>
+                    <div className="w-[45%] h-[200px] mx-auto pl-4 shadow-md shadow-[#000000] my-5 flex flex-col items-start py-2  rounded-lg bg-white">
+                        <div  className="w-16 h-16 rounded-full bg-secondary
+                        my-1"  > </div>
+                        <h1 className="text-lg pb-1">Electronics Engineering</h1>
+                        <p className="text-base  text-secondary">Total Staff : 34</p>
+                        <p className="text-base pb-1 text-green-400">Total Students : 134</p>
+                    </div>
+                    <div className="w-[45%]  h-[200px] mx-auto pl-4 shadow-md shadow-[#000000] my-5 flex flex-col items-start py-2  rounded-lg bg-white">
+                        <div  className="w-16 h-16 rounded-full bg-secondary my-1"  > </div>
+                        <h1 className="text-lg pb-1 ">Civil Engineering</h1>
+                        <p className="text-base  text-secondary">Total Staff : 34</p>
+                        <p className="text-base pb-1 text-green-400">Total Students : 134</p>
+                    </div>
+                    
+                </div>
         </div>
     );
 }
