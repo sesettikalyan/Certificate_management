@@ -17,7 +17,7 @@ export default function Login() {
                 <br />
                     <p className='text-white mt-5 ml-3'>Password</p>
                 <input className='px-20 py-4 rounded-full' type="password" />
-                <link rel="stylesheet" href="" />
+                {/* <link rel="stylesheet" href="" /> */}
                  <p className='text-white ml-auto mr-3 mt-3 mb-2'>Forgot Password ?</p>
                 <button className='px-20 py-4 rounded-full text-white border-[1px] mt-10 border-white' >Login</button>
             </form>
