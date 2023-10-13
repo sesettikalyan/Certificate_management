@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+// import App from './App';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import HomePage from './components/category';
 import Login from './components/login';
 import Branch from './components/branch';
+import Studentview from './components/studentview';
+import Principal from './components/Principal';
+import StaffApproval from './components/staffApproval';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,6 +19,10 @@ root.render(
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/branch" element={<Branch />} />
+        <Route path="/studentview" element={<Studentview />} />
+        <Route path="/principal" element={<Principal />} />
+        <Route path="/staff/:id" element={<StaffApproval />} />
+
       </Routes>
     </BrowserRouter>
     {/* <App /> */}
