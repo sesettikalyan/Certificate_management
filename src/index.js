@@ -6,13 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import HomePage from './components/category';
 import Login from './components/login';
-import Branch from './components/branch';
+// import Branch from './components/branch';
 import Studentview from './components/studentview';
 import Principal from './components/Principal';
 import StaffApproval from './components/staffApproval';
-import Mech from './components/mech';
-import Electrical from './components/electrical';
-import Civil from './components/civil';
+import BranchDetails from './components/branchDetails';
+// import Electrical from './components/electrical';
+// import Civil from './components/civil';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,10 +21,10 @@ root.render(
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/ece" element={<Branch />} />
-        <Route path="/mech" element={<Mech />} />
-        <Route path="/electrical" element={<Electrical />} />
-        <Route path="/civil" element={<Civil />} />
+        {/* <Route path="/ece" element={<Branch />} /> */}
+        <Route path="/:branch" element={<BranchDetails />} />
+        {/* <Route path="/electrical" element={<Electrical />} /> */}
+        {/* <Route path="/civil" element={<Civil />} /> */}
         <Route path="/studentview" element={<Studentview />} />
         <Route path="/principal" element={<Principal />} />
         <Route path="/staff/:id" element={<StaffApproval />} />

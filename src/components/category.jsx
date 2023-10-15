@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import { PiStudentDuotone } from "react-icons/pi";
 import { GiTeacher } from "react-icons/gi";
+import { useNavigate } from "react-router-dom";
 
 
 export default function HomePage() {
@@ -32,6 +33,12 @@ export function Home() {
 }
 
 export function Category() {
+    const navigate = useNavigate();
+
+    const goToLogin = () => {
+        navigate("/login");
+    }
+
     return (
         <div className="flex flex-col w-[100%]  h-screen items-center " >
             <div className="h-[30%] mt-[10%] md:mt-[2%]">
@@ -42,23 +49,25 @@ export function Category() {
                 <h1 className="text-3xl text-center py-2 text-white">Select User Type</h1>
 
                 <div className="flex flex-wrap items-center my-6  justify-center">
-                    <div className="w-[120px] h-[120px] mx-4  my-10 flex flex-col items-center justify-center bg-white">
+                    <div className="w-[120px] h-[120px] mx-4  my-10 flex flex-col items-center justify-center bg-white" onClick={goToLogin} >
+                        <h1 className="text-base ">Principal</h1>
 
 
 
                     </div>
-                    <div className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
+                    <div onClick={goToLogin} className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
+                        <h1 className="text-base ">Hod</h1>
 
 
 
                     </div>
-                    <div className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
+                    <div onClick={goToLogin} className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
                         <GiTeacher className="text-6xl my-1 text-black" />
                         <h1 className="text-base ">Staff</h1>
 
 
                     </div>
-                    <div className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
+                    <div onClick={goToLogin} className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
 
                         <PiStudentDuotone className="text-6xl my-1 text-black" />
                         <h1 className="text-base ">Student</h1>
