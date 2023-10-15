@@ -10,6 +10,9 @@ import Branch from './components/branch';
 import Studentview from './components/studentview';
 import Principal from './components/Principal';
 import StaffApproval from './components/staffApproval';
+import Mech from './components/mech';
+import Electrical from './components/electrical';
+import Civil from './components/civil';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,7 +21,10 @@ root.render(
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/branch" element={<Branch />} />
+        <Route path="/ece" element={<Branch />} />
+        <Route path="/mech" element={<Mech />} />
+        <Route path="/electrical" element={<Electrical />} />
+        <Route path="/civil" element={<Civil />} />
         <Route path="/studentview" element={<Studentview />} />
         <Route path="/principal" element={<Principal />} />
         <Route path="/staff/:id" element={<StaffApproval />} />
