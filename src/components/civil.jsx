@@ -3,7 +3,7 @@ import { FaSearch } from 'react-icons/fa';
 import { IoMdAddCircle } from 'react-icons/io';
 import { Lectures } from '../helpers/lectures';
 import { MdArrowForwardIos } from 'react-icons/md';
-import { StudentList, students } from '../helpers/StudentList';
+import { CivilStudents } from '../helpers/civilStudents';
 
 export default function Branch() {
     return (
@@ -11,7 +11,7 @@ export default function Branch() {
         <div className='w-[100%] h-screen flex flex-col'>
             <div className='w-[90%] mx-auto pt-6 flex items-center'>
                 <MdArrowBackIosNew />
-                <h2 className='mx-1 text-lg '>Electronics</h2>
+                <h2 className='mx-1 text-lg '>Civil</h2>
             </div>
             <div className='px-4 relative w-[85%]'>
                 <input className='mt-4 border-blue-400 border-[1px] rounded-full w-96 pl-14 py-6 h-10 pr-10' type="Search" placeholder='Search' />
@@ -30,7 +30,7 @@ export default function Branch() {
                 </div>
                 <div className='mt-4'>
                 <div className="flex overflow-x-auto mx-4 mt-2 pb-4">
-                        {Lectures.ece.map((lecture, index) => (
+                        {Lectures.civil.map((lecture, index) => (
                             <div key={index} className="items-center space-x-8">
                                 <div className="w-20 h-20 rounded-full mx-4 overflow-hidden">
                                     <img src={lecture.img} alt="" className="w-full h-full object-cover" />
@@ -49,7 +49,7 @@ export default function Branch() {
             <div className="flex justify-between my-5">
             <h1 className="text-3xl text-blue-900 font-semibold ml-6">Students</h1>
             </div>
-            {StudentList.map((student) => (
+            {CivilStudents.map((student) => (
                 <div key={student.id} className="flex items-center border-b-2 border-gray-300 justify-between py-2 px-8 ">
                     <div className="flex">
                         <img src={student.image} alt={`${student.name} Image`} className="w-16 h-16 rounded-full object-cover" />
