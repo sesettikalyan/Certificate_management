@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function LecturerView() {
     const [editForm, setEditForm] = useState(false);
+    const [deleteForm,setDeleteForm] = useState(false);
     const navigate = useNavigate();
     const { branch, id } = useParams();
     const selectedBranch = Branches.find((branchname) => branchname.name === branch);
@@ -42,7 +43,7 @@ export default function LecturerView() {
                 <button className="flex items-center  text-lg" onClick={goBack} ><AiOutlineLeft className="mr-1" /> Back</button>
                 <div className='w-[25%] flex justify-between items-center'>
                     <button onClick={() => setEditForm(true)} className='w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center'> <MdOutlineEdit /></button>
-                    <button className='w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center'> <MdDeleteOutline /></button>
+                    <button onClick={() => setDeleteForm(true)} className='w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center'> <MdDeleteOutline /></button>
                 </div>
             </div>
             <img src={selectedLecturer?.image} className=" my-6 w-48 h-52 rounded-lg object-cover" alt="" />
@@ -118,6 +119,25 @@ export default function LecturerView() {
 
                         </div>
                     ) : null
+            }
+
+            {
+                deleteForm ?
+                (
+                    <div className="fixed inset-0  w-[80%] m-auto h-[20%] flex flex-col z-50 py-4 px-2 rounded-2xl items-center  bg-primary">
+                        <h1 className="text-center text-2xl text-white">Confirm to delete</h1>
+                        <p className="text-white pt-1 text-2xl">{selectedLecturer?.teacher}</p>
+                        {/* <AiOutlineClose onClick={() => setDeleteForm(false)} className="absolute text-white text-2xl cursor-pointer right-2 top-4" /> */}
+                        <div className="w-[90%] mx-auto flex my-3  justify-between items-center" >
+                            <button onClick={() => setDeleteForm(false)} className="flex w-[40%] mx-auto text-xl justify-between bg-black rounded-lg  text-white items-center p-2">Cancel<AiOutlineClose className="mx-1"/></button>
+                            <button className="flex w-[40%] mx-auto text-xl justify-between bg-black rounded-lg text-white items-center p-2">Delete<MdDeleteOutline className="mx-1"/></button>
+
+                        </div>
+
+                    </div>
+                )
+                :
+                null
             }
 
         </div >

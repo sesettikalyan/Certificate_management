@@ -76,12 +76,16 @@ export function LecturerSection() {
         navigate(`/${branch}/lecturer/${id}`);
     }
 
+    const addNewStaff =(branch)=>{
+        navigate(`/${branch}/newstaff`)
+    }
+
 
     return (
         <>
             <div className='flex w-[90%] justify-between items-center mt-2 mx-auto'>
                 <h2 className='text-2xl text-text_color1 font-semibold'>Lecturers</h2>
-                <button className='flex text-xs text-text_color1 items-center'>
+                <button className='flex text-xs text-text_color1 items-center' onClick={() => addNewStaff(branch) } >
                     <IoMdAddCircle className='text-base' />Add new Staff
                 </button>
             </div>
