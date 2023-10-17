@@ -11,6 +11,8 @@ import Studentview from './components/studentview';
 import Principal from './components/Principal';
 import StaffApproval from './components/staffApproval';
 import BranchDetails from './components/branchDetails';
+import { Profile } from './components/profile';
+import Search from './components/search';
 import LecturerView from './components/lecturerview';
 import NewStaff from "./components/newStaff"
 // import Electrical from './components/electrical';
@@ -23,6 +25,7 @@ root.render(
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
         {/* <Route path="/ece" element={<Branch />} /> */}
         <Route path="/:branch" element={<BranchDetails />} />
         {/* <Route path="/electrical" element={<Electrical />} /> */}
@@ -31,6 +34,7 @@ root.render(
         <Route path='/:branch/lecturer/:id' element={<LecturerView />} />
         <Route path="/principal" element={<Principal />} />
         <Route path="/staff/:id" element={<StaffApproval />} />
+        <Route path="/search" element={<Search />} />
         <Route path="/:branch/newstaff" element={<NewStaff/>}/>
 
       </Routes>
