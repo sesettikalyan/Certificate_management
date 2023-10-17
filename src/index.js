@@ -13,6 +13,8 @@ import StaffApproval from './components/staffApproval';
 import BranchDetails from './components/branchDetails';
 import { Profile } from './components/profile';
 import Search from './components/search';
+import LecturerView from './components/lecturerview';
+import NewStaff from "./components/newStaff"
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
 
@@ -28,10 +30,12 @@ root.render(
         <Route path="/:branch" element={<BranchDetails />} />
         {/* <Route path="/electrical" element={<Electrical />} /> */}
         {/* <Route path="/civil" element={<Civil />} /> */}
-        <Route path="/studentview" element={<Studentview />} />
+        <Route path="/:branch/:pin" element={<Studentview />} />
+        <Route path='/:branch/lecturer/:id' element={<LecturerView />} />
         <Route path="/principal" element={<Principal />} />
         <Route path="/staff/:id" element={<StaffApproval />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/:branch/newstaff" element={<NewStaff/>}/>
 
       </Routes>
     </BrowserRouter>

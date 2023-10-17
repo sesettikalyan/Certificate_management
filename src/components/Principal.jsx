@@ -53,7 +53,7 @@ export function Navbar() {
                 <p className="text-text_color2 text-xl">{greeting}..!</p>
                 <h1 className="text-2xl">Principal Name</h1>
             </div>
-            <div>
+            <div >
                 <img src={profile} className="w-12 h-12 rounded-full" alt="" />
             </div>
         </>
@@ -72,7 +72,7 @@ export function Branch() {
     return (
         <>
             <div className="w-[90%] h-fit flex flex-col mx-auto">
-                <div className="w-[100%] mt-[10%] flex flex-row mx-auto justify-between items-center">
+                <div className="w-[100%] mt-[2%] flex flex-row mx-auto justify-between items-center">
                     <h1 className="text-2xl">Select Branch</h1>
                     <AiOutlineSearch className="text-2xl" />
                 </div>
