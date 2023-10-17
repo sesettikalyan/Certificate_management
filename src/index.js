@@ -11,6 +11,8 @@ import Studentview from './components/studentview';
 import Principal from './components/Principal';
 import StaffApproval from './components/staffApproval';
 import BranchDetails from './components/branchDetails';
+import { Profile } from './components/profile';
+import Search from './components/search';
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
 
@@ -21,6 +23,7 @@ root.render(
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
         {/* <Route path="/ece" element={<Branch />} /> */}
         <Route path="/:branch" element={<BranchDetails />} />
         {/* <Route path="/electrical" element={<Electrical />} /> */}
@@ -28,6 +31,7 @@ root.render(
         <Route path="/studentview" element={<Studentview />} />
         <Route path="/principal" element={<Principal />} />
         <Route path="/staff/:id" element={<StaffApproval />} />
+        <Route path="/search" element={<Search />} />
 
       </Routes>
     </BrowserRouter>
