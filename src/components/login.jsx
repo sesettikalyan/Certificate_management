@@ -11,15 +11,15 @@ export default function Login() {
 
                     <div className="flex flex-wrap items-center my-6  justify-center">
 
-                        <form className='flex flex-col justify-between h-40'>
+                        <form className='flex flex-col justify-between h-[70%]'>
                             <p className='text-white mt-10 ml-3'>Username</p>
-                            <input className='px-20 py-4 rounded-full ' type="text" />
+                            <input className='px-20 py-4 rounded-full w-[98%] ' type="text" />
                             <br />
                             <p className='text-white mt-5 ml-3'>Password</p>
-                            <input className='px-20 py-4 rounded-full' type="password" />
+                            <input className='px-20 py-4 rounded-full w-[98%]' type="password" />
                             {/* <link rel="stylesheet" href="" /> */}
                             <p className='text-white ml-auto mr-3 mt-3 mb-2'>Forgot Password ?</p>
-                            <button className='px-20 py-4 rounded-full text-white border-[1px] mt-10 border-white' >Login</button>
+                            <button className='px-20 py-4 rounded-full text-white border-[1px] mt-4 border-white' >Login</button>
                         </form>
                     </div>
 

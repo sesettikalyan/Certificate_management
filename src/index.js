@@ -15,6 +15,7 @@ import { Profile } from './components/profile';
 import Search from './components/search';
 import LecturerView from './components/lecturerview';
 import NewStaff from "./components/newStaff"
+import StaffPage from './components/staffpage';
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
 
@@ -36,6 +37,7 @@ root.render(
         <Route path="/staff/:id" element={<StaffApproval />} />
         <Route path="/search" element={<Search />} />
         <Route path="/:branch/newstaff" element={<NewStaff/>}/>
+        <Route path="/:branch/staffpage" element={<StaffPage/>}/>
 
       </Routes>
     </BrowserRouter>
