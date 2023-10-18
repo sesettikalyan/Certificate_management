@@ -6,8 +6,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import HomePage from './components/category';
 import Login from './components/login';
+// import Staffdetails from './components/staffdetails';
 import Branch from './components/branch';
 import Studentview from './components/studentview';
+import Certificateview1 from './components/Certificateview1';
+import Certificateview2 from './components/Certificateview2';
 import Principal from './components/Principal';
 import StaffApproval from './components/staffApproval';
 
@@ -20,6 +23,8 @@ root.render(
         <Route path="/login" element={<Login />} />
         <Route path="/branch" element={<Branch />} />
         <Route path="/studentview" element={<Studentview />} />
+        <Route path="/certificateview1" element={<Certificateview1 />} />
+        <Route path="/certificateview2" element={<Certificateview2 />} />
         <Route path="/principal" element={<Principal />} />
         <Route path="/staff/:id" element={<StaffApproval />} />
 
