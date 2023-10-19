@@ -42,7 +42,7 @@ export default function NewStaff(){
                                         <option className="text-xs bg-white" value="">Mechanical Engineering</option>
                                         <option className="text-xs bg-white" value="">Electrical Engineering</option>
                                         <option className="text-xs bg-white" value="">Electronics Engineering</option>
-                                        <option className="text-xs" value="">Civil Engineering</option>
+                                        <option className="text-xs bg-white" value="">Civil Engineering</option>
 
                                     </select>
 

@@ -23,6 +23,7 @@ export default function Principal() {
 
 
 export function Navbar() {
+    const navigate = useNavigate();
     const now = new Date();
     const hours = now.getHours();
     const profile = "https://tse4.mm.bing.net/th?id=OIP.AZORnc-2Ni4OxteNH3jTHwHaE8&pid=Api&P=0&h=180";
@@ -47,6 +48,10 @@ export function Navbar() {
         greeting = "Good Night";
     }
 
+    const goToProfile = () => {
+        navigate("/profile");
+    }
+
     return (
         <>
             <div className="flex  flex-col items-start">
@@ -54,7 +59,7 @@ export function Navbar() {
                 <h1 className="text-2xl">Principal Name</h1>
             </div>
             <div >
-                <img src={profile} className="w-12 h-12 rounded-full" alt="" />
+                <img src={profile} onClick={goToProfile} className="w-12 h-12 rounded-full" alt="" />
             </div>
         </>
     );
