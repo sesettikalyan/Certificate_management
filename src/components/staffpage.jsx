@@ -1,11 +1,14 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Branches } from '../helpers/Branches';
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { AiOutlineRight } from 'react-icons/ai';
 import { FaSearch } from 'react-icons/fa';
 import { BsPersonCheck } from 'react-icons/bs';
 import { PiBuildingsBold } from 'react-icons/pi';
-import { IoMdAddCircle } from 'react-icons/io';
+import { MdOutlineEdit } from 'react-icons/md';
+import { MdArrowBackIosNew } from "react-icons/md";
+import { BiLogOut } from "react-icons/bi";
+
 
 export default function StaffPage() {
     return(
@@ -24,13 +27,13 @@ export default function StaffPage() {
 export function TitleAndSearch() {
     let { branch } = useParams();
 
-    const selectedBranch = Branches.find((branchname) => branchname.name === branch);
-
     const navigate = useNavigate();
 
-    const gotoHomePage = () => {
-        navigate(`/principal`);
+    //for navigating to the student approval page 
+    const gotoStudentApproval = () => {
+        navigate(`/${branch}/studentapproval`);
     }
+
     const gotoProfile = () => {
         navigate(`/profile`);
     }
@@ -41,11 +44,11 @@ export function TitleAndSearch() {
                 <AiOutlineLeft className='text-lg' onClick={gotoHomePage} />
                 <h2 className='mx-1 text-lg text-primary '>{selectedBranch?.name}</h2>
             </div> */}
-            <div className='mt-6 ml-auto flex' onClick={gotoProfile}>
-                <div className='bg-secondary h-12 w-12 rounded-full mx-2'>
+            <div className='mt-6 ml-auto flex'>
+                <div className='bg-secondary h-12 w-12 rounded-full mx-2' onClick={gotoStudentApproval} >
                 <BsPersonCheck className='text-4xl ml-1 mt-1'/>
                 </div>
-                <div className='bg-secondary h-12 w-12 rounded-full mx-2'>
+                <div className='bg-secondary h-12 w-12 rounded-full mx-2'  onClick={gotoProfile}>
                 <PiBuildingsBold className='text-3xl ml-2 mt-2'/>
                 </div>
                 <div className=' mx-2 pr-4'>
@@ -91,5 +94,38 @@ export function StudentSection() {
                 </div>
             ))}
         </>
+    )
+}
+
+export const Profile = () => {
+    let { branch } = useParams();
+    //for navigating the profile to staffpage on clicking back button
+    const navigate = useNavigate();
+    const gotoStaffPage = () => {
+        navigate(`/${branch}/staffpage`);
+    }
+    return (
+        <div className="bg-secondary h-screen">
+            <div className="flex pt-4 pb-4 justify-between">
+                <button>
+                <div className="flex" onClick={gotoStaffPage}>
+                <MdArrowBackIosNew className="mt-1 mx-2" />
+                <p> Back</p>
+                </div></button>
+                <div className="bg-blue-900 rounded-full text-white text-2xl h-8 w-8 mr-4">
+                <BiLogOut className="mt-1 mx-1" />
+                </div>
+            </div>
+            <div className="relative">
+                <img className="rounded-lg h-60" src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Corpus_Christi_College_New_Court%2C_Cambridge%2C_UK_-_Diliff.jpg" alt="" />
+
+                <img className="rounded-full w-24 h-24 border-4 border-white absolute bottom-0 left-4 mt-6" src="https://tse4.mm.bing.net/th?id=OIP.AZORnc-2Ni4OxteNH3jTHwHaE8&pid=Api&P=0&h=180" alt="" />
+                <div className="bg-blue-900 w-5 h-5 rounded-full text-center left-9 ml-24 ">
+                    <span className="text-white"><MdOutlineEdit className="ml-1" /></span>
+                </div>
+            </div>
+            
+
+        </div>
     )
 }
