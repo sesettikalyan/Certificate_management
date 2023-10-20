@@ -74,12 +74,16 @@ export function Branch() {
         navigate(`/${branch}`);
     }
 
+    const goToSearch = () => {
+        navigate('/search');
+    }
+
     return (
         <>
             <div className="w-[90%] h-fit flex flex-col mx-auto">
                 <div className="w-[100%] mt-[2%] flex flex-row mx-auto justify-between items-center">
                     <h1 className="text-2xl">Select Branch</h1>
-                    <AiOutlineSearch className="text-2xl" />
+                    <AiOutlineSearch onClick={goToSearch} className="text-2xl" />
                 </div>
 
 

@@ -23,6 +23,10 @@ import Search from './components/search';
 import LecturerView from './components/lecturerview';
 import NewStaff from "./components/newStaff"
 import Selectbranch from './components/selectbranch';
+import StaffPage from './components/staffpage';
+import StudentApproval from './components/studentApproval';
+import StudentDetails from './components/studentDetails';
+
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
 
@@ -46,12 +50,15 @@ root.render(
         <Route path="/:branch" element={<BranchDetails />} />
         {/* <Route path="/electrical" element={<Electrical />} /> */}
         {/* <Route path="/civil" element={<Civil />} /> */}
-        {/* <Route path="/:branch/:pin" element={<Studentview />} /> */}
+        <Route path="/:branch/:pin" element={<Studentview />} />
         <Route path='/:branch/lecturer/:id' element={<LecturerView />} />
         <Route path="/principal" element={<Principal />} />
         <Route path="/staff/:id" element={<StaffApproval />} />
         <Route path="/search" element={<Search />} />
         <Route path="/:branch/newstaff" element={<NewStaff/>}/>
+        <Route path="/:branch/staffpage" element={<StaffPage/>}/>
+        <Route path="/:branch/studentapproval" element={<StudentApproval />} />
+       <Route path="/:branch/studentapproval/:pin" element={<StudentDetails />} />
 
       </Routes>
     </BrowserRouter>
