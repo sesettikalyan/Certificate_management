@@ -1,6 +1,6 @@
 import { AiOutlineRight, AiOutlineSearch } from "react-icons/ai";
 import { lecturerApprovals } from "../helpers/lecturerapprovals";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Branches } from "../helpers/Branches";
 
 export default function Principal() {
@@ -120,17 +120,25 @@ export function Branch() {
 }
 
 
-export function LecturerApprovals() {
+export function LecturerApprovals({navigation}) {
     const navigate = useNavigate();
+    const {branch} = useParams();
 
-    const viewStaffDetails = (id) => {
+    const selectedBranch = Branches.find((branchname) => branchname.name === branch);
+
+    const viewStaffDetails = (id) => {       
         navigate(`/staff/${id}`);
+    }
+
+    const viewStudentDetails = (pin) => {
+        return navigate(`/${selectedBranch?.name}/studentapproval/${pin}`)
     }
 
     return (
         <div className="bg-secondary w-[95%] py-3 mx-auto rounded-lg">
-            <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">Lecturer Approvals</h1>
-            {lecturerApprovals.map((lecturer) => (
+            <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">{navigation ? <>Student Approvals</> :<>Lecturer Approvals</>}</h1>
+            {!navigation ? (<>
+                { lecturerApprovals.map((lecturer) => (
                 <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
                     <div className="flex flex-row items-center">
                         <img src={lecturer.image} className="w-12 h-12 rounded-full" alt="" />
@@ -144,6 +152,27 @@ export function LecturerApprovals() {
                     </div>
                 </div>
             ))}
+            </>)
+            :
+            <>
+            {selectedBranch?.students.map((student) => (
+                <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
+                <div className="flex flex-row items-center">
+                    <img src={student?.image} className="w-12 h-12 rounded-full" alt="" />
+                    <div className="flex flex-col items-start ml-3">
+                        <h1 className="text-lg">{student?.name}</h1>
+                        <p className="text-base">{student?.pin}</p>
+                    </div>
+                </div>
+                <div className="flex">
+                    <button className="flex items-center justify-center" onClick={() => viewStudentDetails(student?.pin)} >view details  <AiOutlineRight className="text-sm ml-1 mt-1" /> </button>
+                </div>
+            </div>
+        ))
+                }
+            </>
+
+            }
         </div>
     );
 }
