@@ -120,13 +120,13 @@ export function Branch() {
 }
 
 
-export function LecturerApprovals({navigation}) {
+export function LecturerApprovals({ navigation }) {
     const navigate = useNavigate();
-    const {branch} = useParams();
+    const { branch } = useParams();
 
     const selectedBranch = Branches.find((branchname) => branchname.name === branch);
 
-    const viewStaffDetails = (id) => {       
+    const viewStaffDetails = (id) => {
         navigate(`/staff/${id}`);
     }
 
@@ -136,41 +136,41 @@ export function LecturerApprovals({navigation}) {
 
     return (
         <div className="bg-secondary w-[95%] py-3 mx-auto rounded-lg">
-            <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">{navigation ? <>Student Approvals</> :<>Lecturer Approvals</>}</h1>
+            <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">{navigation ? <>Student Approvals</> : <>Lecturer Approvals</>}</h1>
             {!navigation ? (<>
-                { lecturerApprovals.map((lecturer) => (
-                <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
-                    <div className="flex flex-row items-center">
-                        <img src={lecturer.image} className="w-12 h-12 rounded-full" alt="" />
-                        <div className="flex flex-col items-start ml-3">
-                            <h1 className="text-lg">{lecturer.name}</h1>
-                            <p className="text-base">{lecturer.id}</p>
+                {lecturerApprovals.map((lecturer) => (
+                    <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
+                        <div className="flex flex-row items-center">
+                            <img src={lecturer.image} className="w-12 h-12 rounded-full" alt="" />
+                            <div className="flex flex-col items-start ml-3">
+                                <h1 className="text-lg">{lecturer.name}</h1>
+                                <p className="text-base">{lecturer.id}</p>
+                            </div>
+                        </div>
+                        <div className="flex">
+                            <button className="flex items-center justify-center" onClick={() => viewStaffDetails(lecturer.id)} >view details  <AiOutlineRight className="text-sm ml-1 mt-1" /> </button>
                         </div>
                     </div>
-                    <div className="flex">
-                        <button className="flex items-center justify-center" onClick={() => viewStaffDetails(lecturer.id)} >view details  <AiOutlineRight className="text-sm ml-1 mt-1" /> </button>
-                    </div>
-                </div>
-            ))}
+                ))}
             </>)
-            :
-            <>
-            {selectedBranch?.students.map((student) => (
-                <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
-                <div className="flex flex-row items-center">
-                    <img src={student?.image} className="w-12 h-12 rounded-full" alt="" />
-                    <div className="flex flex-col items-start ml-3">
-                        <h1 className="text-lg">{student?.name}</h1>
-                        <p className="text-base">{student?.pin}</p>
-                    </div>
-                </div>
-                <div className="flex">
-                    <button className="flex items-center justify-center" onClick={() => viewStudentDetails(student?.pin)} >view details  <AiOutlineRight className="text-sm ml-1 mt-1" /> </button>
-                </div>
-            </div>
-        ))
-                }
-            </>
+                :
+                <>
+                    {selectedBranch?.students.map((student) => (
+                        <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
+                            <div className="flex flex-row items-center">
+                                <img src={student?.image} className="w-12 h-12 rounded-full" alt="" />
+                                <div className="flex flex-col items-start ml-3">
+                                    <h1 className="text-lg">{student?.name}</h1>
+                                    <p className="text-base">{student?.pin}</p>
+                                </div>
+                            </div>
+                            <div className="flex">
+                                <button className="flex items-center justify-center" onClick={() => viewStudentDetails(student?.pin)} >view details  <AiOutlineRight className="text-sm ml-1 mt-1" /> </button>
+                            </div>
+                        </div>
+                    ))
+                    }
+                </>
 
             }
         </div>
