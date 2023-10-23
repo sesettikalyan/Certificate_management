@@ -10,6 +10,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { PiBuildingsBold } from 'react-icons/pi';
 import { BsPersonCheck } from 'react-icons/bs';
+import { useStores } from '../store';
+import { toJS } from 'mobx';
 
 
 export default function BranchDetails() {
@@ -47,7 +49,7 @@ export function TitleAndSearch({ onStaff }) {
     const selectedBranch = Branches.find((branchname) => branchname.name === branch);
 
     const navigate = useNavigate();
-    const gotoStudentApproval = () => { 
+    const gotoStudentApproval = () => {
         navigate(`/${branch}/studentapproval`);
     }
 
@@ -62,8 +64,8 @@ export function TitleAndSearch({ onStaff }) {
     return (
         <>
             <div className='w-[90%] mx-auto pt-6 flex items-center'>
-            {!onStaff ?<> <AiOutlineLeft className='text-lg' onClick={gotoHomePage} />
-                <h2 className='mx-1 text-lg text-primary '>{selectedBranch?.name}</h2></> : <>
+                {!onStaff ? <> <AiOutlineLeft className='text-lg' onClick={gotoHomePage} />
+                    <h2 className='mx-1 text-lg text-primary '>{selectedBranch?.name}</h2></> : <>
                     <div className='mt-2 ml-auto flex'>
                         <div className='bg-secondary h-12 w-12 rounded-full mx-2' onClick={gotoStudentApproval} >
                             <BsPersonCheck className='text-4xl ml-1 mt-1' />
@@ -89,10 +91,14 @@ export function TitleAndSearch({ onStaff }) {
 
 export function LecturerSection() {
     const navigate = useNavigate();
+    const { UserStore } = useStores();
 
     let { branch } = useParams();
 
-    const selectedBranch = Branches.find((branchname) => branchname.name === branch);
+    // const selectedBranch = UserStore.lecturers.;
+    //getting the lectures of the selected branch from the lecturers array in the userstore by checking each lecturer's department by converting into uppercase with the branch from url params. 
+    const selectedBranchLecturers = UserStore.lecturers.filter((lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase());
+    console.log(selectedBranchLecturers);
 
     const showLecturerDetails = (id) => {
         navigate(`/${branch}/lecturer/${id}`);
@@ -113,13 +119,13 @@ export function LecturerSection() {
             </div>
             <div className='mt-4 w-[90%] mx-auto'>
                 <div className="flex overflow-x-auto  items-center pb-4">
-                    {selectedBranch?.lecturers.map((lecturer, index) => (
-                        <div key={index} onClick={() => showLecturerDetails(lecturer?.id)} className="cursor-pointer mx-4 flex flex-col items-center justify-center" >
+                    {selectedBranchLecturers.map((lecturer, index) => (
+                        <div key={index} onClick={() => showLecturerDetails(lecturer?.idno)} className="cursor-pointer mx-4 flex flex-col items-center justify-center" >
                             <div className="w-20 h-20 rounded-full  ">
-                                <img src={lecturer?.image} alt="" className="w-full h-full rounded-full object-cover" />
+                                <img src={lecturer?.photo} alt="" className="w-full h-full rounded-full object-cover" />
                             </div>
 
-                            <p className="text-black ">{lecturer?.teacher}</p>
+                            <p className="text-black ">{lecturer?.name}</p>
 
                         </div>
                     ))}

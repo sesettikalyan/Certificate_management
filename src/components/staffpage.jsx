@@ -13,14 +13,14 @@ import { StudentSection } from './branchDetails';
 
 
 export default function StaffPage() {
-    return(
+    return (
         <div>
-             <div className='w-[100%] h-screen flex flex-col bg-gray-100'>
+            <div className='w-[100%] h-screen flex flex-col bg-gray-100'>
                 {/* search box */}
                 <TitleAndSearch onStaff={true} />
                 {/* Student-list-section */}
                 <div className="bg-white  drop-shadow my-6 shadow-lg w-[90%] py-3 mx-auto rounded-lg">
-                    <StudentSection onstaff={true}/>
+                    <StudentSection onstaff={true} />
                 </div>
 
             </div>
@@ -72,12 +72,12 @@ export const Profile = () => {
         <div className="bg-secondary h-screen">
             <div className="flex pt-4 pb-4 justify-between">
                 <button>
-                <div className="flex" onClick={gotoStaffPage}>
-                <MdArrowBackIosNew className="mt-1 mx-2" />
-                <p> Back</p>
-                </div></button>
+                    <div className="flex" onClick={gotoStaffPage}>
+                        <MdArrowBackIosNew className="mt-1 mx-2" />
+                        <p> Back</p>
+                    </div></button>
                 <div className="bg-blue-900 rounded-full text-white text-2xl h-8 w-8 mr-4">
-                <BiLogOut className="mt-1 mx-1" />
+                    <BiLogOut className="mt-1 mx-1" />
                 </div>
             </div>
             <div className="relative">
@@ -88,7 +88,7 @@ export const Profile = () => {
                     <span className="text-white"><MdOutlineEdit className="ml-1" /></span>
                 </div>
             </div>
-            
+
 
         </div>
     )

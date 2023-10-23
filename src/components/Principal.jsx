@@ -2,9 +2,14 @@ import { AiOutlineRight, AiOutlineSearch } from "react-icons/ai";
 import { lecturerApprovals } from "../helpers/lecturerapprovals";
 import { useNavigate, useParams } from 'react-router-dom';
 import { Branches } from "../helpers/Branches";
+import { useEffect } from "react";
+import { useStores } from "../store/index";
 
 export default function Principal() {
-
+    const { UserStore } = useStores();
+    useEffect(() => {
+        UserStore.getLecturersfromapi();
+    }, [])
 
     return (
         <div className="w-[100%] my-1 h-screen flex flex-col">
@@ -26,7 +31,7 @@ export function Navbar() {
     const now = new Date();
     const hours = now.getHours();
     const profile = "https://tse4.mm.bing.net/th?id=OIP.AZORnc-2Ni4OxteNH3jTHwHaE8&pid=Api&P=0&h=180";
-
+    const navigate = useNavigate();
     // const [greeting, setGreeting] = useState(null);
     let greeting = null;
 
@@ -47,6 +52,10 @@ export function Navbar() {
         greeting = "Good Night";
     }
 
+    const goToProfile = () => {
+        navigate('/profile');
+    }
+
     return (
         <>
             <div className="flex  flex-col items-start">
@@ -54,7 +63,7 @@ export function Navbar() {
                 <h1 className="text-2xl">Principal Name</h1>
             </div>
             <div >
-                <img src={profile} className="w-12 h-12 rounded-full" alt="" />
+                <img src={profile} onClick={goToProfile} className="w-12 h-12 rounded-full" alt="" />
             </div>
         </>
     );

@@ -34,8 +34,22 @@ export function Home() {
 
 export function Category() {
     const navigate = useNavigate();
+    const [role, setRole] = useState(null);
 
     const goToLogin = () => {
+        setRole("principal");
+        navigate("/login");
+    }
+    const goToLogin1 = () => {
+        setRole("hod");
+        navigate("/login");
+    }
+    const goToLogin2 = () => {
+        setRole("staff");
+        navigate("/login");
+    }
+    const goToLogin3 = () => {
+        setRole("student");
         navigate("/login");
     }
 
@@ -55,19 +69,19 @@ export function Category() {
 
 
                     </div>
-                    <div onClick={goToLogin} className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
+                    <div onClick={goToLogin1} className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
                         <h1 className="text-base ">Hod</h1>
 
 
 
                     </div>
-                    <div onClick={goToLogin} className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
+                    <div onClick={goToLogin2} className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
                         <GiTeacher className="text-6xl my-1 text-black" />
                         <h1 className="text-base ">Staff</h1>
 
 
                     </div>
-                    <div onClick={goToLogin} className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
+                    <div onClick={goToLogin3} className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white">
 
                         <PiStudentDuotone className="text-6xl my-1 text-black" />
                         <h1 className="text-base ">Student</h1>
