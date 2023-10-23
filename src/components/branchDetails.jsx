@@ -8,6 +8,9 @@ import { RiDeleteBin5Line } from 'react-icons/ri';
 import { Branches } from '../helpers/Branches';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { PiBuildingsBold } from 'react-icons/pi';
+import { BsPersonCheck } from 'react-icons/bs';
+
 
 export default function BranchDetails() {
     const navigate = useNavigate();
@@ -38,12 +41,19 @@ export default function BranchDetails() {
     );
 }
 
-export function TitleAndSearch() {
+export function TitleAndSearch({ onStaff }) {
     let { branch } = useParams();
 
     const selectedBranch = Branches.find((branchname) => branchname.name === branch);
 
     const navigate = useNavigate();
+    const gotoStudentApproval = () => { 
+        navigate(`/${branch}/studentapproval`);
+    }
+
+    const gotoProfile = () => {
+        navigate(`/profile`);
+    }
 
     const gotoHomePage = () => {
         navigate(`/principal`);
@@ -52,8 +62,20 @@ export function TitleAndSearch() {
     return (
         <>
             <div className='w-[90%] mx-auto pt-6 flex items-center'>
-                <AiOutlineLeft className='text-lg' onClick={gotoHomePage} />
-                <h2 className='mx-1 text-lg text-primary '>{selectedBranch?.name}</h2>
+            {!onStaff ?<> <AiOutlineLeft className='text-lg' onClick={gotoHomePage} />
+                <h2 className='mx-1 text-lg text-primary '>{selectedBranch?.name}</h2></> : <>
+                    <div className='mt-2 ml-auto flex'>
+                        <div className='bg-secondary h-12 w-12 rounded-full mx-2' onClick={gotoStudentApproval} >
+                            <BsPersonCheck className='text-4xl ml-1 mt-1' />
+                        </div>
+                        <div className='bg-secondary h-12 w-12 rounded-full mx-2' onClick={gotoProfile}>
+                            <PiBuildingsBold className='text-3xl ml-2 mt-2' />
+                        </div>
+                        <div className=' mx-2 pr-2'>
+                            <img className='h-12 w-12 rounded-full' src="https://t3.ftcdn.net/jpg/02/65/18/30/360_F_265183061_NkulfPZgRxbNg3rvYSNGGwi0iD7qbmOp.jpg" alt="" />
+                        </div>
+                    </div>
+                </>}
             </div>
             <div className='mt-6 relative w-[90%] mx-auto'>
                 <input type="text" placeholder='Search' className='pl-14 pr-4 py-4 w-full border-blue-400 border-2 rounded-full focus:outline-none' />
@@ -76,7 +98,7 @@ export function LecturerSection() {
         navigate(`/${branch}/lecturer/${id}`);
     }
 
-    const addNewStaff =(branch)=>{
+    const addNewStaff = (branch) => {
         navigate(`/${branch}/newstaff`)
     }
 
@@ -85,7 +107,7 @@ export function LecturerSection() {
         <>
             <div className='flex w-[90%] justify-between items-center mt-2 mx-auto'>
                 <h2 className='text-2xl text-text_color1 font-semibold'>Lecturers</h2>
-                <button className='flex text-xs text-text_color1 items-center' onClick={() => addNewStaff(branch) } >
+                <button className='flex text-xs text-text_color1 items-center' onClick={() => addNewStaff(branch)} >
                     <IoMdAddCircle className='text-base' />Add new Staff
                 </button>
             </div>
