@@ -4,14 +4,16 @@ import { AiOutlineClose, AiOutlineLeft } from "react-icons/ai";
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useEffect, useRef, useState } from "react";
+import { useStores } from "../store/index";
 
 export default function LecturerView() {
     const [editForm, setEditForm] = useState(false);
     const [deleteForm,setDeleteForm] = useState(false);
+    const { UserStore } = useStores();
     const navigate = useNavigate();
     const { branch, id } = useParams();
     const selectedBranch = Branches.find((branchname) => branchname.name === branch);
-    const selectedLecturer = selectedBranch.lecturers.find((lecturer) => lecturer.id === id);
+    const selectedLecturer = UserStore.lecturers.find((lecturer) => lecturer?.idno === id);
 
     const nameref = useRef();
     const idref = useRef();
@@ -20,10 +22,10 @@ export default function LecturerView() {
 
     const autofillref = () => {
         try {
-            nameref.current.value = selectedLecturer?.teacher;
-            idref.current.value = selectedLecturer?.id;
+            nameref.current.value = selectedLecturer?.name;
+            idref.current.value = selectedLecturer?.idno;
             emailref.current.value = selectedLecturer?.email;
-            branchref.current.value = selectedBranch?.name;
+            branchref.current.value = selectedLecturer?.department;
         } catch (error) {
 
         }
@@ -46,24 +48,24 @@ export default function LecturerView() {
                     <button onClick={() => setDeleteForm(true)} className='w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center'> <MdDeleteOutline /></button>
                 </div>
             </div>
-            <img src={selectedLecturer?.image} className=" my-6 w-48 h-52 rounded-lg object-cover" alt="" />
+            <img src={selectedLecturer?.photo} className=" my-6 w-48 h-52 rounded-lg object-cover" alt="" />
 
             <div className="flex flex-col w-[90%]">
                 <div className="flex flex-col mt-2 items-start ">
                     <label className="pb-2" >Name</label>
-                    <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">{selectedLecturer?.teacher}</div>
+                    <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">{selectedLecturer?.name}</div>
                 </div>
                 <div className="flex flex-col mt-2 items-start ">
                     <label className="pb-2" >I'd number</label>
-                    <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">{selectedLecturer?.id}</div>
+                    <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">{selectedLecturer?.idno}</div>
                 </div>
                 <div className="flex flex-col mt-2 items-start ">
                     <label className="pb-2" >Branch name</label>
-                    <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">{branch}</div>
+                    <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">{selectedLecturer?.department}</div>
                 </div>
                 <div className="flex flex-col mt-2 items-start ">
                     <label className="pb-2" >Phone number</label>
-                    <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">{selectedLecturer?.mobile}</div>
+                    <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">{selectedLecturer?.phoneNumber}</div>
                 </div>
                 <div className="flex flex-col mt-2 items-start ">
                     <label className="pb-2" >Email address</label>

@@ -13,7 +13,7 @@ class UserStore {
             console.log(response?.body);
             return this.setLecturers(response?.body);
         }
-        return alert("something went wrong");
+        return alert("failed to fetch lecturers.");
     }
 
 
