@@ -1,13 +1,29 @@
 import { useRef } from "react";
 import logo from "../assets/logo.png";
 import { useStores } from "../store/index";
-export default function Login({ role }) {
+export default function StaffLogin({ role }) {
   const usernameref = useRef(null);
   const passwordref = useRef(null);
   const { AuthStore } = useStores();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    //     console.log("clicked");
+    console.log("clicked");
+    console.log(role);
+    try {
+      const username = usernameref.current.value;
+      const password = passwordref.current.value;
+      AuthStore.callingHodLoginApi(username, password);
+      // const data = {
+      //     username,
+      //     password
+      // }
+
+      //   console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -16,7 +32,7 @@ export default function Login({ role }) {
         <div className="h-[30%] mt-[10%] md:mt-[2%]">
           <img src={logo} className="w-32 h-32 " alt="" />
         </div>
-        <div className="bg-primary p-6 h-[70%]  w-[100%] rounded-tl-[100px] mt-[20%] md:mt-[10%]  items-center justify-center">
+        <div className="bg-primary p-4 h-[70%]  w-[100%] rounded-tl-[100px] mt-[20%] md:mt-[10%]  items-center justify-center">
           <h1 className="text-3xl text-center py-2 text-white">
             Enter Details
           </h1>
@@ -26,7 +42,7 @@ export default function Login({ role }) {
               onSubmit={handleSubmit}
               className="flex flex-col w-[90%] justify-between h-[70%]"
             >
-              <p className="text-white mt-10 ml-3">Username</p>
+              <p className="text-white mt-10 ml-3">User I'd</p>
               <input
                 ref={usernameref}
                 className="px-5 py-4 rounded-full w-[98%] "
@@ -49,6 +65,10 @@ export default function Login({ role }) {
               >
                 Login
               </button>
+              <div className="flex items-center pt-2 text-white justify-center">
+                <p>Don't have an account!</p>
+                <button className="ml-1">Sign Up?</button>
+              </div>
             </form>
           </div>
         </div>
