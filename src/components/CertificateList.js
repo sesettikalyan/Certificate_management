@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Branches } from "../helpers/Branches";
 import { AiOutlineRight } from "react-icons/ai";
+// import { useNavigate } from "react-router-dom";
 
 export default function CertificateList() {
     const { branch, pin } = useParams();
@@ -8,6 +9,12 @@ export default function CertificateList() {
     const selectedBranch = Branches.find((branchname) => branchname.name === branch);
 
     const selectedStudent = selectedBranch.students.find((student) => student.pin === pin);
+
+    // const navigate = useNavigate();
+
+    // const showDetails = (branch, pin) => {
+    //     navigate()
+    // }
     return (
         < >
 
@@ -29,7 +36,7 @@ export default function CertificateList() {
                         </div>
                     </div>
                     <div className="flex">
-                        <button className="flex items-center justify-center text-sm"  >view details  <AiOutlineRight className="text-sm ml-1 mt-1" /> </button>
+                        <button className="flex items-center justify-center text-sm" > view details  <AiOutlineRight className="text-sm ml-1 mt-1" /> </button>
                     </div>
                 </div>
             ))}
