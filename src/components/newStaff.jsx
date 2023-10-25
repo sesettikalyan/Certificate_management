@@ -22,7 +22,7 @@ export default function NewStaff() {
       const id = idref.current.value;
       const email = emailref.current.value;
       const branch = branchref.current.value;
-      // UserStore.postLecturers(name, id, email, branch);
+      UserStore.postLecturers(name, id, email, branch);
       // const data = {
       //     name,
       //     id,
@@ -82,16 +82,16 @@ export default function NewStaff() {
             type="text"
             className=" mb-1  px-1 bg-secondary border-b-2 border-black text-opacity-80  text-lg focus:outline-none  "
           >
-            <option className="text-xs bg-white" value="">
+            <option className="text-xs bg-white" value="Mech">
               Mechanical Engineering
             </option>
-            <option className="text-xs bg-white" value="">
+            <option className="text-xs bg-white" value="EEE">
               Electrical Engineering
             </option>
-            <option className="text-xs bg-white" value="">
+            <option className="text-xs bg-white" value="ECE">
               Electronics Engineering
             </option>
-            <option className="text-xs" value="">
+            <option className="text-xs" value="Civil">
               Civil Engineering
             </option>
           </select>
