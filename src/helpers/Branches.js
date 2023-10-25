@@ -1,6 +1,6 @@
 export const Branches = [
     {
-        name: "Mechanical Engineering",
+        name: "Mech",
         total_staff: "34",
         total_students: "200",
         total_approved: "20",
@@ -283,7 +283,7 @@ export const Branches = [
         ],
     },
     {
-        name: "Electrical Engineering",
+        name: "EEE",
         total_staff: "34",
         total_students: "200",
         total_approved: "20",
@@ -441,7 +441,7 @@ export const Branches = [
         ],
     },
     {
-        name: "Electronics Engineering",
+        name: "ECE",
         total_staff: "34",
         total_students: "200",
         total_approved: "20",
@@ -734,7 +734,7 @@ export const Branches = [
         ],
     },
     {
-        name: "Civil Engineering",
+        name: "Civil",
         total_staff: "34",
         total_students: "200",
         total_approved: "20",
