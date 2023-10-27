@@ -1,10 +1,12 @@
 import { useRef } from "react";
 import logo from "../assets/logo.png";
 import { useStores } from "../store/index";
+import { useNavigate } from "react-router-dom";
 export default function StaffLogin({ role }) {
   const usernameref = useRef(null);
   const passwordref = useRef(null);
   const { AuthStore } = useStores();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,6 +17,10 @@ export default function StaffLogin({ role }) {
       const username = usernameref.current.value;
       const password = passwordref.current.value;
       AuthStore.callingHodLoginApi(username, password);
+
+      if (AuthStore.hodAuth === true) {
+        navigate(`/selectbranch`);
+      }
       // const data = {
       //     username,
       //     password
@@ -24,6 +30,10 @@ export default function StaffLogin({ role }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const goToRegisterPage = () => {
+    navigate("/register");
   };
 
   return (
@@ -67,7 +77,9 @@ export default function StaffLogin({ role }) {
               </button>
               <div className="flex items-center pt-2 text-white justify-center">
                 <p>Don't have an account!</p>
-                <button className="ml-1">Sign Up?</button>
+                <button onClick={goToRegisterPage} className="ml-1">
+                  Sign Up?
+                </button>
               </div>
             </form>
           </div>

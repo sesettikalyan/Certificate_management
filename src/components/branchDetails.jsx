@@ -163,7 +163,7 @@ export function LecturerSection() {
   ));
 }
 
-export function StudentSection() {
+export function StudentSection({ onstaff }) {
   let { branch } = useParams();
   const { UserStore } = useStores();
 
@@ -183,7 +183,24 @@ export function StudentSection() {
 
   return useObserver(() => (
     <>
-      {selectedBranchStudents.length === 0 ? null : (
+      {selectedBranchStudents.length === 0 ? (
+        <>
+          {onstaff && (
+            <div className="flex w-[90%] justify-between items-center mt-2 mx-auto">
+              <h2 className="text-2xl text-text_color1 font-semibold">
+                Students
+              </h2>
+              <button
+                className="flex text-xs text-text_color1 items-center"
+                // onClick={() => addNewStaff(branch)}
+              >
+                <IoMdAddCircle className="text-base" />
+                Add new Student
+              </button>
+            </div>
+          )}{" "}
+        </>
+      ) : (
         <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl">
           Students
         </h1>

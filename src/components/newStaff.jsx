@@ -14,6 +14,9 @@ export default function NewStaff() {
   const idref = useRef();
   const emailref = useRef();
   const branchref = useRef();
+  const passwordref = useRef();
+  const roleref = useRef();
+  const phnoref = useRef();
 
   const postDetails = (e) => {
     e.preventDefault();
@@ -22,7 +25,11 @@ export default function NewStaff() {
       const id = idref.current.value;
       const email = emailref.current.value;
       const branch = branchref.current.value;
-      // UserStore.postLecturers(name, id, email, branch);
+      const password = passwordref.current.value;
+      const role = roleref.current.value;
+      const phone = phnoref.current.value;
+
+      UserStore.postLecturers(name, id, email, branch, password, role, phone);
       // const data = {
       //     name,
       //     id,
@@ -35,8 +42,13 @@ export default function NewStaff() {
     }
   };
 
+  const autoGeneratePassword = () => {
+    const password = Math.random().toString(36).slice(-8);
+    passwordref.current.value = password;
+  };
+
   return (
-    <div className="flex flex-col w-[100%] py-4 bg-secondary rounded-tr-[100px] ">
+    <div className="flex flex-col w-[100%] py-8  bg-secondary rounded-tr-[100px] ">
       <button
         className="flex items-center w-[20%] mx-4  text-lg"
         onClick={showBranch}
@@ -44,7 +56,7 @@ export default function NewStaff() {
         <AiOutlineLeft className="mr-1" /> Back
       </button>
       <h1 className="text-center text-2xl font-semibold mt-[3%]">
-        Edit Details{" "}
+        Enter Details{" "}
       </h1>
 
       <form
@@ -54,9 +66,10 @@ export default function NewStaff() {
         <div className="flex flex-col mt-2">
           <label className="pb-2 font-semibold">Name</label>
           <input
+            required
             ref={nameref}
             type="text"
-            className="bg-secondary mb-1 px-1  text-opacity-80 text-xl focus:outline-none border-b-2 border-black"
+            className="bg-secondary my-1 px-1  text-opacity-80 text-xl focus:outline-none border-b-2 border-black"
           />
         </div>
         <div className="flex flex-col mt-1">
@@ -64,35 +77,76 @@ export default function NewStaff() {
           <input
             ref={idref}
             type="text"
-            className="bg-secondary mb-1 px-1  text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
+            className="bg-secondary my-1 px-1  text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
           />
         </div>
         <div className="flex flex-col mt-1">
           <label className="pb-2 ">E-mail</label>
           <input
+            required
             ref={emailref}
             type="text"
-            className="bg-secondary mb-1 px-1 text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
+            className="bg-secondary my-1 px-1 text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
           />
         </div>
+
+        <div className="flex flex-col mt-1">
+          <label className="pb-2 ">Phone Number</label>
+          <input
+            required
+            ref={phnoref}
+            type="text"
+            className="bg-secondary my-1 px-1 text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
+          />
+        </div>
+
+        <div className="flex flex-col mt-1">
+          <label className="pb-2 ">Password</label>
+          <input
+            required
+            onClick={autoGeneratePassword}
+            ref={passwordref}
+            type="text"
+            className="bg-secondary my-1 px-1 text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
+          />
+        </div>
+
         <div className="flex flex-col mt-1">
           <label className="pb-2 ">Branch</label>
           <select
+            required
             ref={branchref}
             type="text"
-            className=" mb-1  px-1 bg-secondary border-b-2 border-black text-opacity-80  text-lg focus:outline-none  "
+            className=" my-1  px-1 bg-secondary border-b-2 border-black text-opacity-80  text-lg focus:outline-none  "
           >
-            <option className="text-xs bg-white" value="">
+            <option className="text-xs bg-white" value="Mech">
               Mechanical Engineering
             </option>
-            <option className="text-xs bg-white" value="">
+            <option className="text-xs bg-white" value="EEE">
               Electrical Engineering
             </option>
-            <option className="text-xs bg-white" value="">
+            <option className="text-xs bg-white" value="ECE">
               Electronics Engineering
             </option>
-            <option className="text-xs" value="">
+            <option className="text-xs" value="Civil">
               Civil Engineering
+            </option>
+          </select>
+        </div>
+
+        <div className="flex flex-col mt-1">
+          <label className="pb-2 ">Role</label>
+          <select
+            required
+            ref={roleref}
+            type="text"
+            className=" my-1  px-1 bg-secondary border-b-2 border-black text-opacity-80  text-lg focus:outline-none  "
+          >
+            <option className="text-xs bg-white" value="hod">
+              Head of Department
+            </option>
+            <option className="text-xs bg-white" value="staff">
+              staff
             </option>
           </select>
         </div>
@@ -100,7 +154,7 @@ export default function NewStaff() {
         <div className="w-full flex justify-end">
           <button
             type="submit"
-            className="w-[30%] px-8 my-3 mx-1 py-1 bg-primary text-white rounded-lg text-base"
+            className="w-[30%] px-8 mt-10 mx-1 py-1 bg-primary text-white rounded-lg text-base"
           >
             Save
           </button>
