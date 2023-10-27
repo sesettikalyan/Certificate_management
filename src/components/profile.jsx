@@ -1,12 +1,17 @@
 import { MdArrowBackIosNew } from "react-icons/md";
 import { MdOutlineEdit } from "react-icons/md";
 import { BiLogOut } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 export const Profile = () => {
+    const navigate = useNavigate();
+    const goToHomepage = () => {
+        navigate("/principal");
+    }
     return (
         <div className="bg-secondary h-screen">
             <div className="flex pt-4 pb-4 justify-between">
-                <div className="flex">
+                <div onClick={goToHomepage} className="flex">
                 <MdArrowBackIosNew className="mt-1 mx-2" />
                 <p> Back</p>
                 </div>

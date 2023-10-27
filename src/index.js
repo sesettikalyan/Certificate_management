@@ -6,6 +6,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import HomePage from "./components/category";
 import Login from "./components/login";
+import Login1 from './components/login1';
+// import Staffdetails from './components/staffdetails';
+import Certificateview1 from './components/Certificateview1';
+import Certificateview2 from './components/Certificateview2';
+import Staffcertificate1 from './components/staffcertificate1';
+import Staffcertificate from './components/staffcertificate';
 // import Branch from './components/branch';
 import Studentview from "./components/studentview";
 import Principal from "./components/Principal";
@@ -20,6 +26,7 @@ import StudentApproval from "./components/studentApproval";
 import StudentDetails from "./components/studentDetails";
 import StudentLogin from "./components/studentlogin";
 import StaffLogin from "./components/stafflogin";
+import Selectbranch from "./components/selectbranch";
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
 
@@ -30,6 +37,14 @@ root.render(
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/login1" element={<Login1 />} />
+        <Route path="/selectbranch" element={<Selectbranch />} />
+        {/* <Route path="/branch" element={<Branch />} /> */}
+        <Route path="/studentview" element={<Studentview />} />
+        <Route path="/certificateview1" element={<Certificateview1 />} />
+        <Route path="/certificateview2" element={<Certificateview2 />} />
+        <Route path="/staffcertificate1" element={<Staffcertificate1 />} />
+        <Route path="/staffcertificate" element={<Staffcertificate />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/studentlogin" element={<StudentLogin />} />
         <Route path="/stafflogin" element={<StaffLogin />} />
