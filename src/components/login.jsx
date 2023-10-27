@@ -8,6 +8,9 @@ export default function Login({ role }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const username = usernameref.current.value;
+    const password = passwordref.current.value;
+    AuthStore.callingPrincipalLogin(username, password);
   };
 
   return (

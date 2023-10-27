@@ -1,10 +1,12 @@
 import { useRef } from "react";
 import logo from "../assets/logo.png";
 import { useStores } from "../store/index";
+import { useNavigate } from "react-router-dom";
 export default function StudentLogin({ role }) {
   const pinref = useRef(null);
   const passwordref = useRef(null);
   const { AuthStore } = useStores();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,6 +27,10 @@ export default function StudentLogin({ role }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const goToRegister = () => {
+    navigate("/studentregister");
   };
 
   return (
@@ -68,7 +74,9 @@ export default function StudentLogin({ role }) {
               </button>
               <div className="flex items-center pt-2 text-white justify-center">
                 <p>Don't have an account!</p>
-                <button className="ml-1">Sign Up?</button>
+                <button onClick={goToRegister} className="ml-1">
+                  Sign Up?
+                </button>
               </div>
             </form>
           </div>

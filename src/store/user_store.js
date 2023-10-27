@@ -23,13 +23,16 @@ class UserStore {
     return alert("failed to fetch lecturers.");
   }
 
-  async postLecturers(name, idno, email, branch) {
+  async postLecturers(name, idno, email, branch, password, role, phno) {
     const url = "/register/hod";
     const body = {
       name: name,
       department: branch,
       idno: idno,
       email: email,
+      password: password,
+      role: role,
+      phoneNumber: phno,
     };
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {
