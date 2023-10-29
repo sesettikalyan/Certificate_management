@@ -8,10 +8,10 @@ export default function CertificateList() {
   const { UserStore } = useStores();
 
   const selectedBranch = Branches.find(
-    (branchname) => branchname.name === branch
+    (branchname) => branchname?.name === branch
   );
 
-  const selectedStudent = selectedBranch.students.find(
+  const selectedStudent = selectedBranch?.students.find(
     (student) => student?.pin === pin
   );
   return (

@@ -8,7 +8,7 @@ export default function StudentLogin({ role }) {
   const { AuthStore } = useStores();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit2 = (e) => {
     e.preventDefault();
     console.log("clicked");
     console.log(role);
@@ -46,7 +46,7 @@ export default function StudentLogin({ role }) {
 
           <div className="flex flex-wrap items-center my-6  justify-center">
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit2}
               className="flex flex-col w-[90%] justify-between h-[70%]"
             >
               <p className="text-white mt-10 ml-3">Pin Number</p>

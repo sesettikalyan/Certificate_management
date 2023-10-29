@@ -1,4 +1,3 @@
-
 // import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import CertificateList from "./CertificateList";
 import { Branches } from "../helpers/Branches";
@@ -8,7 +7,7 @@ import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
 
 export default function Studentview() {
-  const { UserStore } = useStores();
+  const { UserStore, AuthStore } = useStores();
   const { branch, pin } = useParams();
 
   const selectedBranch = Branches.find(
@@ -22,7 +21,11 @@ export default function Studentview() {
   const navigate = useNavigate();
 
   const showBranch = () => {
-    navigate(`/${branch}`);
+    if (AuthStore.principalAuth === true) {
+      navigate(`/${branch}`);
+    } else {
+      navigate(`/${branch}/staffpage`);
+    }
   };
 
   return useObserver(() => (

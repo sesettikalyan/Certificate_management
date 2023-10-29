@@ -30,6 +30,7 @@ export default function NewStaff() {
       const phone = phnoref.current.value;
 
       UserStore.postLecturers(name, id, email, branch, password, role, phone);
+      navigate(`/${branch}`);
       // const data = {
       //     name,
       //     id,

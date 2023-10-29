@@ -6,16 +6,15 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { useEffect, useRef, useState } from "react";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
+import { BiLogOut } from "react-icons/bi";
 
 export default function LecturerView() {
   const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
-  const { UserStore } = useStores();
+  const { UserStore, AuthStore } = useStores();
   const navigate = useNavigate();
   const { branch, id } = useParams();
-  const selectedBranch = Branches.find(
-    (branchname) => branchname.name === branch
-  );
+
   const selectedLecturer = UserStore.lecturers.find(
     (lecturer) => lecturer?.idno === id
   );
@@ -35,7 +34,11 @@ export default function LecturerView() {
   };
 
   const goBack = () => {
-    navigate(`/${branch}`);
+    if (AuthStore.principalAuth === true) {
+      navigate(`/${branch}`);
+    } else {
+      navigate(`/${branch}/staffpage`);
+    }
   };
 
   useEffect(() => {
@@ -52,28 +55,47 @@ export default function LecturerView() {
     setEditForm(false);
   };
 
+  const logout = () => {
+    localStorage.removeItem("user");
+    AuthStore.user = null;
+    AuthStore.setPrincipalAuth(false);
+    AuthStore.setHodAuth(false);
+    AuthStore.setStudentAuth(false);
+    navigate("/");
+  };
+
   return useObserver(() => (
     <div className="w-[100%] flex flex-col items-center py-4 h-full rounded-b-2xl bg-secondary">
       <div className="w-[90%] my-2 mx-auto flex items-center justify-between">
         <button className="flex items-center  text-lg" onClick={goBack}>
           <AiOutlineLeft className="mr-1" /> Back
         </button>
-        <div className="w-[25%] flex justify-between items-center">
-          <button
-            onClick={() => setEditForm(true)}
-            className="w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center"
+
+        {AuthStore.principalAuth ? (
+          <div className="w-[25%] flex justify-between items-center">
+            <button
+              onClick={() => setEditForm(true)}
+              className="w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center"
+            >
+              {" "}
+              <MdOutlineEdit />
+            </button>
+            <button
+              onClick={() => setDeleteForm(true)}
+              className="w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center"
+            >
+              {" "}
+              <MdDeleteOutline />
+            </button>
+          </div>
+        ) : (
+          <div
+            onClick={logout}
+            className="bg-blue-900 cursor-pointer rounded-full text-white text-2xl h-10 w-10 flex items-center justify-center"
           >
-            {" "}
-            <MdOutlineEdit />
-          </button>
-          <button
-            onClick={() => setDeleteForm(true)}
-            className="w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center"
-          >
-            {" "}
-            <MdDeleteOutline />
-          </button>
-        </div>
+            <BiLogOut className="mr-1" />
+          </div>
+        )}
       </div>
       <img
         src={selectedLecturer?.photo}
