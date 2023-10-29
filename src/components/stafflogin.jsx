@@ -8,7 +8,7 @@ export default function StaffLogin({ role }) {
   const { AuthStore } = useStores();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit1 = (e) => {
     e.preventDefault();
     //     console.log("clicked");
     console.log("clicked");
@@ -49,7 +49,7 @@ export default function StaffLogin({ role }) {
 
           <div className="flex flex-wrap items-center my-6  justify-center">
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit1}
               className="flex flex-col w-[90%] justify-between h-[70%]"
             >
               <p className="text-white mt-10 ml-3">User I'd</p>

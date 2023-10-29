@@ -4,9 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Branches } from "../helpers/Branches";
 import { useEffect } from "react";
 import { useStores } from "../store/index";
+import { useObserver } from "mobx-react";
 
 export default function Principal() {
-  const { UserStore } = useStores();
+  const { UserStore, AuthStore } = useStores();
   useEffect(() => {
     UserStore.getLecturersfromapi();
     UserStore.getStudentsfromapi();
@@ -19,17 +20,17 @@ export default function Principal() {
       </div>
       <div className="w-[100%] h-[88%] overflow-y-auto ">
         <Branch />
-        <LecturerApprovals />
+        <Approvals />
       </div>
     </div>
   );
 }
 
 export function Navbar() {
+  const { AuthStore } = useStores();
   const now = new Date();
   const hours = now.getHours();
-  const profile =
-    "https://tse4.mm.bing.net/th?id=OIP.AZORnc-2Ni4OxteNH3jTHwHaE8&pid=Api&P=0&h=180";
+  const profile = localStorage.getItem("user").photo;
   const navigate = useNavigate();
   // const [greeting, setGreeting] = useState(null);
   let greeting = null;
@@ -56,11 +57,11 @@ export function Navbar() {
     <>
       <div className="flex  flex-col items-start">
         <p className="text-text_color2 text-xl">{greeting}..!</p>
-        <h1 className="text-2xl">Principal Name</h1>
+        <h1 className="text-2xl">{AuthStore.user?.name}</h1>
       </div>
       <div>
         <img
-          src={profile}
+          src={AuthStore.user?.photo || profile}
           onClick={goToProfile}
           className="w-12 h-12 rounded-full"
           alt=""
@@ -72,6 +73,7 @@ export function Navbar() {
 
 export function Branch() {
   const navigate = useNavigate();
+  const { UserStore } = useStores();
 
   const goToSpecificBranch = (branch) => {
     navigate(`/${branch}`);
@@ -81,7 +83,7 @@ export function Branch() {
     navigate("/search");
   };
 
-  return (
+  return useObserver(() => (
     <>
       <div className="w-[90%] h-fit flex flex-col mx-auto">
         <div className="w-[100%] mt-[2%] flex flex-row mx-auto justify-between items-center">
@@ -93,15 +95,15 @@ export function Branch() {
         {Branches.map((item) => (
           <div
             className="w-[45%] h-[200px] mx-auto pl-4 shadow-sm shadow-[#000000] my-5 flex flex-col items-start py-2  rounded-lg bg-white"
-            onClick={() => goToSpecificBranch(item.name)}
+            onClick={() => goToSpecificBranch(item?.name)}
           >
             <div className="w-16 h-16 rounded-full bg-primary2 my-1"> </div>
             <h1 className="text-lg pb-1">{item.name}</h1>
             <p className="text-base  text-text_color2">
-              Total Staff :{item.total_staff}
+              Total Staff :{UserStore?.lecturers.length}
             </p>
             <p className="text-base pb-1 text-green-400">
-              Total Students :{item.total_students}
+              Total Students :{UserStore?.students.length}
             </p>
           </div>
         ))}
@@ -126,16 +128,22 @@ export function Branch() {
                 </div> */}
       </div>
     </>
-  );
+  ));
 }
 
-export function LecturerApprovals({ navigation }) {
+export function Approvals({ navigation }) {
   const navigate = useNavigate();
   const { branch } = useParams();
+  const { UserStore } = useStores();
 
   const selectedBranch = Branches.find(
-    (branchname) => branchname.name === branch
+    (branchname) => branchname?.name === branch
   );
+
+  useEffect(() => {
+    UserStore.UnVerifiedLecturersfromlecturers();
+    UserStore.UnverifiedStudentsfromstudents();
+  }, []);
 
   const viewStaffDetails = (id) => {
     navigate(`/staff/${id}`);
@@ -145,30 +153,30 @@ export function LecturerApprovals({ navigation }) {
     return navigate(`/${selectedBranch?.name}/studentapproval/${pin}`);
   };
 
-  return (
+  return useObserver(() => (
     <div className="bg-secondary w-[95%] py-3 mx-auto rounded-lg">
       <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">
         {navigation ? <>Student Approvals</> : <>Lecturer Approvals</>}
       </h1>
       {!navigation ? (
         <>
-          {lecturerApprovals.map((lecturer) => (
+          {UserStore?.notVerifiedLecturers.map((lecturer) => (
             <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
               <div className="flex flex-row items-center">
                 <img
-                  src={lecturer.image}
+                  src={lecturer?.photo}
                   className="w-12 h-12 rounded-full"
                   alt=""
                 />
                 <div className="flex flex-col items-start ml-3">
-                  <h1 className="text-lg">{lecturer.name}</h1>
-                  <p className="text-base">{lecturer.id}</p>
+                  <h1 className="text-lg">{lecturer?.name}</h1>
+                  <p className="text-base">{lecturer?.idno}</p>
                 </div>
               </div>
               <div className="flex">
                 <button
                   className="flex items-center justify-center"
-                  onClick={() => viewStaffDetails(lecturer.id)}
+                  onClick={() => viewStaffDetails(lecturer?.idno)}
                 >
                   view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
                 </button>
@@ -178,23 +186,23 @@ export function LecturerApprovals({ navigation }) {
         </>
       ) : (
         <>
-          {selectedBranch?.students.map((student) => (
+          {UserStore.notVerifiedStudents.map((student) => (
             <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
               <div className="flex flex-row items-center">
                 <img
-                  src={student?.image}
+                  src={student?.photo}
                   className="w-12 h-12 rounded-full"
                   alt=""
                 />
                 <div className="flex flex-col items-start ml-3">
                   <h1 className="text-lg">{student?.name}</h1>
-                  <p className="text-base">{student?.pin}</p>
+                  <p className="text-base">{student?.pinno}</p>
                 </div>
               </div>
               <div className="flex">
                 <button
                   className="flex items-center justify-center"
-                  onClick={() => viewStudentDetails(student?.pin)}
+                  onClick={() => viewStudentDetails(student?.pinno)}
                 >
                   view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
                 </button>
@@ -204,5 +212,5 @@ export function LecturerApprovals({ navigation }) {
         </>
       )}
     </div>
-  );
+  ));
 }

@@ -18,6 +18,7 @@ export default function StaffPage() {
 
   useEffect(() => {
     UserStore.getStudentsfromapi();
+    UserStore.getLecturersfromapi();
   });
 
   return (

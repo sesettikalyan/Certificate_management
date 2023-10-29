@@ -7,17 +7,24 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 // import { MechStudents } from '../helpers/MechStudents';
 import { Branches } from "../helpers/Branches";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PiBuildingsBold } from "react-icons/pi";
 import { BsPersonCheck } from "react-icons/bs";
-import { useStores } from "../store";
+import { useStores } from "../store/index";
 import { toJS } from "mobx";
 import { useObserver } from "mobx-react";
 
 export default function BranchDetails() {
   const navigate = useNavigate();
 
-  return (
+  const { UserStore } = useStores();
+
+  useEffect(() => {
+    UserStore.approvedlecturers();
+    UserStore.approvedStudents();
+  }, []);
+
+  return useObserver(() => (
     <>
       <div className="w-[100%] h-screen flex flex-col bg-gray-100">
         <TitleAndSearch />
@@ -31,11 +38,12 @@ export default function BranchDetails() {
         </div>
       </div>
     </>
-  );
+  ));
 }
 
 export function TitleAndSearch({ onStaff }) {
   let { branch } = useParams();
+  const { AuthStore } = useStores();
 
   const selectedBranch = Branches.find(
     (branchname) => branchname.name === branch
@@ -52,6 +60,10 @@ export function TitleAndSearch({ onStaff }) {
 
   const gotoHomePage = () => {
     navigate(`/principal`);
+  };
+
+  const showlecturerprofile = (id) => {
+    navigate(`/${branch}/lecturer/${id}`);
   };
 
   return (
@@ -80,11 +92,14 @@ export function TitleAndSearch({ onStaff }) {
               >
                 <PiBuildingsBold className="text-3xl ml-2 mt-2" />
               </div>
-              <div className=" mx-2 pr-2">
+              <div
+                onClick={() => showlecturerprofile(AuthStore.user?.idno)}
+                className=" mx-2 pr-2"
+              >
                 <img
                   className="h-12 w-12 rounded-full"
-                  src="https://t3.ftcdn.net/jpg/02/65/18/30/360_F_265183061_NkulfPZgRxbNg3rvYSNGGwi0iD7qbmOp.jpg"
-                  alt=""
+                  src={AuthStore.user?.photo}
+                  alt={AuthStore.user?.name}
                 />
               </div>
             </div>
@@ -113,7 +128,7 @@ export function LecturerSection() {
 
   // const selectedBranch = UserStore.lecturers.;
   //getting the lectures of the selected branch from the lecturers array in the userstore by checking each lecturer's department by converting into uppercase with the branch from url params.
-  const selectedBranchLecturers = UserStore?.lecturers.filter(
+  const selectedBranchLecturers = UserStore.lecturers.filter(
     (lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase()
   );
   // console.log(selectedBranchLecturers);
@@ -170,8 +185,11 @@ export function StudentSection({ onstaff }) {
   // const selectedBranch = Branches.find(
   //   (branchname) => branchname.name === branch
   // );
+  useEffect(() => {
+    UserStore.approvedStudents();
+  }, []);
 
-  const selectedBranchStudents = UserStore.students.filter(
+  const selectedBranchStudents = UserStore.verifiedstudents.filter(
     (student) => student?.department.toUpperCase() === branch.toUpperCase()
   );
 
@@ -183,22 +201,20 @@ export function StudentSection({ onstaff }) {
 
   return useObserver(() => (
     <>
-      {selectedBranchStudents.length === 0 ? (
+      {onstaff ? (
         <>
-          {onstaff && (
-            <div className="flex w-[90%] justify-between items-center mt-2 mx-auto">
-              <h2 className="text-2xl text-text_color1 font-semibold">
-                Students
-              </h2>
-              <button
-                className="flex text-xs text-text_color1 items-center"
-                // onClick={() => addNewStaff(branch)}
-              >
-                <IoMdAddCircle className="text-base" />
-                Add new Student
-              </button>
-            </div>
-          )}{" "}
+          <div className="flex w-[90%] justify-between items-center mt-2 mx-auto">
+            <h2 className="text-2xl text-text_color1 font-semibold">
+              Students
+            </h2>
+            <button
+              className="flex text-xs text-text_color1 items-center"
+              // onClick={() => addNewStaff(branch)}
+            >
+              <IoMdAddCircle className="text-base" />
+              Add new Student
+            </button>
+          </div>
         </>
       ) : (
         <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl">

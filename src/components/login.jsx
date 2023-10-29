@@ -1,16 +1,21 @@
 import { useRef } from "react";
 import logo from "../assets/logo.png";
 import { useStores } from "../store/index";
+import { useNavigate } from "react-router-dom";
 export default function Login({ role }) {
   const usernameref = useRef(null);
   const passwordref = useRef(null);
   const { AuthStore } = useStores();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const username = usernameref.current.value;
     const password = passwordref.current.value;
-    AuthStore.callingPrincipalLogin(username, password);
+    const resp = AuthStore.callingPrincipalLogin(username, password);
+    if (AuthStore.principalAuth === true) {
+      navigate("/principal");
+    }
   };
 
   return (

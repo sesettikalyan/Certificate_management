@@ -1,32 +1,35 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AiOutlineRight, AiOutlineLeft } from 'react-icons/ai';
-import { Branches } from '../helpers/Branches';
-import { useParams } from 'react-router-dom';
-import { LecturerApprovals } from './Principal';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
+import { Branches } from "../helpers/Branches";
+import { useParams } from "react-router-dom";
+import { Approvals } from "./Principal";
+import { useObserver } from "mobx-react";
 
 export default function StudentApproval() {
-    let { branch } = useParams();
-    //for navigating to the staffpage on clicking back button
-    const navigate = useNavigate();
-    const gotoStaffPage = () => {
-        console.log(branch);
-        navigate(`/${branch}/staffpage`);
-    }
-    return (
-        <div>
-                <button className="flex items-center mt-6 pl-4 text-lg" onClick={gotoStaffPage}><AiOutlineLeft className="mr-1" /> Back</button>
+  let { branch } = useParams();
+  //for navigating to the staffpage on clicking back button
+  const navigate = useNavigate();
+  const gotoStaffPage = () => {
+    console.log(branch);
+    navigate(`/${branch}/staffpage`);
+  };
+  return useObserver(() => (
+    <div>
+      <button
+        className="flex items-center mt-6 pl-4 text-lg"
+        onClick={gotoStaffPage}
+      >
+        <AiOutlineLeft className="mr-1" /> Back
+      </button>
 
-                 {/* Student-list-section */}
-                 <div className=" drop-shadow my-6 shadow-lg w-[90%] mx-auto ">
-                    <LecturerApprovals  navigation={true}/>
-                </div>
-
-        </div>
-        
-    )
+      {/* Student-list-section */}
+      <div className=" drop-shadow my-6 shadow-lg w-[90%] mx-auto ">
+        <Approvals navigation={true} />
+      </div>
+    </div>
+  ));
 }
-
 
 // export function StudentSection() {
 //     let { branch } = useParams();
@@ -40,7 +43,7 @@ export default function StudentApproval() {
 //     }
 
 //     return (
-//         <> 
+//         <>
 //         <div className='bg-secondary rounded-xl'>
 //             <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl">Students Approvals</h1>
 //             {selectedBranch?.students.map((student) => (
