@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import HomePage from "./components/category";
 import Login from "./components/login";
-import Login1 from "./components/staffregister";
+import Register from "./components/register";
 // import Staffdetails from './components/staffdetails';
 import Certificateview1 from "./components/Certificateview1";
 import Certificateview2 from "./components/Certificateview2";
@@ -24,10 +24,10 @@ import NewStaff from "./components/newStaff";
 import StaffPage from "./components/staffpage";
 import StudentApproval from "./components/studentApproval";
 import StudentDetails from "./components/studentDetails";
-import StudentLogin from "./components/studentlogin";
-import StaffLogin from "./components/stafflogin";
+// import StudentLogin from "./components/studentlogin";
+// import StaffLogin from "./components/stafflogin";
 import Selectbranch from "./components/selectbranch";
-import StudentRegister from "./components/studentregister";
+// import StudentRegister from "./components/studentregister";
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
 
@@ -38,9 +38,9 @@ root.render(
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Login1 />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/selectbranch" element={<Selectbranch />} />
-        <Route path="/studentregister" element={<StudentRegister />} />
+        {/* <Route path="/studentregister" element={<StudentRegister />} /> */}
         {/* <Route path="/branch" element={<Branch />} /> */}
         <Route path="/studentview" element={<Studentview />} />
         <Route path="/certificateview1" element={<Certificateview1 />} />
@@ -48,8 +48,8 @@ root.render(
         <Route path="/staffcertificate1" element={<Staffcertificate1 />} />
         <Route path="/staffcertificate" element={<Staffcertificate />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/studentlogin" element={<StudentLogin />} />
-        <Route path="/stafflogin" element={<StaffLogin />} />
+        {/* <Route path="/studentlogin" element={<StudentLogin />} />
+        <Route path="/stafflogin" element={<StaffLogin />} /> */}
         {/* <Route path="/ece" element={<Branch />} /> */}
         <Route path="/:branch" element={<BranchDetails />} />
         {/* <Route path="/electrical" element={<Electrical />} /> */}

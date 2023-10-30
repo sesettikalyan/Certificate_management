@@ -2,20 +2,56 @@ import { useRef } from "react";
 import logo from "../assets/logo.png";
 import { useStores } from "../store/index";
 import { useNavigate } from "react-router-dom";
-export default function Login({ role }) {
+export default function Login() {
   const usernameref = useRef(null);
   const passwordref = useRef(null);
-  const { AuthStore } = useStores();
+  const { AuthStore, CommonStore } = useStores();
   const navigate = useNavigate();
+
+  const usernamelabel = () => {
+    if (CommonStore.role === "principal") {
+      return "Username";
+    } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
+      return "User I'd";
+    } else {
+      return "Pin Number";
+    }
+  };
+
+  const user = usernamelabel();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const username = usernameref.current.value;
     const password = passwordref.current.value;
-    const resp = AuthStore.callingPrincipalLogin(username, password);
-    if (AuthStore.principalAuth === true) {
-      navigate("/principal");
+
+    console.log(CommonStore.role);
+
+    // const resp = AuthStore.callingPrincipalLogin(username, password);
+    // if (AuthStore.principalAuth === true) {
+    //   navigate("/principal");
+    // }
+
+    if (CommonStore.role === "principal") {
+      AuthStore.callingPrincipalLogin(username, password);
+      if (AuthStore.principalAuth === true) {
+        navigate("/principal");
+      }
+    } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
+      AuthStore.callingHodLoginApi(username, password);
+      if (AuthStore.hodAuth === true) {
+        navigate("/selectbranch");
+      }
+    } else {
+      AuthStore.callingStudentLoginApi(username, password);
+      // if (AuthStore.studentAuth === true) {
+      //   navigate("/student");
+      // }
     }
+  };
+
+  const goToRegisterPage = () => {
+    navigate("/register");
   };
 
   return (
@@ -34,15 +70,17 @@ export default function Login({ role }) {
               onSubmit={handleSubmit}
               className="flex flex-col w-[90%] justify-between h-[70%]"
             >
-              <p className="text-white mt-10 ml-3">Username</p>
+              <p className="text-white mt-10 ml-3">{user}</p>
               <input
                 ref={usernameref}
+                required
                 className="px-5 py-4 rounded-full w-[98%] "
                 type="text"
               />
               <br />
               <p className="text-white mt-5 ml-3">Password</p>
               <input
+                required
                 ref={passwordref}
                 className="px-5 py-4 rounded-full w-[98%]"
                 type="password"
@@ -57,6 +95,14 @@ export default function Login({ role }) {
               >
                 Login
               </button>
+              {CommonStore.role !== "principal" ? (
+                <div className="flex items-center pt-2 text-white justify-center">
+                  <p>Don't have an account!</p>
+                  <button onClick={goToRegisterPage} className="ml-1">
+                    Sign Up?
+                  </button>
+                </div>
+              ) : null}
             </form>
           </div>
         </div>
