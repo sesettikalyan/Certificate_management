@@ -97,8 +97,8 @@ export function Branch() {
             className="w-[45%] h-[200px] mx-auto pl-4 shadow-sm shadow-[#000000] my-5 flex flex-col items-start py-2  rounded-lg bg-white"
             onClick={() => goToSpecificBranch(item?.name)}
           >
-            <div className="w-16 h-16 rounded-full bg-primary2 my-1"> </div>
-            <h1 className="text-lg pb-1">{item.name}</h1>
+            <div className="w-16 h-16 rounded-full bg-primary2 my-1"></div>
+            <h1 className="text-lg pb-1">{item?.name}</h1>
             <p className="text-base  text-text_color2">
               Total Staff :{UserStore?.lecturers.length}
             </p>
