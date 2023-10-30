@@ -10,8 +10,7 @@ class AuthStore {
   studentAuth = false;
   principalAuth = false;
 
-  async callingHodLoginApi(username, password, refresh = false) {
-    if (!refresh && this.hodAuth) return;
+  async callingHodLoginApi(username, password) {
     const url = "/hod/login";
     const body = { idno: username, password: password };
     const response = await apiPostPut(body, url, "POST");
@@ -26,8 +25,7 @@ class AuthStore {
     return alert(response?.body);
   }
 
-  async callingStudentLoginApi(pinno, password, refresh = false) {
-    if (!refresh && this.studentAuth) return;
+  async callingStudentLoginApi(pinno, password) {
     const url = "/students/login";
     const body = { pinno: pinno, password: password };
     const response = await apiPostPut(body, url, "POST");
@@ -42,8 +40,7 @@ class AuthStore {
     return alert(response?.body?.message);
   }
 
-  async callingPrincipalLogin(username, password, refresh = false) {
-    if (!refresh && this.principalAuth) return;
+  async callingPrincipalLogin(username, password) {
     const url = "/principal/login";
     const body = { id: username, password: password };
     const response = await apiPostPut(body, url, "POST");

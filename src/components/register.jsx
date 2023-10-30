@@ -1,12 +1,14 @@
 import logo from "../assets/logo.png";
-export default function Login1({ from }) {
+import { useStores } from "../store/index";
+export default function Register() {
+  const { CommonStore } = useStores();
   return (
     <>
       <div className="flex flex-col w-[100%]  items-center">
-        <div className="h-[30%] mt-[10%] md:mt-[2%]">
+        <div className="h-[30%] mt-[5%] md:mt-[2%]">
           <img src={logo} className="w-32 h-32 " alt="" />
         </div>
-        <div className="bg-primary h-[70%] p-6  w-[100%] rounded-tl-[100px] mt-[20%] md:mt-[10%]  items-center justify-center">
+        <div className="bg-primary h-[70%] p-6  w-[100%] rounded-tl-[100px] mt-[8%]  items-center justify-center">
           <h1 className="text-3xl text-center py-2 text-white">
             Enter Details
           </h1>
@@ -20,7 +22,7 @@ export default function Login1({ from }) {
               <input className="px-5 w-[100%] py-4 rounded-full" type="text" />
               {/* <link rel="stylesheet" href="" /> */}
               <p className="text-white mt-4 ml-3">
-                {from ? "Pin Number" : "User I'd"}
+                {CommonStore.role === "student" ? "Pin Number" : "User I'd"}
               </p>
               <input className="px-5 w-[100%] py-4 rounded-full " type="text" />
 

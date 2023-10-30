@@ -5,6 +5,7 @@ import { PiStudentDuotone } from "react-icons/pi";
 import { GiTeacher } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 import Login from "./login";
+import { useStores } from "../store/index";
 
 export default function HomePage() {
   const [showHome, setShowHome] = useState(true);
@@ -28,23 +29,23 @@ export function Home() {
 
 export function Category() {
   const navigate = useNavigate();
-  const [role, setRole] = useState(null);
+  const { CommonStore } = useStores();
 
   const goToLogin = () => {
-    setRole("principal");
+    CommonStore.setRole("principal");
     navigate("/login");
   };
   const goToLogin1 = () => {
-    setRole("hod");
-    navigate("/stafflogin");
+    CommonStore.setRole("hod");
+    navigate("/login");
   };
   const goToLogin2 = () => {
-    setRole("staff");
-    navigate("/stafflogin");
+    CommonStore.setRole("staff");
+    navigate("/login");
   };
   const goToLogin3 = () => {
-    setRole("student");
-    navigate("/studentlogin");
+    CommonStore.setRole("student");
+    navigate("/login");
   };
 
   return (
@@ -86,9 +87,6 @@ export function Category() {
             <h1 className="text-base ">Student</h1>
           </div>
         </div>
-      </div>
-      <div className="hidden">
-        <Login role={role} />
       </div>
     </div>
   );

@@ -46,18 +46,18 @@ class UserStore {
     return alert("failed to fetch lecturers.");
   }
 
-  // approveLecturer(id) {
-  //   const url = `/hod/${id}`;
-  //   const body = {
-  //     isVerified: true,
-  //   };
-  //   const response = apiPostPut(body, url, "PUT");
-  //   if (response.status === 200) {
-  //     console.log(response?.body);
-  //     return this.setLecturers(response?.body);
-  //   }
-  //   return alert("failed to fetch lecturers.");
-  // }
+  approveLecturer(id) {
+    const url = `/hod/${id}`;
+    const body = {
+      isVerified: true,
+    };
+    const response = apiPostPut(body, url, "PUT");
+    if (response.status === 200) {
+      console.log(response?.body);
+      return this.setLecturers(response?.body);
+    }
+    return alert("failed to fetch lecturers.");
+  }
 
   UnVerifiedLecturersfromlecturers() {
     const notVerifiedLecturers = this.lecturers.reduce((acc, lecturer) => {
