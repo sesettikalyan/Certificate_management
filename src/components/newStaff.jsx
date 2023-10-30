@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { useStores } from "../store/index";
+import { useObserver } from "mobx-react";
 
 export default function NewStaff() {
   const { branch } = useParams();
@@ -48,7 +49,7 @@ export default function NewStaff() {
     passwordref.current.value = password;
   };
 
-  return (
+  return useObserver(() => (
     <div className="flex flex-col w-[100%] py-8  bg-secondary rounded-tr-[100px] ">
       <button
         className="flex items-center w-[20%] mx-4  text-lg"
@@ -162,5 +163,5 @@ export default function NewStaff() {
         </div>
       </form>
     </div>
-  );
+  ));
 }

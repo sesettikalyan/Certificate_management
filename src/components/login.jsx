@@ -33,20 +33,17 @@ export default function Login() {
     // }
 
     if (CommonStore.role === "principal") {
-      AuthStore.callingPrincipalLogin(username, password);
-      if (AuthStore.principalAuth === true) {
+      if (AuthStore.callingPrincipalLogin(username, password)) {
         navigate("/principal");
       }
     } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
-      AuthStore.callingHodLoginApi(username, password);
-      if (AuthStore.hodAuth === true) {
+      if (AuthStore.callingHodLoginApi(username, password)) {
         navigate("/selectbranch");
       }
     } else {
-      AuthStore.callingStudentLoginApi(username, password);
-      // if (AuthStore.studentAuth === true) {
-      //   navigate("/student");
-      // }
+      if (AuthStore.callingStudentLoginApi(username, password)) {
+        navigate(`${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
+      }
     }
   };
 

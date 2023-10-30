@@ -17,12 +17,13 @@ class AuthStore {
     if (response.status === 200) {
       console.log(response?.body?.hod);
 
-      this.setuser(response?.body?.hod);
+      this.setUser(response?.body?.hod);
       localStorage.setItem("user", JSON.stringify(response?.body?.hod));
 
       return this.setHodAuth(true);
     }
-    return alert(response?.body);
+    alert(response?.body?.message);
+    return false;
   }
 
   async callingStudentLoginApi(pinno, password) {
@@ -32,12 +33,13 @@ class AuthStore {
     if (response.status === 200) {
       this.setStudentAuth(true);
       console.log(response?.body);
-      this.setuser(response?.body?.student);
+      this.setUser(response?.body?.student);
       localStorage.setItem("user", JSON.stringify(response?.body?.student));
 
       return true;
     }
-    return alert(response?.body?.message);
+    alert(response?.body?.message);
+    return false;
   }
 
   async callingPrincipalLogin(username, password) {
@@ -47,12 +49,13 @@ class AuthStore {
     if (response.status === 200) {
       this.setPrincipalAuth(true);
       console.log(response?.body?.principal);
-      this.setuser(response?.body?.principal);
+      this.setUser(response?.body?.principal);
       localStorage.setItem("user", JSON.stringify(response?.body?.principal));
-      console.log(this.user);
+      console.log(toJS(this.user));
       return true;
     }
-    return alert(response?.body?.message);
+    alert(response?.body?.message);
+    return false;
   }
 
   setPrincipalAuth(bool) {
@@ -67,7 +70,7 @@ class AuthStore {
     this.studentAuth = bool;
   }
 
-  setuser(user) {
+  setUser(user) {
     this.user = user;
   }
 }

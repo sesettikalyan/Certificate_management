@@ -41,7 +41,15 @@ class UserStore {
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {
       console.log(response?.body);
-      return this.setLecturers(response?.body);
+      //pushing this into lecturers array
+      console.log(
+        this.lecturers.push({
+          ...response?.body,
+        })
+      );
+      return this.lecturers.push({
+        ...response?.body,
+      });
     }
     return alert("failed to fetch lecturers.");
   }
@@ -54,19 +62,27 @@ class UserStore {
     const response = await apiPostPut(body, url, "PUT");
     if (response.status === 200) {
       console.log(response?.body);
-      return this.setLecturers(response?.body);
+      this.lecturers.push({
+        ...response?.body,
+      });
+      console.log(this.lecturers);
+      this.UnVerifiedLecturersfromlecturers();
+      return true;
     }
-    return alert("failed to fetch lecturers.");
+    alert("failed to fetch lecturers.");
+    return false;
   }
 
   UnVerifiedLecturersfromlecturers() {
-    const notVerifiedLecturers = this.lecturers.reduce((acc, lecturer) => {
-      if (lecturer?.isVerified === false) {
-        acc.push(lecturer);
-      }
-      return acc;
-    }, []);
-    return this.setNotVerifiedLecturers(notVerifiedLecturers);
+    try {
+      const notVerifiedLecturers = this.lecturers.reduce((acc, lecturer) => {
+        if (lecturer?.isVerified === false) {
+          acc.push(lecturer);
+        }
+        return acc;
+      }, []);
+      return this.setNotVerifiedLecturers(notVerifiedLecturers);
+    } catch (error) {}
   }
 
   setNotVerifiedLecturers(lecturers) {
@@ -74,13 +90,15 @@ class UserStore {
   }
 
   approvedlecturers() {
-    const verifiedlectrers = this.lecturers.reduce((acc, lecturer) => {
-      if (lecturer?.isVerified === true) {
-        acc.push(lecturer);
-      }
-      return acc;
-    }, []);
-    return this.setVerifiedLecturers(verifiedlectrers);
+    try {
+      const verifiedlectrers = this.lecturers.reduce((acc, lecturer) => {
+        if (lecturer?.isVerified === true) {
+          acc.push(lecturer);
+        }
+        return acc;
+      }, []);
+      return this.setVerifiedLecturers(verifiedlectrers);
+    } catch (error) {}
   }
 
   setVerifiedLecturers(lecturers) {
@@ -115,13 +133,15 @@ class UserStore {
   }
 
   approvedStudents() {
-    const verifiedstudents = this.students.reduce((acc, student) => {
-      if (student?.isVerified === true) {
-        acc.push(student);
-      }
-      return acc;
-    }, []);
-    return this.setVerifiedStudents(verifiedstudents);
+    try {
+      const verifiedstudents = this.students.reduce((acc, student) => {
+        if (student?.isVerified === true) {
+          acc.push(student);
+        }
+        return acc;
+      }, []);
+      return this.setVerifiedStudents(verifiedstudents);
+    } catch (error) {}
   }
 
   setVerifiedStudents(students) {
@@ -129,13 +149,15 @@ class UserStore {
   }
 
   UnverifiedStudentsfromstudents() {
-    const notVerifiedStudents = this.students.reduce((acc, student) => {
-      if (student?.isVerified === false) {
-        acc.push(student);
-      }
-      return acc;
-    }, []);
-    return this.setNotVerifiedStudents(notVerifiedStudents);
+    try {
+      const notVerifiedStudents = this.students.reduce((acc, student) => {
+        if (student?.isVerified === false) {
+          acc.push(student);
+        }
+        return acc;
+      }, []);
+      return this.setNotVerifiedStudents(notVerifiedStudents);
+    } catch (error) {}
   }
 
   setNotVerifiedStudents(students) {

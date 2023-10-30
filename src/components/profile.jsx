@@ -6,7 +6,7 @@ import { useStores } from "../store/index";
 
 export const Profile = () => {
   const navigate = useNavigate();
-  const { AuthStore } = useStores();
+  const { AuthStore, CommonStore } = useStores();
   const goToHomepage = () => {
     if (AuthStore.principalAuth === true) {
       navigate("/principal");
@@ -23,6 +23,7 @@ export const Profile = () => {
     AuthStore.setPrincipalAuth(false);
     AuthStore.setHodAuth(false);
     AuthStore.setStudentAuth(false);
+    CommonStore.setRole(null);
     navigate("/");
   };
 

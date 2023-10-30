@@ -11,9 +11,11 @@ export default function Principal() {
   useEffect(() => {
     UserStore.getLecturersfromapi();
     UserStore.getStudentsfromapi();
+    UserStore.UnVerifiedLecturersfromlecturers();
+    UserStore.UnverifiedStudentsfromstudents();
   }, []);
 
-  return (
+  return useObserver(()=>(
     <div className="w-[100%] my-1 h-screen flex flex-col">
       <div className="w-[90%] h-[12%] flex sticky flex-row mx-auto justify-between items-center">
         <Navbar />
@@ -23,14 +25,13 @@ export default function Principal() {
         <Approvals />
       </div>
     </div>
-  );
+  ));
 }
 
 export function Navbar() {
   const { AuthStore } = useStores();
   const now = new Date();
   const hours = now.getHours();
-  const profile = localStorage.getItem("user").photo;
   const navigate = useNavigate();
   // const [greeting, setGreeting] = useState(null);
   let greeting = null;
@@ -53,7 +54,7 @@ export function Navbar() {
     navigate("/profile");
   };
 
-  return (
+  return useObserver(() => (
     <>
       <div className="flex  flex-col items-start">
         <p className="text-text_color2 text-xl">{greeting}..!</p>
@@ -61,14 +62,14 @@ export function Navbar() {
       </div>
       <div>
         <img
-          src={AuthStore.user?.photo || profile}
+          src={AuthStore.user?.photo}
           onClick={goToProfile}
           className="w-12 h-12 rounded-full"
           alt=""
         />
       </div>
     </>
-  );
+  ));
 }
 
 export function Branch() {
@@ -140,10 +141,7 @@ export function Approvals({ navigation }) {
     (branchname) => branchname?.name === branch
   );
 
-  useEffect(() => {
-    UserStore.UnVerifiedLecturersfromlecturers();
-    UserStore.UnverifiedStudentsfromstudents();
-  }, []);
+  useEffect(() => {}, []);
 
   const viewStaffDetails = (id) => {
     navigate(`/staff/${id}`);
