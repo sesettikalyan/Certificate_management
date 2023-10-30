@@ -128,7 +128,7 @@ export function LecturerSection() {
 
   // const selectedBranch = UserStore.lecturers.;
   //getting the lectures of the selected branch from the lecturers array in the userstore by checking each lecturer's department by converting into uppercase with the branch from url params.
-  const selectedBranchLecturers = UserStore.lecturers.filter(
+  const selectedBranchLecturers = UserStore.verifiedlectrers.filter(
     (lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase()
   );
   // console.log(selectedBranchLecturers);
