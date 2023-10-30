@@ -14,7 +14,7 @@ export default function StaffApproval() {
   );
 
   const approveStaff = (id) => {
-    UserStore.approveLecturer(id);
+    UserStore.approveLecturer(id, true);
     navigate(`/principal`);
   };
 

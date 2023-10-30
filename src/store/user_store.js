@@ -46,12 +46,12 @@ class UserStore {
     return alert("failed to fetch lecturers.");
   }
 
-  approveLecturer(id) {
+  async approveLecturer(id, isVerified) {
     const url = `/hod/${id}`;
     const body = {
-      isVerified: true,
+      isVerified: isVerified,
     };
-    const response = apiPostPut(body, url, "PUT");
+    const response = await apiPostPut(body, url, "PUT");
     if (response.status === 200) {
       console.log(response?.body);
       return this.setLecturers(response?.body);
