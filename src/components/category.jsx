@@ -50,44 +50,52 @@ export function Category() {
 
   return (
     <div className="flex flex-col w-[100%]  h-screen items-center ">
-      <div className="h-[30%] mt-[10%] md:mt-[2%]">
-        <img src={logo} className="w-32 h-32 " alt="" />
-      </div>
+      <div className="h-[30%] mt-[10%] md:mt-[5%]">{Logo()}</div>
 
-      <div className="bg-primary p-6 h-[70%]  w-[100%] rounded-tl-[100px] mt-[20%] md:mt-[10%]  items-center justify-center">
-        <h1 className="text-3xl text-center py-2 text-white">
+      <div className="bg-primary p-6 h-[70%] md:w-[70%] lg:w-[70%]  w-[100%] rounded-tl-[100px] md:rounded-tl-none lg:rounded-tl-none mt-[20%] md:mt-[5%]  items-center justify-center">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl text-center py-2 text-white">
           Select User Type
         </h1>
 
-        <div className="flex flex-wrap items-center my-6  justify-center">
+        <div className="flex flex-wrap items-center my-6 md:my-[6%] justify-center">
           <div
-            className="w-[120px] h-[120px] mx-4  my-10 flex flex-col items-center justify-center bg-white"
+            className="w-[120px] h-[120px] md:w-[200px] md:h-[200px] md:mx-8  mx-4  my-10  flex flex-col items-center justify-center bg-white"
             onClick={goToLogin}
           >
-            <h1 className="text-base ">Principal</h1>
+            <h1 className="text-base md:text-xl ">Principal</h1>
           </div>
           <div
             onClick={goToLogin1}
-            className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white"
+            className="w-[120px] h-[120px] md:w-[200px] md:h-[200px] md:mx-8 mx-4 my-10 flex flex-col items-center justify-center bg-white"
           >
-            <h1 className="text-base ">Hod</h1>
+            <h1 className="text-base md:text-xl ">Hod</h1>
           </div>
           <div
             onClick={goToLogin2}
-            className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white"
+            className="w-[120px] h-[120px] md:w-[200px] md:h-[200px] md:mx-8 mx-4 my-10 flex flex-col items-center justify-center bg-white"
           >
-            <GiTeacher className="text-6xl my-1 text-black" />
-            <h1 className="text-base ">Staff</h1>
+            <GiTeacher className="text-6xl md:text-8xl my-1 md:my-2 text-black" />
+            <h1 className="text-base md:text-xl ">Staff</h1>
           </div>
           <div
             onClick={goToLogin3}
-            className="w-[120px] h-[120px] mx-4 my-10 flex flex-col items-center justify-center bg-white"
+            className="w-[120px] h-[120px] md:w-[200px] md:h-[200px] md:mx-8 mx-4 my-10 flex flex-col items-center justify-center bg-white"
           >
-            <PiStudentDuotone className="text-6xl my-1 text-black" />
-            <h1 className="text-base ">Student</h1>
+            <PiStudentDuotone className="text-6xl md:text-8xl my-1 md:my-2 text-black" />
+            <h1 className="text-base md:text-xl ">Student</h1>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+export function Logo() {
+  return (
+    <img
+      src={logo}
+      className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 "
+      alt=""
+    />
   );
 }

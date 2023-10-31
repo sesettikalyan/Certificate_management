@@ -25,7 +25,7 @@ export default function StudentApproval() {
 
       {/* Student-list-section */}
       <div className=" drop-shadow my-6 shadow-lg w-[90%] mx-auto ">
-        <Approvals navigation={true} />
+        <Approvals />
       </div>
     </div>
   ));

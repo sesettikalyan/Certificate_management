@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+// import { SetPasswordFields } from "./components/register";
 // import App from './App';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
@@ -40,6 +41,7 @@ root.render(
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/selectbranch" element={<Selectbranch />} />
+        {/* <Route path="/setpassword" element={<SetPasswordFields />} /> */}
         {/* <Route path="/studentregister" element={<StudentRegister />} /> */}
         {/* <Route path="/branch" element={<Branch />} /> */}
         <Route path="/studentview" element={<Studentview />} />

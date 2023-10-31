@@ -11,6 +11,7 @@ import { BiLogOut } from "react-icons/bi";
 import { TitleAndSearch } from "./branchDetails";
 import { StudentSection } from "./branchDetails";
 import { useStores } from "../store/index";
+import { useObserver } from "mobx-react";
 
 export default function StaffPage() {
   const { UserStore } = useStores();
@@ -21,7 +22,7 @@ export default function StaffPage() {
     UserStore.getLecturersfromapi();
   });
 
-  return (
+  return useObserver(() => (
     <div>
       <div className="w-[100%] h-screen flex flex-col bg-gray-100">
         {/* search box */}
@@ -32,7 +33,7 @@ export default function StaffPage() {
         </div>
       </div>
     </div>
-  );
+  ));
 }
 
 // export function StudentSection() {

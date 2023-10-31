@@ -15,15 +15,23 @@ class AuthStore {
     const body = { idno: username, password: password };
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {
+      this.setHodAuth(true);
       console.log(response?.body?.hod);
 
       this.setUser(response?.body?.hod);
       localStorage.setItem("user", JSON.stringify(response?.body?.hod));
-
-      return this.setHodAuth(true);
+      console.log(toJS(this.user));
+      if (
+        response?.body?.hod?.idno === username &&
+        response?.body?.hod?.password === password
+      ) {
+        return true;
+      }
+      return true;
+    } else {
+      alert(response?.body?.message);
+      return false;
     }
-    alert(response?.body?.message);
-    return false;
   }
 
   async callingStudentLoginApi(pinno, password) {
@@ -35,27 +43,42 @@ class AuthStore {
       console.log(response?.body);
       this.setUser(response?.body?.student);
       localStorage.setItem("user", JSON.stringify(response?.body?.student));
-
+      console.log(toJS(this.user));
+      if (
+        response?.body?.student?.pinno === pinno &&
+        response?.body?.student?.password === password
+      ) {
+        return true;
+      }
       return true;
+    } else {
+      alert(response?.body?.message);
+      return false;
     }
-    alert(response?.body?.message);
-    return false;
   }
 
   async callingPrincipalLogin(username, password) {
     const url = "/principal/login";
     const body = { id: username, password: password };
     const response = await apiPostPut(body, url, "POST");
+
     if (response.status === 200) {
       this.setPrincipalAuth(true);
-      console.log(response?.body?.principal);
+      console.log(response?.body?.principal?.id);
       this.setUser(response?.body?.principal);
       localStorage.setItem("user", JSON.stringify(response?.body?.principal));
       console.log(toJS(this.user));
+      if (
+        response?.body?.principal?.id === username &&
+        response?.body?.principal?.password === password
+      ) {
+        return true;
+      }
       return true;
+    } else {
+      alert(response?.body?.message);
+      return false;
     }
-    alert(response?.body?.message);
-    return false;
   }
 
   setPrincipalAuth(bool) {

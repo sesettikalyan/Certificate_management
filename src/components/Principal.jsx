@@ -11,11 +11,9 @@ export default function Principal() {
   useEffect(() => {
     UserStore.getLecturersfromapi();
     UserStore.getStudentsfromapi();
-    UserStore.UnVerifiedLecturersfromlecturers();
-    UserStore.UnverifiedStudentsfromstudents();
   }, []);
 
-  return useObserver(()=>(
+  return useObserver(() => (
     <div className="w-[100%] my-1 h-screen flex flex-col">
       <div className="w-[90%] h-[12%] flex sticky flex-row mx-auto justify-between items-center">
         <Navbar />
@@ -132,20 +130,23 @@ export function Branch() {
   ));
 }
 
-export function Approvals({ navigation }) {
+export function Approvals() {
   const navigate = useNavigate();
   const { branch } = useParams();
-  const { UserStore } = useStores();
+  const { UserStore, CommonStore } = useStores();
 
   const selectedBranch = Branches.find(
     (branchname) => branchname?.name === branch
   );
 
-  useEffect(() => {}, []);
-
+  console.log(CommonStore.role);
   const viewStaffDetails = (id) => {
     navigate(`/staff/${id}`);
   };
+  useEffect(() => {
+    UserStore.UnVerifiedLecturersfromlecturers();
+    UserStore.UnverifiedStudentsfromstudents();
+  }, []);
 
   const viewStudentDetails = (pin) => {
     return navigate(`/${selectedBranch?.name}/studentapproval/${pin}`);
@@ -153,11 +154,11 @@ export function Approvals({ navigation }) {
 
   return useObserver(() => (
     <div className="bg-secondary w-[95%] py-3 mx-auto rounded-lg">
-      <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">
-        {navigation ? <>Student Approvals</> : <>Lecturer Approvals</>}
-      </h1>
-      {!navigation ? (
+      {CommonStore.role === "principal" ? (
         <>
+          <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">
+            Lecturer Approvals
+          </h1>
           {UserStore?.notVerifiedLecturers.map((lecturer) => (
             <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
               <div className="flex flex-row items-center">
@@ -184,6 +185,9 @@ export function Approvals({ navigation }) {
         </>
       ) : (
         <>
+          <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">
+            Student Approvals
+          </h1>
           {UserStore.notVerifiedStudents.map((student) => (
             <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
               <div className="flex flex-row items-center">

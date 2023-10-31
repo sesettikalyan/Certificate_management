@@ -2,6 +2,8 @@ import { useRef } from "react";
 import logo from "../assets/logo.png";
 import { useStores } from "../store/index";
 import { useNavigate } from "react-router-dom";
+import { useObserver } from "mobx-react";
+import { Logo } from "./category";
 export default function Login() {
   const usernameref = useRef(null);
   const passwordref = useRef(null);
@@ -20,7 +22,7 @@ export default function Login() {
 
   const user = usernamelabel();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const username = usernameref.current.value;
     const password = passwordref.current.value;
@@ -33,15 +35,15 @@ export default function Login() {
     // }
 
     if (CommonStore.role === "principal") {
-      if (AuthStore.callingPrincipalLogin(username, password)) {
+      if (await AuthStore.callingPrincipalLogin(username, password)) {
         navigate("/principal");
       }
     } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
-      if (AuthStore.callingHodLoginApi(username, password)) {
+      if (await AuthStore.callingHodLoginApi(username, password)) {
         navigate("/selectbranch");
       }
     } else {
-      if (AuthStore.callingStudentLoginApi(username, password)) {
+      if (await AuthStore.callingStudentLoginApi(username, password)) {
         navigate(`${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
       }
     }
@@ -51,13 +53,13 @@ export default function Login() {
     navigate("/register");
   };
 
-  return (
+  return useObserver(() => (
     <>
-      <div className="flex flex-col w-[100%]  h-screen items-center">
-        <div className="h-[30%] mt-[10%] md:mt-[2%]">
-          <img src={logo} className="w-32 h-32 " alt="" />
+      <div className="flex flex-col md:flex-row lg:flex-row w-[100%]  h-screen items-center">
+        <div className="h-[30%] flex justify-center md:w-[30%] items-center  md:h-[100%] mt-[10%] md:mt-0">
+          <Logo />
         </div>
-        <div className="bg-primary p-6 h-[70%]  w-[100%] rounded-tl-[100px] mt-[20%] md:mt-[10%]  items-center justify-center">
+        <div className="bg-primary p-6 h-[70%] md:h-[100%]  w-[100%]  rounded-tl-[100px] md:rounded-none mt-[20%] md:mt-0  items-center justify-center">
           <h1 className="text-3xl text-center py-2 text-white">
             Enter Details
           </h1>
@@ -105,5 +107,5 @@ export default function Login() {
         </div>
       </div>
     </>
-  );
+  ));
 }

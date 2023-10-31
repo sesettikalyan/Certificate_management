@@ -1,8 +1,6 @@
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import { IoMdAddCircle } from "react-icons/io";
-import { MdOutlineEdit } from "react-icons/md";
-import { RiDeleteBin5Line } from "react-icons/ri";
 // import { Lectures } from '../helpers/lectures';
 // import { MechStudents } from '../helpers/MechStudents';
 import { Branches } from "../helpers/Branches";
@@ -11,12 +9,9 @@ import { useEffect, useState } from "react";
 import { PiBuildingsBold } from "react-icons/pi";
 import { BsPersonCheck } from "react-icons/bs";
 import { useStores } from "../store/index";
-import { toJS } from "mobx";
 import { useObserver } from "mobx-react";
 
 export default function BranchDetails() {
-  const navigate = useNavigate();
-
   const { UserStore } = useStores();
 
   useEffect(() => {
@@ -66,7 +61,7 @@ export function TitleAndSearch({ onStaff }) {
     navigate(`/${branch}/lecturer/${id}`);
   };
 
-  return (
+  return useObserver(() => (
     <>
       <div className="w-[90%] mx-auto pt-6 flex items-center">
         {!onStaff ? (
@@ -117,7 +112,7 @@ export function TitleAndSearch({ onStaff }) {
         </span>
       </div>
     </>
-  );
+  ));
 }
 
 export function LecturerSection() {

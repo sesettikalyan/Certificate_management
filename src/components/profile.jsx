@@ -3,6 +3,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { BiLogOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useStores } from "../store/index";
+import { useObserver } from "mobx-react";
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export const Profile = () => {
     navigate("/");
   };
 
-  return (
+  return useObserver(() => (
     <div className="bg-secondary h-screen">
       <div className="flex pt-4 pb-4 justify-between">
         <div onClick={goToHomepage} className="flex">
@@ -43,22 +44,22 @@ export const Profile = () => {
       </div>
       <div>
         <img
-          className="relative rounded-lg h-60"
-          src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Corpus_Christi_College_New_Court%2C_Cambridge%2C_UK_-_Diliff.jpg"
+          className="relative w-[100%] rounded-md object-cover  h-60"
+          src={AuthStore.user?.coverImage}
           alt=""
         />
 
         <img
-          className="rounded-full w-24 h-24 border-4 border-white absolute z-30 mt-[-15%] left-4 "
+          className="rounded-full w-24 h-24 border-4 border-white absolute z-30 mt-[-12%] left-4 "
           src={AuthStore.user?.photo}
           alt="profile"
         />
         <div className=" w-24 h-24 relative  ">
-          <span className="bg-blue-900 w-5 absolute z-50 left-[90%] top-[10%] h-5 rounded-full text-center">
-            <MdOutlineEdit className="ml-1 text-white" />
+          <span className="bg-blue-900 w-5 absolute z-50 left-[90%] top-[25%] h-5 rounded-full flex items-center justify-center">
+            <MdOutlineEdit className=" text-white" />
           </span>
         </div>
       </div>
     </div>
-  );
+  ));
 };

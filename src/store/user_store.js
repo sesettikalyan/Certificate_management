@@ -47,11 +47,13 @@ class UserStore {
           ...response?.body,
         })
       );
-      return this.lecturers.push({
+      this.lecturers.push({
         ...response?.body,
       });
+      return true;
     }
-    return alert("failed to fetch lecturers.");
+    alert(`${response?.body}`);
+    return false;
   }
 
   async approveLecturer(id, isVerified) {
@@ -130,6 +132,35 @@ class UserStore {
       return this.setStudents(response?.body);
     }
     return alert("failed to fetch students.");
+  }
+
+  async postStudents(name, pinno, email, branch, password, role, phno) {
+    const url = "/register/studentS";
+    const body = {
+      name: name,
+      department: branch,
+      pinno: pinno,
+      email: email,
+      password: password,
+      role: role,
+      phoneNumber: phno,
+    };
+    const response = await apiPostPut(body, url, "POST");
+    if (response.status === 200) {
+      console.log(response?.body);
+      //pushing this into students array
+      console.log(
+        this.students.push({
+          ...response?.body,
+        })
+      );
+      this.students.push({
+        ...response?.body,
+      });
+      return true;
+    }
+    alert(`${response?.body}`);
+    return false;
   }
 
   approvedStudents() {
