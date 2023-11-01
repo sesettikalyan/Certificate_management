@@ -8,8 +8,13 @@ module.exports = {
         primary2: "#C3C5FF",
         secondary: "#E4E4FF",
 
-        text_color1:"#2F3172",
-        text_color2:"#363CF2",
+        text_color1: "#2F3172",
+        text_color2: "#363CF2",
+      },
+      screens: {
+        md: "1000px",
+        lg: "1900px",
+        // => @media (min-width: 1440px) { ... }
       },
     },
   },

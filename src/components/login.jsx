@@ -59,7 +59,7 @@ export default function Login() {
       } else {
       }
     };
-  }, []);
+  }, [CommonStore.role]);
 
   const goToRegisterPage = () => {
     navigate("/register");

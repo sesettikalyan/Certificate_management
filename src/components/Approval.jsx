@@ -9,17 +9,24 @@ export default function Approval({ navigation }) {
   const navigate = useNavigate();
   const { UserStore, CommonStore, AuthStore } = useStores();
 
-  const selectedLecturer = UserStore?.notVerifiedLecturers.find(
+  const selectedLecturer = UserStore?.lecturers.find(
     (lecturer) => lecturer?.idno === id
   );
 
-  const selectedStudent = UserStore?.notVerifiedStudents.find(
+  const selectedStudent = UserStore?.students.find(
     (student) => student?.pinno === pin
   );
 
   const approveStaff = async (id) => {
-    if (await UserStore.approveLecturer(id, true)) {
-      navigate(`/principal`);
+    if (CommonStore.role === "principal") {
+      if (await UserStore.approveLecturer(id)) {
+        navigate(`/principal`);
+      }
+    }
+    else {
+      if (await UserStore.approveStudent(id)) {
+        navigate(`/${AuthStore.user?.department}/studentapproval`);
+      }
     }
   };
 

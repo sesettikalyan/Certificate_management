@@ -48,17 +48,17 @@ export function Category() {
   };
 
   return (
-    <div className="flex flex-col w-[100%]  h-screen items-center ">
+    <div className="flex flex-col w-[100%]  h-screen overflow-hidden items-center ">
       <div className="h-[30%] mt-[10%] md:mt-[5%]">{Logo()}</div>
 
-      <div className="bg-primary p-6 h-[70%] md:w-[70%] lg:w-[70%]  w-[100%] rounded-tl-[100px] md:rounded-tl-none lg:rounded-tl-none mt-[20%] md:mt-[5%]  items-center justify-center">
+      <div className="bg-primary p-6 h-[70%] md:w-[80%] lg:w-[70%]  w-[100%] rounded-tl-[100px] md:rounded-tl-none lg:rounded-tl-none mt-[20%] md:mt-[5%]  items-center justify-center">
         <h1 className="text-3xl md:text-4xl lg:text-5xl text-center py-2 text-white">
           Select User Type
         </h1>
 
-        <div className="flex flex-wrap items-center my-6 md:my-[6%] justify-center">
+        <div className="flex flex-wrap items-center my-6 md:my-[4%] lg:my-[6%] justify-center">
           <div
-            className="w-[120px] h-[120px] md:w-[200px] md:h-[200px] md:mx-8  mx-4  my-10  flex flex-col items-center justify-center bg-white"
+            className="w-[120px] h-[120px] md:w-[200px] md:h-[200px] lg:w-[200px] lg:h-[200px] md:mx-8  mx-4  my-10  flex flex-col items-center justify-center bg-white"
             onClick={goToLogin}
           >
             <h1 className="text-base md:text-xl ">Principal</h1>

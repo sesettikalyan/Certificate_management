@@ -30,7 +30,7 @@ export default function LecturerView() {
       idref.current.value = selectedLecturer?.idno;
       emailref.current.value = selectedLecturer?.email;
       branchref.current.value = selectedLecturer?.department;
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const goBack = () => {
@@ -45,8 +45,8 @@ export default function LecturerView() {
     autofillref();
   }, [editForm]);
 
-  const updateLecturerDetails = async (id) => {
-    // e.preventDefault();
+  const updateLecturerDetails = async (e, id) => {
+    e.preventDefault();
     const name = nameref.current.value;
     const idno = idref.current.value;
     const email = emailref.current.value;
@@ -151,6 +151,7 @@ export default function LecturerView() {
             <div className="flex flex-col mt-2">
               <label className="pb-2 text-white">Name</label>
               <input
+                required
                 ref={nameref}
                 type="text"
                 className="bg-primary mb-1 px-1 text-white text-opacity-80 text-lg focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
@@ -159,6 +160,7 @@ export default function LecturerView() {
             <div className="flex flex-col mt-1">
               <label className="pb-2 text-white">I'd Number</label>
               <input
+                required
                 ref={idref}
                 type="text"
                 className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
@@ -167,6 +169,7 @@ export default function LecturerView() {
             <div className="flex flex-col mt-1">
               <label className="pb-2 text-white">E-mail</label>
               <input
+                required
                 ref={emailref}
                 type="text"
                 className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
@@ -175,21 +178,22 @@ export default function LecturerView() {
             <div className="flex flex-col mt-1">
               <label className="pb-2 text-white">Branch</label>
               <select
+                required
                 ref={branchref}
                 type="text"
                 className="w-[70%] mb-1 rounded-lg px-1 bg-white text-opacity-80  text-lg focus:outline-none  "
               >
                 <option className="text-xs" value="Mech">
-                  Mech
+                  Mechanical Engineering
                 </option>
                 <option className="text-xs" value="EEE">
-                  EEE
+                  Electrical and Electronics Engineering
                 </option>
                 <option className="text-xs" value="ECE">
-                  ECE
+                  Electronics and Communication Engineering
                 </option>
                 <option className="text-xs" value="Civil">
-                  Civil
+                  Civil Engineering
                 </option>
               </select>
             </div>
@@ -208,7 +212,7 @@ export default function LecturerView() {
         <div className="fixed inset-0  w-[80%] m-auto h-[20%] flex flex-col z-50 py-4 px-2 rounded-2xl items-center  bg-primary">
           <h1 className="text-center text-2xl text-white">Confirm to delete</h1>
           <p className="text-white pt-1 text-2xl">
-            {selectedLecturer?.teacher}
+            {selectedLecturer?.name}
           </p>
           {/* <AiOutlineClose onClick={() => setDeleteForm(false)} className="absolute text-white text-2xl cursor-pointer right-2 top-4" /> */}
           <div className="w-[90%] mx-auto flex my-3  justify-between items-center">

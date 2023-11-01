@@ -2,7 +2,7 @@ import { AiOutlineRight, AiOutlineSearch } from "react-icons/ai";
 import { lecturerApprovals } from "../helpers/lecturerapprovals";
 import { useNavigate, useParams } from "react-router-dom";
 import { Branches } from "../helpers/Branches";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
 
@@ -126,24 +126,46 @@ export function Branch() {
 
 export function Approvals() {
   const navigate = useNavigate();
-  const { branch } = useParams();
-  const { UserStore, CommonStore } = useStores();
+  const [lecturerApprovals, setLecturerApprovals] = useState([]);
+  const [studentApprovals, setStudentApprovals] = useState([]);
+  const { UserStore, CommonStore, AuthStore } = useStores();
 
-  const selectedBranch = Branches.find(
-    (branchname) => branchname?.name === branch
-  );
+
+
+  //check verification status
+  useEffect(() => {
+    try {
+      if (CommonStore.role === "principal") {
+        const notverifiedLecturers = UserStore?.lecturers.filter(
+          (lecturer) => lecturer?.isVerified === false
+        );
+        setLecturerApprovals(notverifiedLecturers);
+      }
+      else {
+        const notverifiedStudents = UserStore?.students.filter(
+          (student) => student?.isVerified === false
+        );
+        setStudentApprovals(notverifiedStudents);
+      }
+    } catch (error) {
+
+    }
+  }, [UserStore?.lecturers, UserStore?.students]);
+
+
+
+
+
+
 
   console.log(CommonStore.role);
   const viewStaffDetails = (id) => {
     navigate(`/staff/${id}`);
   };
-  useEffect(() => {
-    UserStore.UnVerifiedLecturersfromlecturers();
-    UserStore.UnverifiedStudentsfromstudents();
-  }, []);
+
 
   const viewStudentDetails = (pin) => {
-    return navigate(`/${selectedBranch?.name}/studentapproval/${pin}`);
+    return navigate(`/${AuthStore.user?.department}/studentapproval/${pin}`);
   };
 
   return useObserver(() => (
@@ -153,7 +175,7 @@ export function Approvals() {
           <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">
             Lecturer Approvals
           </h1>
-          {UserStore?.notVerifiedLecturers.map((lecturer) => (
+          {lecturerApprovals.map((lecturer) => (
             <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
               <div className="flex flex-row items-center">
                 <img
@@ -182,7 +204,7 @@ export function Approvals() {
           <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">
             Student Approvals
           </h1>
-          {UserStore.notVerifiedStudents.map((student) => (
+          {studentApprovals.map((student) => (
             <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
               <div className="flex flex-row items-center">
                 <img

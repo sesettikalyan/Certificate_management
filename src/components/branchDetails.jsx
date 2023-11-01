@@ -113,19 +113,25 @@ export function TitleAndSearch({ onStaff }) {
 export function LecturerSection() {
   const navigate = useNavigate();
   const { UserStore } = useStores();
+  const [selectedBranchLecturers, setSelectedBranchLecturers] = useState([]);
 
   let { branch } = useParams();
 
-  useEffect(() => {
-    UserStore.approvedlecturers();
-  }, []);
 
-  // const selectedBranch = UserStore.lecturers.;
-  //getting the lectures of the selected branch from the lecturers array in the userstore by checking each lecturer's department by converting into uppercase with the branch from url params.
-  const selectedBranchLecturers = UserStore.verifiedlectrers.filter(
-    (lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase()
-  );
-  // console.log(selectedBranchLecturers);
+
+  //check verification
+  useEffect(() => {
+    try {
+      const verifiedLecturers = UserStore?.lecturers.filter(
+        (lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase() && lecturer?.isVerified === true
+      );
+      setSelectedBranchLecturers(verifiedLecturers);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [UserStore?.lecturers]);
+
+
 
   const showLecturerDetails = (id) => {
     navigate(`/${branch}/lecturer/${id}`);
@@ -174,18 +180,22 @@ export function LecturerSection() {
 
 export function StudentSection({ onstaff }) {
   let { branch } = useParams();
+  const [selectedBranchStudents, setSelectedBranchStudents] = useState([]);
   const { UserStore } = useStores();
 
-  // const selectedBranch = Branches.find(
-  //   (branchname) => branchname.name === branch
-  // );
-  useEffect(() => {
-    UserStore.approvedStudents();
-  }, []);
 
-  const selectedBranchStudents = UserStore?.verifiedstudents.filter(
-    (student) => student?.department.toUpperCase() === branch.toUpperCase()
-  );
+  //check verification 
+  useEffect(() => {
+    try {
+      const verifiedStudents = UserStore?.students.filter(
+        (student) => student?.department.toUpperCase() === branch.toUpperCase() && student?.isVerified === true
+      );
+      setSelectedBranchStudents(verifiedStudents);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+    , [UserStore?.students]);
 
   const navigate = useNavigate();
 
@@ -203,7 +213,7 @@ export function StudentSection({ onstaff }) {
             </h2>
             <button
               className="flex text-xs text-text_color1 items-center"
-              // onClick={() => addNewStaff(branch)}
+            // onClick={() => addNewStaff(branch)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Student
