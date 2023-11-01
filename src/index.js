@@ -16,7 +16,7 @@ import Staffcertificate from "./components/staffcertificate";
 // import Branch from './components/branch';
 import Studentview from "./components/studentview";
 import Principal from "./components/Principal";
-import StaffApproval from "./components/staffApproval";
+import Approval from "./components/Approval";
 import BranchDetails from "./components/branchDetails";
 import { Profile } from "./components/profile";
 import Search from "./components/search";
@@ -59,7 +59,7 @@ root.render(
         <Route path="/:branch/:pin" element={<Studentview />} />
         <Route path="/:branch/lecturer/:id" element={<LecturerView />} />
         <Route path="/principal" element={<Principal />} />
-        <Route path="/staff/:id" element={<StaffApproval />} />
+        <Route path="/staff/:id" element={<Approval />} />
         <Route path="/search" element={<Search />} />
         <Route path="/:branch/newstaff" element={<NewStaff />} />
         <Route path="/:branch/staffpage" element={<StaffPage />} />

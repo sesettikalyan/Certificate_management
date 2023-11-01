@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
 
-export default function StaffApproval({ navigation }) {
+export default function Approval({ navigation }) {
   let { id, pin } = useParams();
   const navigate = useNavigate();
   const { UserStore, CommonStore, AuthStore } = useStores();
