@@ -45,13 +45,13 @@ export default function LecturerView() {
     autofillref();
   }, [editForm]);
 
-  const updateLecturerDetails = (id) => {
+  const updateLecturerDetails = async (id) => {
     // e.preventDefault();
     const name = nameref.current.value;
     const idno = idref.current.value;
     const email = emailref.current.value;
     const branch = branchref.current.value;
-    UserStore.updateLecturers(name, idno, email, branch, id);
+    await UserStore.updateLecturers(name, idno, email, branch, id);
     setEditForm(false);
   };
 

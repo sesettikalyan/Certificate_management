@@ -140,10 +140,10 @@ class UserStore {
       name: name,
       department: branch,
       pinno: pinno,
-      email: email,
+      emailid: email,
       password: password,
       role: role,
-      phoneNumber: phno,
+      studentmobile: phno,
     };
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {

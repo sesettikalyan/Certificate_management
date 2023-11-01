@@ -4,7 +4,6 @@ import logo from "../assets/logo.png";
 import { PiStudentDuotone } from "react-icons/pi";
 import { GiTeacher } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
-import Login from "./login";
 import { useStores } from "../store/index";
 
 export default function HomePage() {
@@ -68,7 +67,7 @@ export function Category() {
             onClick={goToLogin1}
             className="w-[120px] h-[120px] md:w-[200px] md:h-[200px] md:mx-8 mx-4 my-10 flex flex-col items-center justify-center bg-white"
           >
-            <h1 className="text-base md:text-xl ">Hod</h1>
+            <h1 className="text-base md:text-xl ">H.O.D</h1>
           </div>
           <div
             onClick={goToLogin2}

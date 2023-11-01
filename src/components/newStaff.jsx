@@ -19,7 +19,7 @@ export default function NewStaff() {
   const roleref = useRef();
   const phnoref = useRef();
 
-  const postDetails = (e) => {
+  const postDetails = async (e) => {
     e.preventDefault();
     try {
       const name = nameref.current.value;
@@ -30,7 +30,15 @@ export default function NewStaff() {
       const role = roleref.current.value;
       const phone = phnoref.current.value;
 
-      UserStore.postLecturers(name, id, email, branch, password, role, phone);
+      await UserStore.postLecturers(
+        name,
+        id,
+        email,
+        branch,
+        password,
+        role,
+        phone
+      );
       navigate(`/${branch}`);
       // const data = {
       //     name,

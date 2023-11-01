@@ -14,7 +14,7 @@ export const Profile = () => {
     } else if (AuthStore.hodAuth === true) {
       navigate(`/${AuthStore.user?.department.toUpperCase()}/staffpage`);
     } else {
-      navigate("/:branch/:pin");
+      navigate(`/${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
     }
   };
 

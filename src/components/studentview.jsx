@@ -2,23 +2,98 @@
 import CertificateList from "./CertificateList";
 import { Branches } from "../helpers/Branches";
 import { useNavigate, useParams } from "react-router-dom";
-import { AiOutlineLeft } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineLeft } from "react-icons/ai";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
+import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
+import { PiBuildingsBold } from "react-icons/pi";
+import { BiLogOut } from "react-icons/bi";
+import { IoMdAddCircle } from "react-icons/io";
+import { useState } from "react";
 
 export default function Studentview() {
-  const { UserStore, AuthStore } = useStores();
+  const { UserStore, AuthStore, CommonStore } = useStores();
   const { branch, pin } = useParams();
+  const [deleteForm, setDeleteForm] = useState(false);
 
-  const selectedBranch = Branches.find(
-    (branchname) => branchname.name === branch
-  );
+  // const selectedBranch = Branches.find(
+  //   (branchname) => branchname.name === branch
+  // );
 
-  const selectedStudent = UserStore.students.find(
-    (student) => student.pinno === pin
+  const selectedStudent = UserStore?.students.find(
+    (student) => student?.pinno === pin
   );
 
   const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    AuthStore.user = null;
+    AuthStore.setPrincipalAuth(false);
+    AuthStore.setHodAuth(false);
+    AuthStore.setStudentAuth(false);
+    CommonStore.setRole(null);
+    navigate("/");
+  };
+
+  const Navbar = () => {
+    if (CommonStore.role === "principal") {
+      return (
+        <button
+          className="flex items-center w-[20%] mx-4 text-white text-lg"
+          onClick={showBranch}
+        >
+          <AiOutlineLeft className="mr-1" /> Back
+        </button>
+      );
+    } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
+      return (
+        <div className="flex justify-between w-[95%] items-center">
+          <button
+            className="flex items-center w-[20%] mx-4 text-white text-lg"
+            onClick={showBranch}
+          >
+            <AiOutlineLeft className="mr-1" /> Back
+          </button>
+          <div className="flex">
+            <button
+              // onClick={() => setEditForm(true)}
+              className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center"
+            >
+              {" "}
+              <MdOutlineEdit />
+            </button>
+            <button
+              onClick={() => setDeleteForm(true)}
+              className="w-10 h-10 bg-white rounded-full mx-3 text-2xl text-black flex items-center justify-center"
+            >
+              {" "}
+              <MdDeleteOutline />
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex justify-end w-[95%] items-center">
+          <button
+            // onClick={() => setEditForm(true)}
+            className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center"
+          >
+            {" "}
+            <PiBuildingsBold />
+          </button>
+          <button
+            onClick={logout}
+            className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center"
+          >
+            {" "}
+            <BiLogOut />
+          </button>
+        </div>
+      );
+    }
+  };
 
   const showBranch = () => {
     if (AuthStore.principalAuth === true) {
@@ -30,44 +105,112 @@ export default function Studentview() {
 
   return useObserver(() => (
     <div className="w-[100%] h-full">
-      <div className="py-10 flex flex-col items-start w-full bg-primary rounded-b-2xl">
-        <button
-          className="flex items-center w-[20%] mx-4 text-white text-lg"
-          onClick={showBranch}
-        >
-          <AiOutlineLeft className="mr-1" /> Back
-        </button>
+      <div className="pb-10 pt-6 flex flex-col items-start w-full bg-primary rounded-b-2xl">
+        <Navbar />
         <div className="w-[85%] mx-auto items-center flex mt-6">
           <img
-            src={selectedStudent?.photo}
+            src={
+              CommonStore.role === "student"
+                ? AuthStore.user?.photo
+                : selectedStudent?.photo
+            }
             className="h-44 w-36 object-fit-cover rounded-lg"
             alt=""
           />
           <div className="ml-6 text-white">
-            <h1 className="text-xl pb-1 ">{selectedStudent?.name}</h1>
-            <p className="text-base ">{selectedStudent?.pinno}</p>
-            <p className="text-base">{branch}</p>
-            <p className="text-base">{selectedStudent?.studentmobile}</p>
-            <p className="text-base pb-1">{selectedStudent?.emailid}</p>
+            <h1 className="text-xl pb-1 ">
+              {CommonStore.role === "student"
+                ? AuthStore.user?.name
+                : selectedStudent?.name}
+            </h1>
+            <p className="text-base ">
+              {CommonStore.role === "student"
+                ? AuthStore.user?.pinno
+                : selectedStudent?.pinno}
+            </p>
+            <p className="text-base">
+              {CommonStore.role === "student"
+                ? AuthStore.user?.department
+                : selectedStudent?.department}
+            </p>
+            <p className="text-base">
+              {CommonStore.role === "student"
+                ? AuthStore.user?.studentmobile
+                : selectedStudent?.studentmobile}
+            </p>
+            <p className="text-base pb-1">
+              {CommonStore.role === "student"
+                ? AuthStore.user?.emailid
+                : selectedStudent?.emailid}
+            </p>
+            {CommonStore.role === "staff" || CommonStore.role === "hod" ? (
+              <button className="bg-white text-black rounded-lg p-1">
+                View Biodata
+              </button>
+            ) : null}
           </div>
         </div>
       </div>
       <div className="flex ml-6 mt-4 space-x-10 ">
         <div className="h-16 w-36 bg-primary rounded-lg">
           <p className="text-lg ml-2 text-white">Sem Percentage</p>
-          <p className="text-white ml-14">{selectedStudent?.percentage} %</p>
+          <p className="text-white ml-14">
+            {CommonStore.role === "student"
+              ? AuthStore.user?.percentage
+              : selectedStudent?.percentage}{" "}
+            %
+          </p>
         </div>
         <div className="h-16 w-36 bg-primary rounded-lg">
           <p className="text-lg ml-9 text-white">Backlogs</p>
-          <p className="text-white ml-16">{selectedStudent?.backlogs}</p>
+          <p className="text-white ml-16">
+            {CommonStore.role === "student"
+              ? AuthStore.user?.backlogs
+              : selectedStudent?.backlogs}
+          </p>
         </div>
       </div>
       <div className="bg-white  drop-shadow my-6 shadow-lg w-[90%] py-3 mx-auto rounded-lg">
-        <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl">
-          Certificates
-        </h1>
+        {CommonStore.role === "student" ? (
+          <div className="flex w-[90%] justify-between items-center mt-2 mx-auto">
+            <h2 className="text-2xl text-text_color1 font-semibold">
+              Certificates
+            </h2>
+            <button
+              className="flex text-xs text-text_color1 items-center"
+              // onClick={() => addNewStaff(branch)}
+            >
+              <IoMdAddCircle className="text-base" />
+              Add new Certificate
+            </button>
+          </div>
+        ) : (
+          <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl">
+            Certificates
+          </h1>
+        )}
         <CertificateList />
       </div>
+      {deleteForm ? (
+        <div className="fixed inset-0  w-[80%] m-auto h-[20%] flex flex-col z-50 py-4 px-2 rounded-2xl items-center  bg-primary">
+          <h1 className="text-center text-2xl text-white">Confirm to delete</h1>
+          <p className="text-white pt-1 text-2xl">{selectedStudent?.name}</p>
+          {/* <AiOutlineClose onClick={() => setDeleteForm(false)} className="absolute text-white text-2xl cursor-pointer right-2 top-4" /> */}
+          <div className="w-[90%] mx-auto flex my-3  justify-between items-center">
+            <button
+              onClick={() => setDeleteForm(false)}
+              className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg  text-black items-center p-2"
+            >
+              Cancel
+              <AiOutlineClose className="mx-1" />
+            </button>
+            <button className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg text-black items-center p-2">
+              Delete
+              <MdDeleteOutline className="mx-1" />
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   ));
 }

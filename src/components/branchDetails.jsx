@@ -14,11 +14,6 @@ import { useObserver } from "mobx-react";
 export default function BranchDetails() {
   const { UserStore } = useStores();
 
-  useEffect(() => {
-    UserStore.approvedlecturers();
-    UserStore.approvedStudents();
-  }, []);
-
   return useObserver(() => (
     <>
       <div className="w-[100%] h-screen flex flex-col bg-gray-100">
@@ -121,6 +116,10 @@ export function LecturerSection() {
 
   let { branch } = useParams();
 
+  useEffect(() => {
+    UserStore.approvedlecturers();
+  }, []);
+
   // const selectedBranch = UserStore.lecturers.;
   //getting the lectures of the selected branch from the lecturers array in the userstore by checking each lecturer's department by converting into uppercase with the branch from url params.
   const selectedBranchLecturers = UserStore.verifiedlectrers.filter(
@@ -184,7 +183,7 @@ export function StudentSection({ onstaff }) {
     UserStore.approvedStudents();
   }, []);
 
-  const selectedBranchStudents = UserStore.verifiedstudents.filter(
+  const selectedBranchStudents = UserStore?.verifiedstudents.filter(
     (student) => student?.department.toUpperCase() === branch.toUpperCase()
   );
 

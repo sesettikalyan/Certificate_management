@@ -7,12 +7,6 @@ import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
 
 export default function Principal() {
-  const { UserStore, AuthStore } = useStores();
-  useEffect(() => {
-    UserStore.getLecturersfromapi();
-    UserStore.getStudentsfromapi();
-  }, []);
-
   return useObserver(() => (
     <div className="w-[100%] my-1 h-screen flex flex-col">
       <div className="w-[90%] h-[12%] flex sticky flex-row mx-auto justify-between items-center">

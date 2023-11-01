@@ -11,8 +11,8 @@ export default function CertificateList() {
     (branchname) => branchname?.name === branch
   );
 
-  const selectedStudent = selectedBranch?.students.find(
-    (student) => student?.pin === pin
+  const selectedStudent = UserStore?.students.find(
+    (student) => student?.pinno === pin
   );
   return (
     <>
@@ -24,7 +24,7 @@ export default function CertificateList() {
 
             ))} */}
 
-      {selectedStudent?.certificate.map((item) => (
+      {selectedStudent?.documents.map((item) => (
         <div className="w-[90%] p-2 border-b-2 border-gray-400 mx-auto my-2 flex flex-row items-end justify-between">
           <div className="flex flex-row items-center">
             <img src={item?.url} className="w-16 h-12 " alt="" />

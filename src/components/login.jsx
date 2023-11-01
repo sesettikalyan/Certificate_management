@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import logo from "../assets/logo.png";
 import { useStores } from "../store/index";
 import { useNavigate } from "react-router-dom";
@@ -7,14 +7,14 @@ import { Logo } from "./category";
 export default function Login() {
   const usernameref = useRef(null);
   const passwordref = useRef(null);
-  const { AuthStore, CommonStore } = useStores();
+  const { AuthStore, CommonStore, UserStore } = useStores();
   const navigate = useNavigate();
 
   const usernamelabel = () => {
     if (CommonStore.role === "principal") {
       return "Username";
     } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
-      return "User I'd";
+      return "Staff I'd";
     } else {
       return "Pin Number";
     }
@@ -44,10 +44,22 @@ export default function Login() {
       }
     } else {
       if (await AuthStore.callingStudentLoginApi(username, password)) {
-        navigate(`${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
+        navigate(`/${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
       }
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (CommonStore.role === "principal") {
+        UserStore.getLecturersfromapi();
+        UserStore.getStudentsfromapi();
+      } else if (CommonStore.role === "staff" || CommonStore.role === "hod") {
+        UserStore.getStudentsfromapi();
+      } else {
+      }
+    };
+  }, []);
 
   const goToRegisterPage = () => {
     navigate("/register");
@@ -95,11 +107,12 @@ export default function Login() {
                 Login
               </button>
               {CommonStore.role !== "principal" ? (
-                <div className="flex items-center pt-2 text-white justify-center">
+                <div
+                  onClick={goToRegisterPage}
+                  className="flex items-center pt-2 text-white justify-center"
+                >
                   <p>Don't have an account!</p>
-                  <button onClick={goToRegisterPage} className="ml-1">
-                    Sign Up?
-                  </button>
+                  <button className="ml-1">Sign Up?</button>
                 </div>
               ) : null}
             </form>

@@ -24,7 +24,7 @@ import LecturerView from "./components/lecturerview";
 import NewStaff from "./components/newStaff";
 import StaffPage from "./components/staffpage";
 import StudentApproval from "./components/studentApproval";
-import StudentDetails from "./components/studentDetails";
+import StudentApprovalDetails from "./components/studentDetails";
 // import StudentLogin from "./components/studentlogin";
 // import StaffLogin from "./components/stafflogin";
 import Selectbranch from "./components/selectbranch";
@@ -66,7 +66,7 @@ root.render(
         <Route path="/:branch/studentapproval" element={<StudentApproval />} />
         <Route
           path="/:branch/studentapproval/:pin"
-          element={<StudentDetails />}
+          element={<StudentApprovalDetails />}
         />
       </Routes>
     </BrowserRouter>
