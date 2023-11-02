@@ -11,7 +11,7 @@ import { BiLogOut } from "react-icons/bi";
 export default function LecturerView() {
   const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
-  const { UserStore, AuthStore } = useStores();
+  const { UserStore, AuthStore,CommonStore } = useStores();
   const navigate = useNavigate();
   const { branch, id } = useParams();
 
@@ -34,7 +34,7 @@ export default function LecturerView() {
   };
 
   const goBack = () => {
-    if (AuthStore.principalAuth === true) {
+    if (CommonStore.role === "principal") {
       navigate(`/${branch}`);
     } else {
       navigate(`/${branch}/staffpage`);
@@ -45,15 +45,22 @@ export default function LecturerView() {
     autofillref();
   }, [editForm]);
 
-  const updateLecturerDetails = async (e, id) => {
+  function updateLecturerDetails(id,e){
     e.preventDefault();
     const name = nameref.current.value;
     const idno = idref.current.value;
     const email = emailref.current.value;
     const branch = branchref.current.value;
-    await UserStore.updateLecturers(name, idno, email, branch, id);
-    setEditForm(false);
+    console.log(name, idno, email, branch);
+    console.log(id);
+  
   };
+
+  const removeLecturer = async (id) => {
+   await UserStore.deleteLecturers(id);
+    setDeleteForm(false);
+    navigate(`/${branch}`);
+  }
 
   const logout = () => {
     localStorage.removeItem("user");
@@ -145,7 +152,7 @@ export default function LecturerView() {
             className="absolute text-white text-2xl cursor-pointer right-2 top-4"
           />
           <form
-            onSubmit={() => updateLecturerDetails(selectedLecturer?._id)}
+            onSubmit={()=>updateLecturerDetails(selectedLecturer?._id)}
             className="flex flex-col w-[95%] mx-auto h-full"
           >
             <div className="flex flex-col mt-2">
@@ -223,7 +230,7 @@ export default function LecturerView() {
               Cancel
               <AiOutlineClose className="mx-1" />
             </button>
-            <button className="flex w-[40%] mx-auto text-xl justify-between bg-black rounded-lg text-white items-center p-2">
+            <button onClick={() => removeLecturer(selectedLecturer?._id)} className="flex w-[40%] mx-auto text-xl justify-between bg-black rounded-lg text-white items-center p-2">
               Delete
               <MdDeleteOutline className="mx-1" />
             </button>

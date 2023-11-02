@@ -93,6 +93,21 @@ class UserStore {
     return false;
   }
 
+  async deleteLecturers(id) {
+    const url = `/hod/${id}`;
+    const response = await apiDelete(url);
+    if (response.status === 200) {
+      console.log(response?.body);
+      const index = this.lecturers.findIndex((lecturer) => lecturer?._id === id);
+      if (index !== -1) {
+        this.lecturers.splice(index, 1);
+      }
+      return true;
+    }
+    alert("failed to fetch lecturers.");
+    return false;
+  }
+
   async getStudentsfromapi(refresh = false) {
     if (!refresh && this.hittedapis.students) return;
     const response = await apiGet("/students");
@@ -165,6 +180,21 @@ class UserStore {
       const index = this.students.findIndex((student) => student?._id === id);
       if (index !== -1) {
         this.students[index] = response?.body;
+      }
+      return true;
+    }
+    alert("failed to fetch students.");
+    return false;
+  }
+
+  async deleteStudents(id) {
+    const url = `/students/${id}`;
+    const response = await apiDelete(url);
+    if (response.status === 200) {
+      console.log(response?.body);
+      const index = this.students.findIndex((student) => student?._id === id);
+      if (index !== -1) {
+        this.students.splice(index, 1);
       }
       return true;
     }
