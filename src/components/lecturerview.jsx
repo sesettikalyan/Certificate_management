@@ -7,17 +7,19 @@ import { useEffect, useRef, useState } from "react";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
 import { BiLogOut } from "react-icons/bi";
+import { toJS } from "mobx";
 
 export default function LecturerView() {
   const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
+  const [selectedLecturer, setSelectedLecturer] = useState({});
   const { UserStore, AuthStore,CommonStore } = useStores();
   const navigate = useNavigate();
   const { branch, id } = useParams();
 
-  const selectedLecturer = UserStore.lecturers.find(
-    (lecturer) => lecturer?.idno === id
-  );
+  // const selectedLecturer = UserStore.lecturers.find(
+  //   (lecturer) => lecturer?.idno === id
+  // );
 
   const nameref = useRef();
   const idref = useRef();
@@ -43,16 +45,23 @@ export default function LecturerView() {
 
   useEffect(() => {
     autofillref();
+      const lecturer = UserStore.lecturers.find(
+        (lecturer) => lecturer?._id === id
+      );
+      setSelectedLecturer(lecturer);
   }, [editForm]);
 
-  function updateLecturerDetails(id,e){
-    e.preventDefault();
+
+  const updateLecturerDetails = async (id) => {
     const name = nameref.current.value;
     const idno = idref.current.value;
     const email = emailref.current.value;
     const branch = branchref.current.value;
     console.log(name, idno, email, branch);
     console.log(id);
+   if(await UserStore.updateLecturers(name,idno,email,branch,id)){
+    setEditForm(false);
+   }
   
   };
 
@@ -151,8 +160,7 @@ export default function LecturerView() {
             onClick={() => setEditForm(false)}
             className="absolute text-white text-2xl cursor-pointer right-2 top-4"
           />
-          <form
-            onSubmit={()=>updateLecturerDetails(selectedLecturer?._id)}
+          <div
             className="flex flex-col w-[95%] mx-auto h-full"
           >
             <div className="flex flex-col mt-2">
@@ -206,12 +214,12 @@ export default function LecturerView() {
             </div>
 
             <button
-              type="submit"
+            onClick={()=>updateLecturerDetails(selectedLecturer?._id)}
               className="absolute right-6 bottom-4 px-8 py-1 bg-black text-white rounded-lg text-base"
             >
               Save
             </button>
-          </form>
+          </div>
         </div>
       ) : null}
 

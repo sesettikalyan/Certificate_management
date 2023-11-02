@@ -141,12 +141,13 @@ export function Approvals() {
         );
         setLecturerApprovals(notverifiedLecturers);
       }
-      else {
+      else if(CommonStore.role === "hod" || CommonStore.role === "staff") {
         const notverifiedStudents = UserStore?.students.filter(
           (student) => student?.isVerified === false
         );
         setStudentApprovals(notverifiedStudents);
       }
+      else{}
     } catch (error) {
 
     }

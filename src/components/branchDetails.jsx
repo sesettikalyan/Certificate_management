@@ -158,7 +158,7 @@ export function LecturerSection() {
           {selectedBranchLecturers.map((lecturer, index) => (
             <div
               key={index}
-              onClick={() => showLecturerDetails(lecturer?.idno)}
+              onClick={() => showLecturerDetails(lecturer?._id)}
               className="cursor-pointer mx-4 flex flex-col items-center justify-center"
             >
               <div className="w-20 h-20 rounded-full  ">
