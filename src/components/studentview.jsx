@@ -95,6 +95,12 @@ export default function Studentview() {
     }
   };
 
+  const removeStudent = async (id) => {
+   await UserStore.deleteStudents(id);
+    setDeleteForm(false);
+    navigate(`/${AuthStore.user?.department}/staffpage`);
+  };
+
   const showBranch = () => {
     if (AuthStore.principalAuth === true) {
       navigate(`/${branch}`);
@@ -204,7 +210,9 @@ export default function Studentview() {
               Cancel
               <AiOutlineClose className="mx-1" />
             </button>
-            <button className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg text-black items-center p-2">
+            <button 
+            onClick={()=>removeStudent(selectedStudent?._id)}
+             className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg text-black items-center p-2">
               Delete
               <MdDeleteOutline className="mx-1" />
             </button>
