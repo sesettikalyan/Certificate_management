@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import logo from "../assets/logo.png";
 import { useStores } from "../store/index";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineLeft } from "react-icons/ai";
 export default function Register() {
   const { CommonStore, UserStore } = useStores();
   const [showSetPassword, setShowSetPassword] = useState(false);
@@ -73,19 +74,28 @@ export default function Register() {
       }
     } catch (error) {}
   };
+  const back = () => {
+    navigate("/login");
+  }
 
   return (
     <>
       <div className="flex flex-col w-[100%] h-screen items-center">
+      <button
+        className="flex items-center w-[90%] mx-auto pt-2 text-lg"
+        onClick={back}
+      >
+        <AiOutlineLeft className="mr-1" /> Back
+      </button>
         <div
           className={`h-[30%] ${
-            showSetPassword ? "mt-[20%]" : "mt-[3%]"
+            showSetPassword ? "mt-[20%]" : "mt-[2%]"
           } md:mt-[2%]`}
         >
           <img src={logo} className="w-36 h-36" alt="" />
         </div>
         {!showSetPassword ? (
-          <div className="bg-primary h-[100%] py-4 flex flex-col  w-[100%] rounded-tl-[100px] mt-[6%]  items-center justify-center">
+          <div className="bg-primary h-[100%] py-4 flex flex-col  w-[100%] rounded-tl-[100px] mt-[4%]  items-center justify-center">
             <h1 className="text-3xl text-center py-2 text-white">
               Enter Details
             </h1>
@@ -95,14 +105,14 @@ export default function Register() {
                 onSubmit={goToSetPassword}
                 className="flex w-[90%] flex-col justify-between "
               >
-                <p className="text-white mt-4 ml-3">Name</p>
+                <p className="text-white mt-3 ml-3">Name</p>
                 <input
                   ref={nameref}
                   required
                   className="px-5 w-[100%] py-4 rounded-full "
                   type="text"
                 />
-                <p className="text-white mt-4 ml-3">Email</p>
+                <p className="text-white mt-3 ml-3">Email</p>
                 <input
                   ref={emailref}
                   required
@@ -110,7 +120,7 @@ export default function Register() {
                   type="email"
                 />
 
-                <p className="text-white mt-4 ml-3">Phone Number</p>
+                <p className="text-white mt-3 ml-3">Phone Number</p>
                 <input
                   ref={phoneref}
                   required
@@ -118,7 +128,7 @@ export default function Register() {
                   type="text"
                 />
                 {/* <link rel="stylesheet" href="" /> */}
-                <p className="text-white mt-4 ml-3">
+                <p className="text-white mt-3 ml-3">
                   {CommonStore.role === "student" ? "Pin Number" : "Staff I'd"}
                 </p>
                 <input
@@ -128,7 +138,7 @@ export default function Register() {
                   type="text"
                 />
 
-                <p className="text-white mt-4 ml-3">Branch</p>
+                <p className="text-white mt-3 ml-3">Branch</p>
                 <select
                   ref={branchref}
                   type="text"
@@ -167,7 +177,7 @@ export default function Register() {
                 {/* <p className='text-white ml-auto mr-3 mt-3 mb-2'>Forgot Password ?</p> */}
                 <button
                   type="submit"
-                  className="w-[100%] py-4 rounded-full text-white border-[1px] mt-10 border-white"
+                  className="w-[100%] py-4 rounded-full text-white border-[1px] mt-8 border-white"
                 >
                   Next
                 </button>

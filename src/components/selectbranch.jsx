@@ -21,37 +21,37 @@ export default function Selectbranch() {
   //   const [branch, setBranch] = useState("");
 
   const goToHomePage = () => {
-    if (AuthStore.user?.department === "Mech") {
+    if (AuthStore.user?.department === "Mech" && AuthStore.user?.isVerified === true) {
       navigate("/Mech/staffpage");
     } else {
-      alert("You are not authorized to access this page as you are not a Mechanical staff")
+      alert("You are not authorized to access this page.")
     }
   };
 
   const goToHomePage1 = () => {
-    if (AuthStore.user?.department === "ECE") {
+    if (AuthStore.user?.department === "ECE" && AuthStore.user?.isVerified === true) {
       navigate("/ECE/staffpage");
     }
     else {
-      alert("You are not authorized to access this page as you are not a ECE staff")
+      alert("You are not authorized to access this page. ")
     }
   };
 
   const goToHomePage2 = () => {
-    if (AuthStore.user?.department === "EEE") {
+    if (AuthStore.user?.department === "EEE" && AuthStore.user?.isVerified === true) {
       navigate("/EEE/staffpage");
     }
     else {
-      alert("You are not authorized to access this page as you are not a EEE staff")
+      alert("You are not authorized to access this page.")
     }
   };
 
   const goToHomePage3 = () => {
-    if (AuthStore.user?.department === "Civil") {
+    if (AuthStore.user?.department === "Civil" && AuthStore.user?.isVerified === true) {
       navigate("/Civil/staffpage");
     }
     else {
-      alert("You are not authorized to access this page as you are not a Civil staff")
+      alert("You are not authorized to access this page.")
     }
   };
 

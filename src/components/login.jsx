@@ -4,6 +4,7 @@ import { useStores } from "../store/index";
 import { useNavigate } from "react-router-dom";
 import { useObserver } from "mobx-react";
 import { Logo } from "./category";
+import { AiOutlineLeft } from "react-icons/ai";
 export default function Login() {
   const usernameref = useRef(null);
   const passwordref = useRef(null);
@@ -44,7 +45,9 @@ export default function Login() {
       }
     } else {
       if (await AuthStore.callingStudentLoginApi(username, password)) {
+       if(AuthStore.user?.isVerified === true){
         navigate(`/${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
+       }
       }
     }
   };
@@ -65,10 +68,20 @@ export default function Login() {
     navigate("/register");
   };
 
+  const back = () => {
+    navigate("/");
+  }
+
   return useObserver(() => (
     <>
       <div className="flex flex-col md:flex-row lg:flex-row w-[100%]  h-screen items-center">
-        <div className="h-[30%] flex justify-center md:w-[30%] items-center  md:h-[100%] mt-[10%] md:mt-0">
+      <button
+        className="flex items-center w-[90%] mx-auto pt-4 text-lg"
+        onClick={back}
+      >
+        <AiOutlineLeft className="mr-1" /> Back
+      </button>
+        <div className="h-[30%] flex justify-center md:w-[30%] items-center  md:h-[100%] mt-[8%] md:mt-0">
           <Logo />
         </div>
         <div className="bg-primary p-6 h-[70%] md:h-[100%]  w-[100%]  rounded-tl-[100px] md:rounded-none mt-[20%] md:mt-0  items-center justify-center">
