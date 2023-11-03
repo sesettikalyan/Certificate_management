@@ -8,6 +8,7 @@ import { useObserver } from "mobx-react";
 export const Profile = () => {
   const navigate = useNavigate();
   const { AuthStore, CommonStore } = useStores();
+  const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
   const goToHomepage = () => {
     if (AuthStore.principalAuth === true) {
       navigate("/principal");
@@ -49,11 +50,15 @@ export const Profile = () => {
           alt=""
         />
 
-        <img
-          className="rounded-full w-24 h-24 border-4 border-white absolute z-30 mt-[-12%] left-4 "
-          src={AuthStore.user?.photo}
-          alt="profile"
-        />
+        <div className="w-24 h-24 rounded-full border border-white absolute z-30 mt-[-12%] left-4 overflow-hidden"
+          style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+        >
+          <img
+            className="rounded-full object-cover "
+            src={AuthStore.user?.photo}
+            alt=" "
+          />
+        </div>
         <div className=" w-24 h-24 relative  ">
           <span className="bg-blue-900 w-5 absolute z-50 left-[90%] top-[25%] h-5 rounded-full flex items-center justify-center">
             <MdOutlineEdit className=" text-white" />

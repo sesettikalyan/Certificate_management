@@ -34,6 +34,7 @@ export default function BranchDetails() {
 export function TitleAndSearch({ onStaff }) {
   let { branch } = useParams();
   const { AuthStore } = useStores();
+  const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg";
 
   const selectedBranch = Branches.find(
     (branchname) => branchname.name === branch
@@ -86,11 +87,15 @@ export function TitleAndSearch({ onStaff }) {
                 onClick={() => showlecturerprofile(AuthStore.user?.idno)}
                 className=" mx-2 pr-2"
               >
-                <img
-                  className="h-12 w-12 rounded-full"
-                  src={AuthStore.user?.photo}
-                  alt={AuthStore.user?.name}
-                />
+                <div className="h-12 w-12 rounded-full overflow-hidden"
+                  style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+                >
+                  <img
+                    className="object-cover rounded-full"
+                    src={AuthStore.user?.photo}
+                    alt=" "
+                  />
+                </div>
               </div>
             </div>
           </>
@@ -114,7 +119,7 @@ export function LecturerSection() {
   const navigate = useNavigate();
   const { UserStore } = useStores();
   const [selectedBranchLecturers, setSelectedBranchLecturers] = useState([]);
-
+  const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
   let { branch } = useParams();
 
 
@@ -155,23 +160,33 @@ export function LecturerSection() {
       </div>
       <div className="mt-4 w-[90%] mx-auto">
         <div className="flex overflow-x-auto  items-center pb-4">
-          {selectedBranchLecturers.map((lecturer, index) => (
-            <div
-              key={index}
-              onClick={() => showLecturerDetails(lecturer?._id)}
-              className="cursor-pointer mx-4 flex flex-col items-center justify-center"
-            >
-              <div className="w-20 h-20 rounded-full  ">
-                <img
-                  src={lecturer?.photo}
-                  alt=""
-                  className="w-full h-full rounded-full object-cover"
-                />
-              </div>
+          {
+            selectedBranchLecturers.length === 0 ? (
+              <h1 className="font-semibold w-[90%] text-lg py-10 mx-auto text-center">
+                No Approved Lecturers
+              </h1>
+            ) : (
+              selectedBranchLecturers.map((lecturer, index) => (
+                <div
+                  key={index}
+                  onClick={() => showLecturerDetails(lecturer?._id)}
+                  className="cursor-pointer mx-4 flex flex-col items-center justify-center"
+                >
+                  <div className="w-20 h-20 rounded-full overflow-hidden"
+                    style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+                  >
+                    <img
+                      src={lecturer?.photo}
+                      alt=" "
+                      className=" rounded-full object-cover "
+                    />
+                  </div>
 
-              <p className="text-black ">{lecturer?.name}</p>
-            </div>
-          ))}
+                  <p className="text-black pt-1">{lecturer?.name}</p>
+                </div>
+              ))
+            )
+          }
         </div>
       </div>
     </>
@@ -182,6 +197,7 @@ export function StudentSection({ onstaff }) {
   let { branch } = useParams();
   const [selectedBranchStudents, setSelectedBranchStudents] = useState([]);
   const { UserStore } = useStores();
+  const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
 
 
   //check verification 
@@ -225,31 +241,43 @@ export function StudentSection({ onstaff }) {
           Students
         </h1>
       )}
-      {selectedBranchStudents.map((student) => (
-        <>
-          <div className="w-[90%] p-2 border-b-2 border-[rgba(0, 0, 0, 1)] mx-auto my-2 flex flex-row items-end justify-between">
-            <div className="flex flex-row items-center">
-              <img
-                src={student?.photo}
-                className="w-12 h-12 rounded-full"
-                alt=""
-              />
-              <div className="flex flex-col items-start ml-3">
-                <h1 className="text-lg">{student?.name}</h1>
-                <p className="text-base">{student?.pinno}</p>
+      {
+        selectedBranchStudents.length === 0 ? (
+          <h1 className=" font-semibold w-[90%] text-lg py-10 mx-auto text-center">
+            No Approved Students
+          </h1>
+        ) : (
+          selectedBranchStudents.map((student) => (
+            <>
+              <div className="w-[90%] p-2 border-b-2 border-[rgba(0, 0, 0, 1)] mx-auto my-2 flex flex-row items-end justify-between">
+                <div className="flex flex-row items-center">
+                  <div className="w-12 h-12 rounded-full overflow-hidden"
+                    style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+                  >
+                    <img
+                      src={student?.photo}
+                      className="object-cover rounded-full"
+                      alt=""
+                    />
+                  </div>
+                  <div className="flex flex-col items-start ml-3">
+                    <h1 className="text-lg">{student?.name}</h1>
+                    <p className="text-base">{student?.pinno}</p>
+                  </div>
+                </div>
+                <div className="flex">
+                  <button
+                    className="flex items-center justify-center"
+                    onClick={() => showStudentDetails(student?.pinno)}
+                  >
+                    view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="flex">
-              <button
-                className="flex items-center justify-center"
-                onClick={() => showStudentDetails(student?.pinno)}
-              >
-                view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
-              </button>
-            </div>
-          </div>
-        </>
-      ))}
+            </>
+          ))
+        )
+      }
     </>
   ));
 }

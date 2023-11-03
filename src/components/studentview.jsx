@@ -8,13 +8,15 @@ import { useObserver } from "mobx-react";
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import { PiBuildingsBold } from "react-icons/pi";
 import { BiLogOut } from "react-icons/bi";
-import { IoMdAddCircle } from "react-icons/io";
-import { useState } from "react";
+import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
+import { useRef, useState } from "react";
 
 export default function Studentview() {
   const { UserStore, AuthStore, CommonStore } = useStores();
   const { branch, pin } = useParams();
   const [deleteForm, setDeleteForm] = useState(false);
+  const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
+  const fileInputRef = useRef(null);
 
   // const selectedBranch = Branches.find(
   //   (branchname) => branchname.name === branch
@@ -96,7 +98,7 @@ export default function Studentview() {
   };
 
   const removeStudent = async (id) => {
-   await UserStore.deleteStudents(id);
+    await UserStore.deleteStudents(id);
     setDeleteForm(false);
     navigate(`/${AuthStore.user?.department}/staffpage`);
   };
@@ -109,20 +111,50 @@ export default function Studentview() {
     }
   };
 
+  const openFiles = () => {
+    fileInputRef.current.click();
+  };
+
+  const changeImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Handle the selected file
+      console.log('Selected file: ' + file.name);
+    }
+  };
+
   return useObserver(() => (
     <div className="w-[100%] h-full">
       <div className="pb-10 pt-6 flex flex-col items-start w-full bg-primary rounded-b-2xl">
         <Navbar />
-        <div className="w-[85%] mx-auto items-center flex mt-6">
-          <img
-            src={
-              CommonStore.role === "student"
-                ? AuthStore.user?.photo
-                : selectedStudent?.photo
-            }
-            className="h-44 w-36 object-fit-cover rounded-lg"
-            alt=""
-          />
+        <div className="pb-2 w-[85%] mx-auto items-center flex mt-4">
+          {CommonStore.role === "student" && !AuthStore.user?.photo ? (
+            <div onClick={openFiles} className="bg-secondary cursor-pointer text-primary my-6 w-36 h-44 rounded-lg flex flex-col items-center justify-center">
+              <IoMdAdd className="text-6xl" />
+              <p className="py-1 text-lg">Add Image</p>
+              <input
+                type="file"
+                id="fileInput"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={changeImage}
+              />
+            </div>
+          ) :
+            <div className="h-44 w-36 rounded-lg "
+              style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+            >
+              <img
+                src={
+                  CommonStore.role === "student"
+                    ? AuthStore.user?.photo
+                    : selectedStudent?.photo
+                }
+                className=" object-fit-cover rounded-lg"
+                alt=""
+              />
+            </div>
+          }
           <div className="ml-6 text-white">
             <h1 className="text-xl pb-1 ">
               {CommonStore.role === "student"
@@ -184,7 +216,7 @@ export default function Studentview() {
             </h2>
             <button
               className="flex text-xs text-text_color1 items-center"
-              // onClick={() => addNewStaff(branch)}
+            // onClick={() => addNewStaff(branch)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Certificate
@@ -210,9 +242,9 @@ export default function Studentview() {
               Cancel
               <AiOutlineClose className="mx-1" />
             </button>
-            <button 
-            onClick={()=>removeStudent(selectedStudent?._id)}
-             className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg text-black items-center p-2">
+            <button
+              onClick={() => removeStudent(selectedStudent?._id)}
+              className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg text-black items-center p-2">
               Delete
               <MdDeleteOutline className="mx-1" />
             </button>

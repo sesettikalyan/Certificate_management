@@ -21,7 +21,7 @@ export default function StudentApproval() {
       </button>
 
       {/* Student-list-section */}
-      <div className=" drop-shadow my-6 shadow-lg w-[90%] mx-auto ">
+      <div className=" drop-shadow my-6 pb-2 shadow-lg w-[90%] mx-auto ">
         <Approvals />
       </div>
     </div>

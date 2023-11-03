@@ -7,15 +7,18 @@ import { useEffect, useRef, useState } from "react";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
 import { BiLogOut } from "react-icons/bi";
+import { IoMdAdd } from "react-icons/io";
 import { toJS } from "mobx";
 
 export default function LecturerView() {
   const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
   const [selectedLecturer, setSelectedLecturer] = useState({});
-  const { UserStore, AuthStore,CommonStore } = useStores();
+  const { UserStore, AuthStore, CommonStore } = useStores();
   const navigate = useNavigate();
   const { branch, id } = useParams();
+  const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
+  const fileInputRef = useRef(null);
 
   // const selectedLecturer = UserStore.lecturers.find(
   //   (lecturer) => lecturer?.idno === id
@@ -45,10 +48,10 @@ export default function LecturerView() {
 
   useEffect(() => {
     autofillref();
-      const lecturer = UserStore.lecturers.find(
-        (lecturer) => lecturer?._id === id
-      );
-      setSelectedLecturer(lecturer);
+    const lecturer = UserStore.lecturers.find(
+      (lecturer) => lecturer?._id === id
+    );
+    setSelectedLecturer(lecturer);
   }, [editForm]);
 
 
@@ -59,14 +62,14 @@ export default function LecturerView() {
     const branch = branchref.current.value;
     console.log(name, idno, email, branch);
     console.log(id);
-   if(await UserStore.updateLecturers(name,idno,email,branch,id)){
-    setEditForm(false);
-   }
-  
+    if (await UserStore.updateLecturers(name, idno, email, branch, id)) {
+      setEditForm(false);
+    }
+
   };
 
   const removeLecturer = async (id) => {
-   await UserStore.deleteLecturers(id);
+    await UserStore.deleteLecturers(id);
     setDeleteForm(false);
     navigate(`/${branch}`);
   }
@@ -79,6 +82,19 @@ export default function LecturerView() {
     AuthStore.setStudentAuth(false);
     navigate("/");
   };
+
+  const openFiles = () => {
+    fileInputRef.current.click();
+  };
+
+  const changeImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Handle the selected file
+      console.log('Selected file: ' + file.name);
+    }
+  };
+
 
   return useObserver(() => (
     <div className="w-[100%] flex flex-col items-center py-4 h-full rounded-b-2xl bg-secondary">
@@ -113,41 +129,59 @@ export default function LecturerView() {
           </div>
         )}
       </div>
-      <img
-        src={selectedLecturer?.photo}
-        className=" my-6 w-48 h-52 rounded-lg object-cover"
-        alt=""
-      />
+      {CommonStore.role === "hod" || CommonStore.role === "staff" && !AuthStore.user?.photo ? (
+        <div onClick={openFiles} className="bg-primary text-white my-6 w-48 h-52 rounded-lg flex flex-col items-center justify-center">
+          <IoMdAdd className="text-6xl" />
+          <p className="py-1 text-lg">Add Image</p>
+          <input
+            type="file"
+            id="fileInput"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={changeImage}
+          />
+        </div>
+      ) : (
+        <div className="w-48 h-52 rounded-lg "
+          style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+        >
+          <img
+            src={CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.photo : selectedLecturer?.photo}
+            className="my-6 rounded-lg object-cover"
+            alt=""
+          />
+        </div>
+      )}
 
       <div className="flex flex-col w-[90%]">
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">Name</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {selectedLecturer?.name}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.name : selectedLecturer?.name}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">I'd number</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {selectedLecturer?.idno}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.idno : selectedLecturer?.idno}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">Branch name</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {selectedLecturer?.department}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.department : selectedLecturer?.department}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">Phone number</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {selectedLecturer?.phoneNumber}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.phoneNumber : selectedLecturer?.phoneNumber}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">Email address</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {selectedLecturer?.email}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.email : selectedLecturer?.email}
           </div>
         </div>
       </div>
@@ -214,7 +248,7 @@ export default function LecturerView() {
             </div>
 
             <button
-            onClick={()=>updateLecturerDetails(selectedLecturer?._id)}
+              onClick={() => updateLecturerDetails(selectedLecturer?._id)}
               className="absolute right-6 bottom-4 px-8 py-1 bg-black text-white rounded-lg text-base"
             >
               Save
