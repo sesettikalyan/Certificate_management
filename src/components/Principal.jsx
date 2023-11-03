@@ -125,6 +125,7 @@ export function Branch() {
 }
 
 export function Approvals() {
+  const { branch } = useParams();
   const navigate = useNavigate();
   const [lecturerApprovals, setLecturerApprovals] = useState([]);
   const [studentApprovals, setStudentApprovals] = useState([]);
@@ -141,13 +142,13 @@ export function Approvals() {
         );
         setLecturerApprovals(notverifiedLecturers);
       }
-      else if(CommonStore.role === "hod" || CommonStore.role === "staff") {
+      else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
         const notverifiedStudents = UserStore?.students.filter(
-          (student) => student?.isVerified === false
+          (student) => student?.department.toUpperCase() === branch.toUpperCase() && student?.isVerified === false
         );
         setStudentApprovals(notverifiedStudents);
       }
-      else{}
+      else { }
     } catch (error) {
 
     }

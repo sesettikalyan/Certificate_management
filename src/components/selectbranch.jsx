@@ -13,25 +13,46 @@ import {
 } from "react-icons/gi";
 import { IoBuild } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { useStores } from "../store/index";
 
 export default function Selectbranch() {
   const navigate = useNavigate();
+  const { AuthStore } = useStores();
   //   const [branch, setBranch] = useState("");
 
   const goToHomePage = () => {
-    navigate("/Mech/staffpage");
+    if (AuthStore.user?.department === "Mech") {
+      navigate("/Mech/staffpage");
+    } else {
+      alert("You are not authorized to access this page as you are not a Mechanical staff")
+    }
   };
 
   const goToHomePage1 = () => {
-    navigate("/ECE/staffpage");
+    if (AuthStore.user?.department === "ECE") {
+      navigate("/ECE/staffpage");
+    }
+    else {
+      alert("You are not authorized to access this page as you are not a ECE staff")
+    }
   };
 
   const goToHomePage2 = () => {
-    navigate("/EEE/staffpage");
+    if (AuthStore.user?.department === "EEE") {
+      navigate("/EEE/staffpage");
+    }
+    else {
+      alert("You are not authorized to access this page as you are not a EEE staff")
+    }
   };
 
   const goToHomePage3 = () => {
-    navigate("/Civil/staffpage");
+    if (AuthStore.user?.department === "Civil") {
+      navigate("/Civil/staffpage");
+    }
+    else {
+      alert("You are not authorized to access this page as you are not a Civil staff")
+    }
   };
 
   return (
