@@ -4,11 +4,19 @@ import { apiPostPut } from "../api/api_methods";
 class AuthStore {
   constructor() {
     makeAutoObservable(this);
+    this.loadUserFromLocalStorage();
   }
   user = null;
   hodAuth = false;
   studentAuth = false;
   principalAuth = false;
+  
+  loadUserFromLocalStorage() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      this.setUser(user);
+    }
+  }
 
   async callingHodLoginApi(username, password) {
     const url = "/hod/login";
@@ -68,15 +76,15 @@ class AuthStore {
       this.setUser(response?.body?.principal);
       localStorage.setItem("user", JSON.stringify(response?.body?.principal));
       console.log(toJS(this.user));
-      if (
-        response?.body?.principal?.id === username &&
-        response?.body?.principal?.password === password
-      ) {
-        return true;
-      }
+      // if (
+      //   response?.body?.principal?.id === username &&
+      //   response?.body?.principal?.password === password
+      // ) {
+      //   return true;
+      // }
       return true;
     } else {
-      alert(response?.body?.message);
+      // alert(response?.body?.message);
       return false;
     }
   }

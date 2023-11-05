@@ -37,32 +37,40 @@ export default function Login() {
 
     if (CommonStore.role === "principal") {
       if (await AuthStore.callingPrincipalLogin(username, password)) {
-        navigate("/principal");
+       return navigate("/principal");
       }
     } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
       if (await AuthStore.callingHodLoginApi(username, password)) {
-        navigate("/selectbranch");
+        if(AuthStore.user?.isVerified === true){
+        return navigate("/selectbranch");
+        }
+        else{
+         return alert("you don't have access to this page");
+        }
       }
     } else {
       if (await AuthStore.callingStudentLoginApi(username, password)) {
        if(AuthStore.user?.isVerified === true){
-        navigate(`/${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
+        return navigate(`/${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
+       }
+       else{
+        return alert("you don't have access to this page");
        }
       }
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (CommonStore.role === "principal") {
-        UserStore.getLecturersfromapi();
-        UserStore.getStudentsfromapi();
-      } else if (CommonStore.role === "staff" || CommonStore.role === "hod") {
-        UserStore.getStudentsfromapi();
-      } else {
-      }
-    };
-  }, [CommonStore.role]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (CommonStore.role === "principal") {
+  //       UserStore.getLecturersfromapi();
+  //       UserStore.getStudentsfromapi();
+  //     } else if (CommonStore.role === "staff" || CommonStore.role === "hod") {
+  //       UserStore.getStudentsfromapi();
+  //     } else {
+  //     }
+  //   };
+  // }, [CommonStore.role]);
 
   const goToRegisterPage = () => {
     navigate("/register");

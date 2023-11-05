@@ -4,6 +4,7 @@ import { apiGet, apiPostPut, apiDelete } from "../api/api_methods";
 class UserStore {
   constructor() {
     makeAutoObservable(this);
+    this.loadUserDataFromLocalStorage();
   }
   lecturers = [];
   students = [];
@@ -11,6 +12,17 @@ class UserStore {
     lecturers: false,
     students: false,
   };
+
+  loadUserDataFromLocalStorage() {
+    const lecturers = JSON.parse(localStorage.getItem("lecturers"));
+    const students = JSON.parse(localStorage.getItem("students"));
+    if (lecturers) {
+      this.setLecturers(lecturers);
+    }
+    if (students) {
+      this.setStudents(students);
+    }
+  }
 
   async getLecturersfromapi(refresh = false) {
     if (!refresh && this.hittedapis.lecturers) return;
@@ -204,10 +216,12 @@ class UserStore {
 
   setStudents(students) {
     this.students = students;
+    localStorage.setItem("students", JSON.stringify(students));
   }
 
   setLecturers(lecturers) {
     this.lecturers = lecturers;
+    localStorage.setItem("lecturers", JSON.stringify(lecturers));
   }
 }
 

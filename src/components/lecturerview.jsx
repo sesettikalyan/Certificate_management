@@ -103,7 +103,7 @@ export default function LecturerView() {
           <AiOutlineLeft className="mr-1" /> Back
         </button>
 
-        {AuthStore.principalAuth ? (
+        {CommonStore.role === "principal" ? (
           <div className="w-[25%] flex justify-between items-center">
             <button
               onClick={() => setEditForm(true)}

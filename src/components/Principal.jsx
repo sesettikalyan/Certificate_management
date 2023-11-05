@@ -1,13 +1,15 @@
 import { AiOutlineRight, AiOutlineSearch } from "react-icons/ai";
-import { lecturerApprovals } from "../helpers/lecturerapprovals";
 import { useNavigate, useParams } from "react-router-dom";
 import { Branches } from "../helpers/Branches";
 import { useEffect, useState } from "react";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
-import { IoBuild } from "react-icons/io5";
-
 export default function Principal() {
+  const {UserStore} = useStores();
+  useEffect(() =>{
+    UserStore.getLecturersfromapi();
+    UserStore.getStudentsfromapi();
+  },[])
   return useObserver(() => (
     <div className="w-[100%] my-1 h-screen flex flex-col">
       <div className="w-[90%] h-[12%] flex sticky flex-row mx-auto justify-between items-center">
@@ -52,13 +54,13 @@ export function Navbar() {
     <>
       <div className="flex  flex-col items-start">
         <p className="text-text_color2 text-xl">{greeting}..!</p>
-        <h1 className="text-2xl">{AuthStore.user?.name}</h1>
+        <h1 className="text-2xl">{AuthStore?.user?.name}</h1>
       </div>
       <div className="w-12 h-12 rounded-full overflow-hidden"
         style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
       >
         <img
-          src={AuthStore.user?.photo}
+          src={AuthStore?.user?.photo}
           onClick={goToProfile}
           className="w-12 h-12 rounded-full"
           alt=""
@@ -198,7 +200,7 @@ export function Approvals() {
                       style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }} >
                       <img
                         src={lecturer?.photo}
-                        className="w-12 h rounded-full object-cover"
+                        className=" rounded-full object-cover"
                         alt=""
                       />
                     </div>
@@ -210,7 +212,7 @@ export function Approvals() {
                   <div className="flex">
                     <button
                       className="flex items-center justify-center"
-                      onClick={() => viewStaffDetails(lecturer?.idno)}
+                      onClick={() => viewStaffDetails(lecturer?._id)}
                     >
                       view details{" "}
                       <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
@@ -235,11 +237,14 @@ export function Approvals() {
               studentApprovals.map((student) => (
                 <div className="w-[90%] p-2 border-b-2 border-black mx-auto my-2 flex flex-row items-end justify-between">
                   <div className="flex flex-row items-center">
+                    <div className="w-12 h-12 rounded-full overflow-hidden"
+                     style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }} >
                     <img
                       src={student?.photo}
-                      className="w-12 h-12 rounded-full"
+                      className="object-cover rounded-full"
                       alt=""
                     />
+                    </div>
                     <div className="flex flex-col items-start ml-3">
                       <h1 className="text-lg">{student?.name}</h1>
                       <p className="text-base">{student?.pinno}</p>
