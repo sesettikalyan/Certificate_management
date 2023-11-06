@@ -82,7 +82,7 @@ export default function Register() {
     <>
       <div className="flex flex-col w-[100%] h-screen items-center">
       <button
-        className="flex items-center w-[90%] mx-auto pt-2 text-lg"
+        className="flex items-center w-[90%] mx-auto pt-4 text-lg"
         onClick={back}
       >
         <AiOutlineLeft className="mr-1" /> Back
@@ -92,7 +92,7 @@ export default function Register() {
             showSetPassword ? "mt-[20%]" : "mt-[2%]"
           } md:mt-[2%]`}
         >
-          <img src={logo} className="w-36 h-36" alt="" />
+          <img src={logo} className="w-40 h-40" alt="" />
         </div>
         {!showSetPassword ? (
           <div className="bg-primary h-[100%] py-4 flex flex-col  w-[100%] rounded-tl-[100px] mt-[4%]  items-center justify-center">
