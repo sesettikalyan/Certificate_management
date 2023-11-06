@@ -95,7 +95,7 @@ export function Branch() {
       <div className="w-full h-fit  my-3 flex flex-wrap mx-auto justify-between items-center">
         {Branches.map((item,index) => (
           <div
-            className="w-[45%] md:w-[35%] h-[100%]  mx-auto pl-4 shadow-sm shadow-[#000000] my-5 flex flex-col items-start py-5  rounded-lg bg-white"
+            className="w-[45%] md:w-[35%] h-[100%]  mx-auto pl-4 shade-sh my-5 flex flex-col items-start py-5  rounded-lg bg-white"
             onClick={() => goToSpecificBranch(item?.name)}
             key={index}
           >
