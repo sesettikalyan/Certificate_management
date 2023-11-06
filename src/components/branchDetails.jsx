@@ -19,12 +19,14 @@ export default function BranchDetails() {
       <div className="w-[100%] h-screen flex flex-col bg-gray-100">
         <TitleAndSearch />
         {/* Lecturers section */}
-        <div className="bg-[#E4E4FF] mt-6 mx-auto w-[90%] rounded-lg">
+        <div className="flex flex-col md:flex-row-reverse md:justify-between mx-auto w-[90%] md:w-[90%]">
+        <div className="bg-[#E4E4FF] mt-6  rounded-lg md:w-[35%] ">
           <LecturerSection />
         </div>
         {/* Student-list-section */}
-        <div className="bg-white  drop-shadow my-6 shadow-lg w-[90%]  mx-auto rounded-lg">
+        <div className="bg-white  drop-shadow-2xl my-6 shadow-lg md:w-[55%]  rounded-lg  ">
           <StudentSection />
+        </div>
         </div>
       </div>
     </>
@@ -58,12 +60,12 @@ export function TitleAndSearch({ onStaff }) {
   };
 
   return useObserver(() => (
-    <>
-      <div className="w-[90%] mx-auto pt-6 flex items-center">
+    <div className="flex flex-col w-[90%] mx-auto md:w-[90%] md:flex-row md:justify-between">
+      <div className="md:w-[55%]  pt-6 flex items-center">
         {!onStaff ? (
           <>
             {" "}
-            <AiOutlineLeft className="text-lg" onClick={gotoHomePage} />
+            <AiOutlineLeft className="text-lg  cursor-pointer" onClick={gotoHomePage} />
             <h2 className="mx-1 text-lg text-primary ">
               {selectedBranch?.name}
             </h2>
@@ -101,17 +103,17 @@ export function TitleAndSearch({ onStaff }) {
           </>
         )}
       </div>
-      <div className="mt-6 relative w-[90%] mx-auto">
+      <div className="mt-6  relative w-[90%]  md:w-[35%] ">
         <input
           type="text"
           placeholder="Search"
           className="pl-14 pr-4 py-4 w-full border-blue-400 border-2 rounded-full focus:outline-none"
         />
-        <span className="absolute left-2 top-5  mx-4">
+        <span className="absolute left-2 top-5  mx-4  ">
           <FaSearch className="text-lg" />
         </span>
       </div>
-    </>
+    </div>
   ));
 }
 
@@ -148,7 +150,7 @@ export function LecturerSection() {
 
   return useObserver(() => (
     <>
-      <div className="flex w-[90%] justify-between items-center mt-2 mx-auto">
+      <div className="flex w-[90%] justify-between items-center mt-2 mx-auto md:w-[75%]">
         <h2 className="text-2xl text-text_color1 font-semibold">Lecturers</h2>
         <button
           className="flex text-xs text-text_color1 items-center"
@@ -159,7 +161,7 @@ export function LecturerSection() {
         </button>
       </div>
       <div className="mt-4 w-[90%] mx-auto">
-        <div className="flex overflow-x-auto  items-center pb-4">
+        <div className="flex overflow-x-auto items-center pb-4 md:grid md:grid-cols-3 md:gap-4">
           {
             selectedBranchLecturers.length === 0 ? (
               <h1 className="font-semibold w-[90%] text-lg py-10 mx-auto text-center">
@@ -170,7 +172,7 @@ export function LecturerSection() {
                 <div
                   key={index}
                   onClick={() => showLecturerDetails(lecturer?._id)}
-                  className="cursor-pointer mx-4 flex flex-col items-center justify-center"
+                  className="cursor-pointer mx-3 flex flex-col items-center justify-center"
                 >
                   <div className="w-20 h-20 rounded-full overflow-hidden"
                     style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
@@ -182,7 +184,7 @@ export function LecturerSection() {
                     />
                   </div>
 
-                  <p className="text-black pt-1">{lecturer?.name}</p>
+                  <p className="text-black pt-1 md:w-28 text-center truncate">{lecturer?.name}</p>
                 </div>
               ))
             )
@@ -237,7 +239,7 @@ export function StudentSection({ onstaff }) {
           </div>
         </>
       ) : (
-        <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl">
+        <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl my-4">
           Students
         </h1>
       )}
