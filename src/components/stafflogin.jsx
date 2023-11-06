@@ -5,7 +5,7 @@
 // export default function StaffLogin({ role }) {
 //   const usernameref = useRef(null);
 //   const passwordref = useRef(null);
-//   const { AuthStore } = useStores();
+//   const { UserStore } = useStores();
 //   const navigate = useNavigate();
 
 //   const handleSubmit1 = (e) => {
@@ -16,9 +16,9 @@
 //     try {
 //       const username = usernameref.current.value;
 //       const password = passwordref.current.value;
-//       AuthStore.callingHodLoginApi(username, password);
+//       UserStore.callingHodLoginApi(username, password);
 
-//       if (AuthStore.hodAuth === true) {
+//       if (UserStore.hodAuth === true) {
 //         navigate(`/selectbranch`);
 //       }
 //       // const data = {

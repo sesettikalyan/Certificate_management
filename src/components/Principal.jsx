@@ -24,7 +24,7 @@ export default function Principal() {
 }
 
 export function Navbar() {
-  const { AuthStore } = useStores();
+  const { UserStore } = useStores();
   const now = new Date();
   const hours = now.getHours();
   const navigate = useNavigate();
@@ -54,13 +54,13 @@ export function Navbar() {
     <>
       <div className="flex  flex-col items-start">
         <p className="text-text_color2 text-xl">{greeting}..!</p>
-        <h1 className="text-2xl">{AuthStore?.user?.name}</h1>
+        <h1 className="text-2xl">{UserStore?.user?.name}</h1>
       </div>
       <div className="w-12 h-12 rounded-full overflow-hidden"
         style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
       >
         <img
-          src={AuthStore?.user?.photo}
+          src={UserStore?.user?.photo}
           onClick={goToProfile}
           className="w-12 h-12 rounded-full"
           alt=""
@@ -137,7 +137,7 @@ export function Approvals() {
   const navigate = useNavigate();
   const [lecturerApprovals, setLecturerApprovals] = useState([]);
   const [studentApprovals, setStudentApprovals] = useState([]);
-  const { UserStore, CommonStore, AuthStore } = useStores();
+  const { UserStore, CommonStore} = useStores();
   const defaultprofile = "https://t3.ftcdn.net/jpg/00/64/67/80/240_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg";
 
 
@@ -177,7 +177,7 @@ export function Approvals() {
 
 
   const viewStudentDetails = (pin) => {
-    return navigate(`/${AuthStore.user?.department}/studentapproval/${pin}`);
+    return navigate(`/${UserStore.user?.department}/studentapproval/${pin}`);
   };
 
   return useObserver(() => (

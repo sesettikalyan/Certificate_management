@@ -8,7 +8,7 @@ export default function Approval({ navigation }) {
   let { id, pin } = useParams();
   const navigate = useNavigate();
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
-  const { UserStore, CommonStore, AuthStore } = useStores();
+  const { UserStore, CommonStore} = useStores();
 
   const selectedLecturer = UserStore?.lecturers.find(
     (lecturer) => lecturer?._id === id
@@ -26,7 +26,7 @@ export default function Approval({ navigation }) {
     }
     else {
       if (await UserStore.approveStudent(id)) {
-        navigate(`/${AuthStore.user?.department}/studentapproval`);
+        navigate(`/${UserStore.user?.department}/studentapproval`);
       }
     }
   };
@@ -35,7 +35,7 @@ export default function Approval({ navigation }) {
     if (CommonStore.role === "principal") {
       navigate(`/principal`);
     } else {
-      navigate(`/${AuthStore.user?.department}/studentapproval`);
+      navigate(`/${UserStore.user?.department}/studentapproval`);
     }
   };
 

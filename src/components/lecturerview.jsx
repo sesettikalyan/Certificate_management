@@ -14,7 +14,7 @@ export default function LecturerView() {
   const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
   const [selectedLecturer, setSelectedLecturer] = useState({});
-  const { UserStore, AuthStore, CommonStore } = useStores();
+  const { UserStore, CommonStore } = useStores();
   const navigate = useNavigate();
   const { branch, id } = useParams();
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
@@ -76,10 +76,10 @@ export default function LecturerView() {
 
   const logout = () => {
     localStorage.removeItem("user");
-    AuthStore.user = null;
-    AuthStore.setPrincipalAuth(false);
-    AuthStore.setHodAuth(false);
-    AuthStore.setStudentAuth(false);
+    UserStore.user = null;
+    UserStore.setPrincipalAuth(false);
+    UserStore.setHodAuth(false);
+    UserStore.setStudentAuth(false);
     navigate("/");
   };
 
@@ -129,7 +129,7 @@ export default function LecturerView() {
           </div>
         )}
       </div>
-      {CommonStore.role === "hod" || CommonStore.role === "staff" && !AuthStore.user?.photo ? (
+      {CommonStore.role === "hod" && !UserStore.user?.photo || CommonStore.role === "staff"  && !UserStore.user?.photo ? (
         <div onClick={openFiles} className="bg-primary text-white my-6 w-48 h-52 rounded-lg flex flex-col items-center justify-center">
           <IoMdAdd className="text-6xl" />
           <p className="py-1 text-lg">Add Image</p>
@@ -142,12 +142,12 @@ export default function LecturerView() {
           />
         </div>
       ) : (
-        <div className="w-48 h-52 rounded-lg "
+        <div className="w-48 h-52 rounded-lg overflow-hidden"
           style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
         >
           <img
-            src={CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.photo : selectedLecturer?.photo}
-            className="my-6 rounded-lg object-cover"
+            src={CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.photo : selectedLecturer?.photo}
+            className="w-48 rounded-lg object-cover"
             alt=""
           />
         </div>
@@ -157,31 +157,31 @@ export default function LecturerView() {
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">Name</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.name : selectedLecturer?.name}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.name : selectedLecturer?.name}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">I'd number</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.idno : selectedLecturer?.idno}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.idno : selectedLecturer?.idno}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">Branch name</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.department : selectedLecturer?.department}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.department : selectedLecturer?.department}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">Phone number</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.phoneNumber : selectedLecturer?.phoneNumber}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.phoneNumber : selectedLecturer?.phoneNumber}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">Email address</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
-            {CommonStore.role === "hod" || CommonStore.role === "staff" ? AuthStore.user?.email : selectedLecturer?.email}
+            {CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.email : selectedLecturer?.email}
           </div>
         </div>
       </div>

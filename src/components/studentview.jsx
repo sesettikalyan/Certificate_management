@@ -12,7 +12,7 @@ import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
 import { useRef, useState } from "react";
 
 export default function Studentview() {
-  const { UserStore, AuthStore, CommonStore } = useStores();
+  const { UserStore,CommonStore } = useStores();
   const { branch, pin } = useParams();
   const [deleteForm, setDeleteForm] = useState(false);
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
@@ -30,10 +30,10 @@ export default function Studentview() {
 
   const logout = () => {
     localStorage.removeItem("user");
-    AuthStore.user = null;
-    AuthStore.setPrincipalAuth(false);
-    AuthStore.setHodAuth(false);
-    AuthStore.setStudentAuth(false);
+    UserStore.user = null;
+    UserStore.setPrincipalAuth(false);
+    UserStore.setHodAuth(false);
+    UserStore.setStudentAuth(false);
     CommonStore.setRole(null);
     navigate("/");
   };
@@ -100,7 +100,7 @@ export default function Studentview() {
   const removeStudent = async (id) => {
     await UserStore.deleteStudents(id);
     setDeleteForm(false);
-    navigate(`/${AuthStore.user?.department}/staffpage`);
+    navigate(`/${UserStore.user?.department}/staffpage`);
   };
 
   const showBranch = () => {
@@ -128,7 +128,7 @@ export default function Studentview() {
       <div className="pb-10 pt-6 flex flex-col items-start w-full bg-primary rounded-b-2xl">
         <Navbar />
         <div className="pb-2 w-[85%] mx-auto items-center flex mt-4">
-          {CommonStore.role === "student" && !AuthStore.user?.photo ? (
+          {CommonStore.role === "student" && !UserStore.user?.photo ? (
             <div onClick={openFiles} className="bg-secondary cursor-pointer text-primary my-6 w-36 h-44 rounded-lg flex flex-col items-center justify-center">
               <IoMdAdd className="text-6xl" />
               <p className="py-1 text-lg">Add Image</p>
@@ -147,7 +147,7 @@ export default function Studentview() {
               <img
                 src={
                   CommonStore.role === "student"
-                    ? AuthStore.user?.photo
+                    ? UserStore.user?.photo
                     : selectedStudent?.photo
                 }
                 className=" object-fit-cover rounded-lg"
@@ -158,27 +158,27 @@ export default function Studentview() {
           <div className="ml-6 text-white">
             <h1 className="text-xl pb-1 ">
               {CommonStore.role === "student"
-                ? AuthStore.user?.name
+                ? UserStore.user?.name
                 : selectedStudent?.name}
             </h1>
             <p className="text-base ">
               {CommonStore.role === "student"
-                ? AuthStore.user?.pinno
+                ? UserStore.user?.pinno
                 : selectedStudent?.pinno}
             </p>
             <p className="text-base">
               {CommonStore.role === "student"
-                ? AuthStore.user?.department
+                ? UserStore.user?.department
                 : selectedStudent?.department}
             </p>
             <p className="text-base">
               {CommonStore.role === "student"
-                ? AuthStore.user?.studentmobile
+                ? UserStore.user?.studentmobile
                 : selectedStudent?.studentmobile}
             </p>
             <p className="text-base pb-1">
               {CommonStore.role === "student"
-                ? AuthStore.user?.emailid
+                ? UserStore.user?.emailid
                 : selectedStudent?.emailid}
             </p>
             {CommonStore.role === "staff" || CommonStore.role === "hod" ? (
@@ -194,7 +194,7 @@ export default function Studentview() {
           <p className="text-lg ml-2 text-white">Sem Percentage</p>
           <p className="text-white ml-14">
             {CommonStore.role === "student"
-              ? AuthStore.user?.percentage
+              ? UserStore.user?.percentage
               : selectedStudent?.percentage}{" "}
             %
           </p>
@@ -203,7 +203,7 @@ export default function Studentview() {
           <p className="text-lg ml-9 text-white">Backlogs</p>
           <p className="text-white ml-16">
             {CommonStore.role === "student"
-              ? AuthStore.user?.backlogs
+              ? UserStore.user?.backlogs
               : selectedStudent?.backlogs}
           </p>
         </div>

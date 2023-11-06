@@ -33,7 +33,7 @@ export default function BranchDetails() {
 
 export function TitleAndSearch({ onStaff }) {
   let { branch } = useParams();
-  const { AuthStore } = useStores();
+  const { UserStore } = useStores();
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg";
 
   const selectedBranch = Branches.find(
@@ -84,7 +84,7 @@ export function TitleAndSearch({ onStaff }) {
                 <PiBuildingsBold className="text-3xl ml-2 mt-2" />
               </div>
               <div
-                onClick={() => showlecturerprofile(AuthStore.user?.idno)}
+                onClick={() => showlecturerprofile(UserStore.user?.idno)}
                 className=" mx-2 pr-2"
               >
                 <div className="h-12 w-12 rounded-full overflow-hidden"
@@ -92,7 +92,7 @@ export function TitleAndSearch({ onStaff }) {
                 >
                   <img
                     className="object-cover rounded-full"
-                    src={AuthStore.user?.photo}
+                    src={UserStore.user?.photo}
                     alt=" "
                   />
                 </div>

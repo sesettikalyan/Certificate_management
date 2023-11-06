@@ -8,7 +8,7 @@ import { AiOutlineLeft } from "react-icons/ai";
 export default function Login() {
   const usernameref = useRef(null);
   const passwordref = useRef(null);
-  const { AuthStore, CommonStore, UserStore } = useStores();
+  const { UserStore, CommonStore } = useStores();
   const navigate = useNavigate();
 
   const usernamelabel = () => {
@@ -30,18 +30,18 @@ export default function Login() {
 
     console.log(CommonStore.role);
 
-    // const resp = AuthStore.callingPrincipalLogin(username, password);
-    // if (AuthStore.principalAuth === true) {
+    // const resp = UserStore.callingPrincipalLogin(username, password);
+    // if (UserStore.principalAuth === true) {
     //   navigate("/principal");
     // }
 
     if (CommonStore.role === "principal") {
-      if (await AuthStore.callingPrincipalLogin(username, password)) {
+      if (await UserStore.callingPrincipalLogin(username, password)) {
        return navigate("/principal");
       }
     } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
-      if (await AuthStore.callingHodLoginApi(username, password)) {
-        if(AuthStore.user?.isVerified === true){
+      if (await UserStore.callingHodLoginApi(username, password)) {
+        if(UserStore.user?.isVerified === true){
         return navigate("/selectbranch");
         }
         else{
@@ -49,9 +49,9 @@ export default function Login() {
         }
       }
     } else {
-      if (await AuthStore.callingStudentLoginApi(username, password)) {
-       if(AuthStore.user?.isVerified === true){
-        return navigate(`/${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
+      if (await UserStore.callingStudentLoginApi(username, password)) {
+       if(UserStore.user?.isVerified === true){
+        return navigate(`/${UserStore.user?.department}/${UserStore.user?.pinno}`);
        }
        else{
         return alert("you don't have access to this page");

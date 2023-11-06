@@ -17,11 +17,11 @@ import { useStores } from "../store/index";
 
 export default function Selectbranch() {
   const navigate = useNavigate();
-  const { AuthStore } = useStores();
+  const { UserStore } = useStores();
   //   const [branch, setBranch] = useState("");
 
   const goToHomePage = () => {
-    if (AuthStore.user?.department === "Mech" && AuthStore.user?.isVerified === true) {
+    if (UserStore.user?.department === "Mech" && UserStore.user?.isVerified === true) {
       navigate("/Mech/staffpage");
     } else {
       alert("You are not authorized to access this page.")
@@ -29,7 +29,7 @@ export default function Selectbranch() {
   };
 
   const goToHomePage1 = () => {
-    if (AuthStore.user?.department === "ECE" && AuthStore.user?.isVerified === true) {
+    if (UserStore.user?.department === "ECE" && UserStore.user?.isVerified === true) {
       navigate("/ECE/staffpage");
     }
     else {
@@ -38,7 +38,7 @@ export default function Selectbranch() {
   };
 
   const goToHomePage2 = () => {
-    if (AuthStore.user?.department === "EEE" && AuthStore.user?.isVerified === true) {
+    if (UserStore.user?.department === "EEE" && UserStore.user?.isVerified === true) {
       navigate("/EEE/staffpage");
     }
     else {
@@ -47,7 +47,7 @@ export default function Selectbranch() {
   };
 
   const goToHomePage3 = () => {
-    if (AuthStore.user?.department === "Civil" && AuthStore.user?.isVerified === true) {
+    if (UserStore.user?.department === "Civil" && UserStore.user?.isVerified === true) {
       navigate("/Civil/staffpage");
     }
     else {
