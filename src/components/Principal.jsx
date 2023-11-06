@@ -11,14 +11,16 @@ export default function Principal() {
     UserStore.getStudentsfromapi();
   },[])
   return useObserver(() => (
-    <div className="w-[100%] my-1 h-screen flex flex-col">
+    <div className="w-[100%] my-1 h-screen flex flex-col no-scrollbar overflow-hidden">
       <div className="w-[90%] h-[12%] flex sticky flex-row mx-auto justify-between items-center">
         <Navbar />
       </div>
-      <div className="w-[100%] h-[88%] overflow-y-auto ">
-        <Branch />
-        <Approvals />
-      </div>
+   
+      <div className="w-[100%] md:h-[85%] md:w-[95%] md:py-[3%] md:rounded-lg md:mx-auto md:bg-primary h-fit flex flex-col md:flex-row  overflow-y-auto ">
+          <Branch />
+          <Approvals />
+        </div>
+      
     </div>
   ));
 }
@@ -51,8 +53,8 @@ export function Navbar() {
   };
 
   return useObserver(() => (
-    <>
-      <div className="flex  flex-col items-start">
+    <div className="flex flex-row justify-between md:justify-end w-[100%]">
+      <div className="flex  flex-col items-start md:mr-[2%]">
         <p className="text-text_color2 text-xl">{greeting}..!</p>
         <h1 className="text-2xl">{AuthStore?.user?.name}</h1>
       </div>
@@ -66,7 +68,7 @@ export function Navbar() {
           alt=""
         />
       </div>
-    </>
+    </div>
   ));
 }
 
@@ -83,31 +85,33 @@ export function Branch() {
   };
 
   return useObserver(() => (
-    <>
+    <div className="md:w-[55%] md:mx-auto">
       <div className="w-[90%] h-fit flex flex-col mx-auto">
-        <div className="w-[100%] mt-[2%] flex flex-row mx-auto justify-between items-center">
-          <h1 className="text-2xl">Select Branch</h1>
-          <AiOutlineSearch onClick={goToSearch} className="text-2xl" />
+        <div className="w-[100%] mt-[2%] flex flex-row mx-auto justify-between md:text-white items-center">
+          <h1 className="text-2xl ">Select Branch</h1>
+          <AiOutlineSearch onClick={goToSearch} className="text-2xl " />
         </div>
       </div>
       <div className="w-full h-fit  my-3 flex flex-wrap mx-auto justify-between items-center">
-        {Branches.map((item) => (
+        {Branches.map((item,index) => (
           <div
-            className="w-[45%] h-[200px] mx-auto pl-4 shade-sh my-5 flex flex-col items-start py-2  rounded-lg bg-white"
+            className="w-[45%] md:w-[35%] h-[100%]  mx-auto pl-4 shade-sh my-5 flex flex-col items-start py-5  rounded-lg bg-white"
             onClick={() => goToSpecificBranch(item?.name)}
+            key={index}
           >
-            <div className="w-16 h-16 flex justify-center items-center rounded-full bg-primary2 my-1">
+            <div className="w-16 h-16 md:w-20 md:h-20 flex justify-center items-center rounded-full bg-primary2 my-1">
               {item?.icon}
             </div>
-            <h1 className="text-lg pb-1">{item?.name}</h1>
-            <p className="text-base  text-text_color2">
+            <h1 className="text-lg pb-1 md:text-xl">{item?.name}</h1>
+            <p className="text-base md:text-lg text-text_color2">
               Total Staff :{UserStore?.lecturers.length}
             </p>
-            <p className="text-base pb-1 text-green-400">
+            <p className="text-base md:text-lg pb-1 text-green-400">
               Total Students :{UserStore?.students.length}
             </p>
           </div>
         ))}
+        
         {/* <div className="w-[45%] h-[200px] mx-auto pl-4 shadow-md  shadow-[#000000] my-5 flex flex-col items-start py-2  rounded-lg bg-white">
                     <div className="w-16 h-16 rounded-full bg-primary2 my-1"  > </div>
                     <h1 className="text-lg pb-1">Electrical Engineering</h1>
@@ -128,7 +132,7 @@ export function Branch() {
                     <p className="text-base pb-1 text-green-400">Total Students : 134</p>
                 </div> */}
       </div>
-    </>
+    </div>
   ));
 }
 
@@ -181,7 +185,7 @@ export function Approvals() {
   };
 
   return useObserver(() => (
-    <div className="bg-secondary w-[95%] py-3 mx-auto rounded-lg">
+    <div className="bg-secondary w-[95%]  md:w-[35%] md:h-fit py-3 mx-auto rounded-lg">
       {CommonStore.role === "principal" ? (
         <>
           <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-3xl">

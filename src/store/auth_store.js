@@ -1,5 +1,5 @@
 import { makeAutoObservable, toJS } from "mobx";
-import { apiPostPut } from "../api/api_methods";
+import { apiGet, apiPostPut } from "../api/api_methods";
 
 class AuthStore {
   constructor() {
@@ -7,15 +7,56 @@ class AuthStore {
     this.loadUserFromLocalStorage();
   }
   user = null;
+  principal = [];
   hodAuth = false;
   studentAuth = false;
   principalAuth = false;
   
   loadUserFromLocalStorage() {
     const user = JSON.parse(localStorage.getItem("user"));
+    const principal = JSON.parse(localStorage.getItem("principal"));
     if (user) {
       this.setUser(user);
     }
+    if (principal) {
+      this.setPrincipal(principal);
+    }
+  }
+
+
+  //update image of principal if commonstore.role is principal also set it to user
+  async updateImageofPrincipal(id, image) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const url = `/principal/${id}`;
+    const body = {
+      photo: image,
+    };
+    const response = await apiPostPut(body, url, "PUT");
+    if (response.status === 200) {
+      console.log(response?.body);
+      this.setPrincipal(response?.body);
+      localStorage.setItem("user", JSON.stringify(response?.body));
+      this.setUser(response?.body);
+      return true;
+    }
+    alert("failed to fetch principal.");
+    return false;
+  }
+
+  async getPrincipalfromapi(refresh = false) {
+    // if (!refresh && this.hittedapis.principal) return;
+    const response = await apiGet("/principal");
+    if (response.status === 200) {
+      console.log(response?.body);
+      // this.hittedapis.principal = true;
+      return this.setPrincipal(response?.body);
+    }
+    return alert("failed to fetch principal.");
+  }
+
+  setPrincipal(principal) {
+    this.principal = principal;
+    localStorage.setItem("principal", JSON.stringify(principal));
   }
 
   async callingHodLoginApi(username, password) {
