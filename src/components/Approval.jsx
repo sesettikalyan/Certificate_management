@@ -7,14 +7,15 @@ import { useObserver } from "mobx-react";
 export default function Approval({ navigation }) {
   let { id, pin } = useParams();
   const navigate = useNavigate();
+  const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
   const { UserStore, CommonStore, AuthStore } = useStores();
 
   const selectedLecturer = UserStore?.lecturers.find(
-    (lecturer) => lecturer?.idno === id
+    (lecturer) => lecturer?._id === id
   );
 
   const selectedStudent = UserStore?.students.find(
-    (student) => student?.pinno === pin
+    (student) => student?._id === pin
   );
 
   const approveStaff = async (id) => {
@@ -50,11 +51,15 @@ export default function Approval({ navigation }) {
           </button>
 
           <div className="w-[85%] mx-auto  flex mt-6">
+            <div className="h-44 w-36 rounded-lg overflow-hidden"
+                style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+            >
             <img
               src={selectedLecturer?.photo}
-              className="h-44 w-36 rounded-lg"
+              className="object-cover rounded-lg"
               alt=""
             />
+            </div>
             <div className="ml-6">
               <h1 className="text-xl pb-1 ">{selectedLecturer?.name}</h1>
               <p className="text-base ">{selectedLecturer?.idno}</p>

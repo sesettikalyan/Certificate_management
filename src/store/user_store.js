@@ -212,7 +212,7 @@ class UserStore {
     }
     alert("failed to fetch students.");
     return false;
-  }
+  } 
 
   setStudents(students) {
     this.students = students;

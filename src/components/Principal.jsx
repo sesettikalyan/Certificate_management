@@ -253,7 +253,7 @@ export function Approvals() {
                   <div className="flex">
                     <button
                       className="flex items-center justify-center"
-                      onClick={() => viewStudentDetails(student?.pinno)}
+                      onClick={() => viewStudentDetails(student?._id)}
                     >
                       view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
                     </button>
