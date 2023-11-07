@@ -347,6 +347,28 @@ class UserStore {
     return false;
   } 
 
+
+  async updateStudentImage(image, id) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const url = `/students/${id}`;
+    const body = {
+      photo: image,
+    };
+    const response = await apiPostPut(body, url, "PUT");
+    if (response.status === 200) {
+      console.log(response?.body);
+      const index = this.students.findIndex((student) => student?._id === id);
+      localStorage.setItem("user", JSON.stringify(response?.body));
+      this.setUser(response?.body);
+      if (index !== -1) {
+        this.students[index] = response?.body;
+      }
+      return true;
+    }
+    alert("failed to fetch students.");
+    return false;
+  }
+
   setPrincipalAuth(bool) {
     this.principalAuth = bool;
   }

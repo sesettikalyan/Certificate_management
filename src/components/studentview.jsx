@@ -10,6 +10,8 @@ import { PiBuildingsBold } from "react-icons/pi";
 import { BiLogOut } from "react-icons/bi";
 import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
 import { useRef, useState } from "react";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../firebase";
 
 export default function Studentview() {
   const { UserStore,CommonStore } = useStores();
@@ -115,11 +117,27 @@ export default function Studentview() {
     fileInputRef.current.click();
   };
 
+  const uploadImageToFirebase = async (file) => {
+    
+      const timeStamp = new Date().valueOf();
+      const storageRef = ref(storage, `images/${timeStamp}-${file.name}`);
+      try {
+      await uploadBytes(storageRef, file);
+      console.log('Image uploaded to Firebase Storage');
+      const imageURL = await getDownloadURL(storageRef);
+      console.log(imageURL);
+      await UserStore.updateStudentImage(imageURL,UserStore.user?._id);
+      } catch (error) {
+
+      }
+  };
+    
+
+
   const changeImage = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Handle the selected file
-      console.log('Selected file: ' + file.name);
+      uploadImageToFirebase(file);
     }
   };
 
@@ -141,7 +159,7 @@ export default function Studentview() {
               />
             </div>
           ) :
-            <div className="h-44 w-36 rounded-lg "
+            <div className="h-44 w-36 rounded-lg relative"
               style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
             >
               <img
@@ -153,6 +171,10 @@ export default function Studentview() {
                 className=" object-fit-cover rounded-lg"
                 alt=""
               />
+              <span onClick={openFiles} className="bg-blue-900 w-6 absolute z-50  left-[88%] top-[100%] h-6 rounded-full flex items-center justify-center">
+                <MdOutlineEdit className=" text-white" />
+                <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
+              </span>
             </div>
           }
           <div className="ml-6 text-white">
