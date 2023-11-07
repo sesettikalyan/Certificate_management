@@ -1,28 +1,35 @@
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
-
-const file = 'https://www.ittcouncil.com/assets/img/certificate/new1.jpg'
+import { useNavigate, useParams } from "react-router-dom";
+import { useStores } from "../store";
 export default function Certificateview1() {
+  const {branch,studentid,id}= useParams();
+  const navigate = useNavigate();
+  const {UserStore} = useStores();
+  const selectedCertificate = UserStore?.students?.find((student) => student?._id === studentid)?.documents?.find((certificate) => certificate?._id === id);
     return (
         <div>
-            <div className='flex mt-4 ml-4'>
-                <div className=' pt-2'>
-                    <MdOutlineArrowBackIosNew />
-                </div>
-                <button className='flex text-xl'>Back</button>
+            <div className="w-[90%] mx-auto">
+              <button className="flex items-center justify-center mt-2 text-lg" onClick={() => navigate(`/${branch}/${studentid}`) }><MdOutlineArrowBackIosNew className="mr-1"/> Back</button>
             </div>
-            <div className='h-96 w-80 border-2 border-slate-400 justify-center bg-slate-400 rounded-lg m-9'>
-                <img className='h-96 w-80 rounded-lg' src={file} alt="" />
+            <div className='h-96 w-[80%] rounded-lg'>
+                <iframe src={selectedCertificate?.fileUrl} className="w-full h-full" style={{zoom:"150%"}} frameborder="0"></iframe>
             </div>
-            <div classname=''>
-                <h1 className='font-normal text-3xl text-primary'>Certificate Details</h1> 
+               
+          <div className="flex flex-col w-[90%] mx-auto">
+            <h1 className=' text-2xl text-primary'>Certificate Details</h1> 
+            <div className="flex flex-col  mt-2 items-start ">
+              <label className="pb-2">Certificate Name</label>
+              <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-[border: 0.3px solid #000000]">
+                name
+              </div>
             </div>
-            <div>
-                <p className='mt-6'>Certificate description</p>
+            <div className="flex flex-col mt-2 items-start ">
+              <label className="pb-2">Certificate Type</label>
+              <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-[border: 0.3px solid #000000]">
+                Type
+              </div>
             </div>
-            <div className='h-16 w-96  justify-center m-1 p-'>
-            <input className='w-full h-24 border-2 px-6  border-slate-400 rounded-lg ' type="text" />
-                <p></p>
-            </div>
+          </div>
         </div>
     )
 }

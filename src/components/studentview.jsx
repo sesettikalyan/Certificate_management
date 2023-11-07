@@ -15,7 +15,7 @@ import { storage } from "../firebase";
 
 export default function Studentview() {
   const { UserStore,CommonStore } = useStores();
-  const { branch, pin } = useParams();
+  const { branch, id } = useParams();
   const [deleteForm, setDeleteForm] = useState(false);
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
   const fileInputRef = useRef(null);
@@ -25,7 +25,7 @@ export default function Studentview() {
   // );
 
   const selectedStudent = UserStore?.students.find(
-    (student) => student?.pinno === pin
+    (student) => student?._id === id
   );
 
   const navigate = useNavigate();
@@ -159,7 +159,7 @@ export default function Studentview() {
               />
             </div>
           ) :
-            <div className="h-44 w-36 rounded-lg relative"
+            <div className="h-44 w-36 rounded-lg relative overflow-hidden"
               style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
             >
               <img
@@ -168,10 +168,10 @@ export default function Studentview() {
                     ? UserStore.user?.photo
                     : selectedStudent?.photo
                 }
-                className=" object-fit-cover rounded-lg"
+                className=" object-cover rounded-lg"
                 alt=""
               />
-              <span onClick={openFiles} className="bg-blue-900 w-6 absolute z-50  left-[88%] top-[100%] h-6 rounded-full flex items-center justify-center">
+              <span onClick={openFiles} className="bg-primary w-6 absolute z-auto cursor-pointer left-[85%] top-0 h-6 rounded-full flex items-center justify-center">
                 <MdOutlineEdit className=" text-white" />
                 <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
               </span>
@@ -231,14 +231,14 @@ export default function Studentview() {
         </div>
       </div>
       <div className="bg-white  drop-shadow my-6 shadow-lg w-[90%] py-3 mx-auto rounded-lg">
-        {CommonStore.role === "student" ? (
+        {CommonStore.role !== "principal" ? (
           <div className="flex w-[90%] justify-between items-center mt-2 mx-auto">
             <h2 className="text-2xl text-text_color1 font-semibold">
               Certificates
             </h2>
             <button
-              className="flex text-xs text-text_color1 items-center"
-            // onClick={() => addNewStaff(branch)}
+              className="flex text-xs text-text_color1 items-center cursor-pointer"
+              onClick={() => navigate(`/${branch}/${CommonStore.role === "student" ? UserStore.user?._id : selectedStudent?._id}/certificate`)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Certificate

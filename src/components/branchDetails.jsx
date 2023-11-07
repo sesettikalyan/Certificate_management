@@ -217,8 +217,8 @@ export function StudentSection({ onstaff }) {
 
   const navigate = useNavigate();
 
-  const showStudentDetails = (pin) => {
-    navigate(`/${branch}/${pin}`);
+  const showStudentDetails = (id) => {
+    navigate(`/${branch}/${id}`);
   };
 
   return useObserver(() => (
@@ -270,7 +270,7 @@ export function StudentSection({ onstaff }) {
                 <div className="flex">
                   <button
                     className="flex items-center justify-center"
-                    onClick={() => showStudentDetails(student?.pinno)}
+                    onClick={() => showStudentDetails(student?._id)}
                   >
                     view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
                   </button>

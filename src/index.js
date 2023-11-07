@@ -45,10 +45,10 @@ root.render(
         {/* <Route path="/studentregister" element={<StudentRegister />} /> */}
         {/* <Route path="/branch" element={<Branch />} /> */}
         <Route path="/studentview" element={<Studentview />} />
-        <Route path="/certificateview1" element={<Certificateview1 />} />
-        <Route path="/certificateview2" element={<Certificateview2 />} />
-        <Route path="/staffcertificate1" element={<Staffcertificate1 />} />
-        <Route path="/staffcertificate" element={<Staffcertificate />} />
+        <Route path="/:branch/:studentid/certificate/:id" element={<Certificateview1 />} />
+        <Route path="/:branch/:id/certificate" element={<Certificateview2 />} />
+        {/* <Route path="/staffcertificate1" element={<Staffcertificate1 />} /> */}
+        {/* <Route path="/staffcertificate" element={<Staffcertificate />} /> */}
         <Route path="/profile" element={<Profile />} />
         {/* <Route path="/studentlogin" element={<StudentLogin />} />
         <Route path="/stafflogin" element={<StaffLogin />} /> */}
@@ -56,7 +56,7 @@ root.render(
         <Route path="/:branch" element={<BranchDetails />} />
         {/* <Route path="/electrical" element={<Electrical />} /> */}
         {/* <Route path="/civil" element={<Civil />} /> */}
-        <Route path="/:branch/:pin" element={<Studentview />} />
+        <Route path="/:branch/:id" element={<Studentview />} />
         <Route path="/:branch/lecturer/:id" element={<LecturerView />} />
         <Route path="/principal" element={<Principal />} />
         <Route path="/staff/:id" element={<Approval />} />

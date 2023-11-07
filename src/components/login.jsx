@@ -51,7 +51,7 @@ export default function Login() {
     } else {
       if (await UserStore.callingStudentLoginApi(username, password)) {
        if(UserStore.user?.isVerified === true){
-        return navigate(`/${UserStore.user?.department}/${UserStore.user?.pinno}`);
+        return navigate(`/${UserStore.user?.department}/${UserStore.user?._id}`);
        }
        else{
         return alert("you don't have access to this page");
