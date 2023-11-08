@@ -64,14 +64,12 @@ export default function Studentview() {
               // onClick={() => setEditForm(true)}
               className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center"
             >
-              {" "}
               <MdOutlineEdit />
             </button>
             <button
               onClick={() => setDeleteForm(true)}
               className="w-10 h-10 bg-white rounded-full mx-3 text-2xl text-black flex items-center justify-center"
             >
-              {" "}
               <MdDeleteOutline />
             </button>
           </div>

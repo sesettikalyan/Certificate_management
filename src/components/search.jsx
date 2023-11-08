@@ -12,11 +12,15 @@ const Search = () => {
     const [SearchResultStudents,setSearchResultStudents] = useState([]);
     const [SearchResultLecturers,setSearchResultLecturers] = useState([]);
     const {UserStore} = useStores();
+    const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
 
     const showStudentDetails = (branch, id) => {
         navigate(`/${branch}/${id}`);
     }
 
+    const showLecturerDetails = (branch,id) => {
+        navigate(`/${branch}/lecturer/${id}`);
+    }
    
     const handleSearch = (e) => {
         const input = e.target.value;
@@ -61,12 +65,48 @@ const Search = () => {
                 </span>
             </div>
             {
-                SearchResultStudents.length > 0 ? ( 
+                SearchResultStudents.length > 0 || SearchResultLecturers.length > 0 ? (
+                    <>
+                    <div className="bg-secondary mt-6 w-[90%] mx-auto rounded-lg ">
+                    <h2 className="text-2xl mx-3 text-text_color1 font-semibold">Lecturers</h2>
+                        <div className="flex overflow-x-auto items-center pb-4">
+                            {
+                                SearchResultLecturers.map((lecturer, index) => (
+                                    <div
+                                      key={index}
+                                      onClick={() => showLecturerDetails(lecturer?.department,lecturer?._id)}
+                                      className="cursor-pointer mx-3 flex flex-col items-center justify-center"
+                                    >
+                                      <div className="w-20 h-20 rounded-full overflow-hidden"
+                                        style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+                                      >
+                                        <img
+                                          src={lecturer?.photo}
+                                          alt=" "
+                                          className=" rounded-full object-cover "
+                                        />
+                                      </div>
+                    
+                                      <p className="text-black pt-1 md:w-28 text-center truncate">{lecturer?.name}</p>
+                                    </div>
+                                  ))
+                            }
+                        </div>
+                    </div> 
                     <div className="bg-white  drop-shadow my-6 shadow-lg w-[90%] py-3 mx-auto rounded-lg">
+                    <h2 className="text-2xl mx-3 text-text_color1 font-semibold">Students</h2>
                     {SearchResultStudents.map((student) => (
                         <div className="w-[90%] p-2 border-b-2 border-[rgba(0, 0, 0, 1)] mx-auto my-2 flex flex-row items-end justify-between">
                             <div className="flex flex-row items-center">
-                                <img src={student?.photo} className="w-12 h-12 rounded-full" alt="" />
+                            <div className="w-12 h-12 rounded-full overflow-hidden"
+                                style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+                            >
+                                <img
+                                    src={student?.photo}
+                                    className="object-cover rounded-full"
+                                    alt=""
+                                />
+                            </div>
                                 <div className="flex flex-col items-start ml-3">
                                     <h1 className="text-lg">{student?.name}</h1>
                                     <p className="text-base">{student?.pinno}</p>
@@ -78,6 +118,7 @@ const Search = () => {
                     </div>
                     ))}
                     </div>  
+                    </>
                 )
 
                 : 
