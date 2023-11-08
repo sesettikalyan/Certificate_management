@@ -28,6 +28,7 @@ import StudentApprovalDetails from "./components/studentDetails";
 // import StudentLogin from "./components/studentlogin";
 // import StaffLogin from "./components/stafflogin";
 import Selectbranch from "./components/selectbranch";
+import NewStudent from "./components/newStudent";
 // import StudentRegister from "./components/studentregister";
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
@@ -62,6 +63,7 @@ root.render(
         <Route path="/staff/:id" element={<Approval />} />
         <Route path="/search" element={<Search />} />
         <Route path="/:branch/newstaff" element={<NewStaff />} />
+        <Route path="/:branch/newstudent" element={<NewStudent />} />
         <Route path="/:branch/staffpage" element={<StaffPage />} />
         <Route path="/:branch/studentapproval" element={<StudentApproval />} />
         <Route

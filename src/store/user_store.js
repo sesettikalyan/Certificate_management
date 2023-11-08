@@ -264,16 +264,18 @@ class UserStore {
     return alert("failed to fetch students.");
   }
 
-  async postStudents(name, pinno, email, branch, password, role, phno) {
+  async postStudents(image,name, pinno, email, phno,branch,password) {
     const url = "/register/studentS";
     const body = {
+      photo: image,
       name: name,
       department: branch,
       pinno: pinno,
       emailid: email,
       password: password,
-      role: role,
+      role: "student",
       studentmobile: phno,
+      isVerified: true,
     };
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {

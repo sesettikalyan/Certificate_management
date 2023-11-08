@@ -231,7 +231,7 @@ export function StudentSection({ onstaff }) {
             </h2>
             <button
               className="flex text-xs text-text_color1 items-center"
-            // onClick={() => addNewStaff(branch)}
+            onClick={() => navigate(`/${branch}/newstudent`)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Student
