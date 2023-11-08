@@ -110,11 +110,11 @@ class UserStore {
   }
 
   async getPrincipalfromapi(refresh = false) {
-    // if (!refresh && this.hittedapis.principal) return;
+    if (!refresh && this.hittedapis.principal) return;
     const response = await apiGet("/principal");
     if (response.status === 200) {
       console.log(response?.body);
-      // this.hittedapis.principal = true;
+      this.hittedapis.principal = true;
       return this.setPrincipal(response?.body);
     }
     return alert("failed to fetch principal.");
@@ -311,13 +311,14 @@ class UserStore {
     return false;
   }
 
-  async updateStudents(name, pinno, email, branch, id) {
+  async updateStudents(name, pinno, email,mobile, branch, id) {
     const url = `/students/${id}`;
     const body = {
       name: name,
       department: branch,
       pinno: pinno,
       emailid: email,
+      studentmobile: mobile,
     };
     const response = await apiPostPut(body, url, "PUT");
     if (response.status === 200) {

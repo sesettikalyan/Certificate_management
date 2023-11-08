@@ -9,16 +9,22 @@ import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import { PiBuildingsBold } from "react-icons/pi";
 import { BiLogOut } from "react-icons/bi";
 import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase";
 
 export default function Studentview() {
   const { UserStore,CommonStore } = useStores();
   const { branch, id } = useParams();
+  const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
   const fileInputRef = useRef(null);
+  const nameref = useRef(null);
+  const pinref = useRef(null);
+  const emailref = useRef(null);
+  const branchref = useRef(null);
+  const phoneref = useRef(null);
 
   // const selectedBranch = Branches.find(
   //   (branchname) => branchname.name === branch
@@ -27,6 +33,37 @@ export default function Studentview() {
   const selectedStudent = UserStore?.students.find(
     (student) => student?._id === id
   );
+
+  const autofillref = () => {
+    try {
+      nameref.current.value = selectedStudent?.name;
+    pinref.current.value = selectedStudent?.pinno;
+    emailref.current.value = selectedStudent?.emailid;
+    branchref.current.value = selectedStudent?.department;
+    phoneref.current.value = selectedStudent?.studentmobile;
+    } catch (error) {
+      
+    }
+  };
+
+  useEffect(() => {
+    autofillref();
+  }, [editForm]);  
+
+  const updateStudentDetails = async (id) => {
+    try {
+      const name = nameref.current.value;
+    const pinno = pinref.current.value;
+    const emailid = emailref.current.value;
+    const department = branchref.current.value;
+    const studentmobile = phoneref.current.value;
+
+    await UserStore.updateStudents(name,pinno,emailid,studentmobile,department,id);
+    setEditForm(false);
+    } catch (error) {
+      
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -61,7 +98,7 @@ export default function Studentview() {
           </button>
           <div className="flex">
             <button
-              // onClick={() => setEditForm(true)}
+              onClick={() => setEditForm(true)}
               className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center"
             >
               <MdOutlineEdit />
@@ -271,6 +308,87 @@ export default function Studentview() {
           </div>
         </div>
       ) : null}
+      {
+        editForm ? (
+          <div className="fixed inset-0 w-[90%] m-auto h-[80%] flex flex-col z-50 py-4 px-2 rounded-2xl justify-center  bg-primary">
+          <h1 className="text-center text-lg text-white">Edit Details </h1>
+
+          <AiOutlineClose
+            onClick={() => setEditForm(false)}
+            className="absolute text-white text-2xl cursor-pointer right-2 top-4"
+          />
+          <div
+            className="flex flex-col w-[95%] mx-auto h-full"
+          >
+            <div className="flex flex-col mt-2">
+              <label className="pb-2 text-white">Name</label>
+              <input
+                required
+                ref={nameref}
+                type="text"
+                className="bg-primary mb-1 px-1 text-white text-opacity-80 text-lg focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+              />
+            </div>
+            <div className="flex flex-col mt-1">
+              <label className="pb-2 text-white">Pin Number</label>
+              <input
+                required
+                ref={pinref}
+                type="text"
+                className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+              />
+            </div>
+            <div className="flex flex-col mt-1">
+              <label className="pb-2 text-white">E-mail</label>
+              <input
+                required
+                ref={emailref}
+                type="text"
+                className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+              />
+            </div>
+             <div className="flex flex-col mt-1">
+              <label className="pb-2 text-white">Phone Number</label>
+              <input
+                required
+                ref={phoneref}
+                type="text"
+                className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+              />
+            </div>
+            <div className="flex flex-col mt-1">
+              <label className="pb-2 text-white">Branch</label>
+              <select
+                required
+                ref={branchref}
+                type="text"
+                className="w-[70%] mb-1 rounded-lg px-1 bg-white text-opacity-80  text-lg focus:outline-none  "
+              >
+                <option className="text-xs" value="Mech">
+                  Mechanical Engineering
+                </option>
+                <option className="text-xs" value="EEE">
+                  Electrical and Electronics Engineering
+                </option>
+                <option className="text-xs" value="ECE">
+                  Electronics and Communication Engineering
+                </option>
+                <option className="text-xs" value="Civil">
+                  Civil Engineering
+                </option>
+              </select>
+            </div>
+
+            <button
+              onClick={() => updateStudentDetails(selectedStudent?._id)}
+              className="absolute right-6 bottom-4 px-8 py-1 bg-black text-white rounded-lg text-base"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+        ) : null
+      }
     </div>
   ));
 }
