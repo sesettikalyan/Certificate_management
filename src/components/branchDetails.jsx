@@ -16,11 +16,11 @@ export default function BranchDetails() {
 
   return useObserver(() => (
     <>
-      <div className="w-[100%] h-screen flex flex-col bg-gray-100">
+      <div className="w-[100%]  flex flex-col bg-gray-100">
         <TitleAndSearch />
         {/* Lecturers section */}
         <div className="flex flex-col md:flex-row-reverse md:justify-between mx-auto w-[90%] md:w-[90%]">
-        <div className="bg-[#E4E4FF] mt-6  rounded-lg md:w-[35%] ">
+        <div className=" mt-6 h-auto rounded-lg md:w-[35%] ">
           <LecturerSection />
         </div>
         {/* Student-list-section */}
@@ -149,8 +149,8 @@ export function LecturerSection() {
   };
 
   return useObserver(() => (
-    <>
-      <div className="flex w-[90%] justify-between items-center mt-2 mx-auto md:w-[75%]">
+    <div className="bg-secondary py-4 rounded-lg">
+      <div className=" flex w-[90%] justify-between items-center mt-2 mx-auto md:w-[75%]">
         <h2 className="text-2xl text-text_color1 font-semibold">Lecturers</h2>
         <button
           className="flex text-xs text-text_color1 items-center"
@@ -191,7 +191,7 @@ export function LecturerSection() {
           }
         </div>
       </div>
-    </>
+    </div>
   ));
 }
 
