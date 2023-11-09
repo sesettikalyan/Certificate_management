@@ -19,6 +19,7 @@ code {
 
 .shade-sh{
   box-shadow: -3px 3px 30px 13px #00000021;
+}
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
