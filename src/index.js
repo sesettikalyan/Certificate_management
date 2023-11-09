@@ -28,6 +28,7 @@ import StudentApprovalDetails from "./components/studentDetails";
 // import StudentLogin from "./components/studentlogin";
 // import StaffLogin from "./components/stafflogin";
 import Selectbranch from "./components/selectbranch";
+import NewStudent from "./components/newStudent";
 // import StudentRegister from "./components/studentregister";
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
@@ -45,10 +46,10 @@ root.render(
         {/* <Route path="/studentregister" element={<StudentRegister />} /> */}
         {/* <Route path="/branch" element={<Branch />} /> */}
         <Route path="/studentview" element={<Studentview />} />
-        <Route path="/certificateview1" element={<Certificateview1 />} />
-        <Route path="/certificateview2" element={<Certificateview2 />} />
-        <Route path="/staffcertificate1" element={<Staffcertificate1 />} />
-        <Route path="/staffcertificate" element={<Staffcertificate />} />
+        <Route path="/:branch/:studentid/certificate/:id" element={<Certificateview1 />} />
+        <Route path="/:branch/:id/certificate" element={<Certificateview2 />} />
+        {/* <Route path="/staffcertificate1" element={<Staffcertificate1 />} /> */}
+        {/* <Route path="/staffcertificate" element={<Staffcertificate />} /> */}
         <Route path="/profile" element={<Profile />} />
         {/* <Route path="/studentlogin" element={<StudentLogin />} />
         <Route path="/stafflogin" element={<StaffLogin />} /> */}
@@ -56,12 +57,13 @@ root.render(
         <Route path="/:branch" element={<BranchDetails />} />
         {/* <Route path="/electrical" element={<Electrical />} /> */}
         {/* <Route path="/civil" element={<Civil />} /> */}
-        <Route path="/:branch/:pin" element={<Studentview />} />
+        <Route path="/:branch/:id" element={<Studentview />} />
         <Route path="/:branch/lecturer/:id" element={<LecturerView />} />
         <Route path="/principal" element={<Principal />} />
         <Route path="/staff/:id" element={<Approval />} />
         <Route path="/search" element={<Search />} />
         <Route path="/:branch/newstaff" element={<NewStaff />} />
+        <Route path="/:branch/newstudent" element={<NewStudent />} />
         <Route path="/:branch/staffpage" element={<StaffPage />} />
         <Route path="/:branch/studentapproval" element={<StudentApproval />} />
         <Route

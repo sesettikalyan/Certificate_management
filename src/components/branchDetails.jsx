@@ -16,11 +16,11 @@ export default function BranchDetails() {
 
   return useObserver(() => (
     <>
-      <div className="w-[100%] h-screen flex flex-col bg-gray-100">
+      <div className="w-[100%]  flex flex-col bg-gray-100">
         <TitleAndSearch />
         {/* Lecturers section */}
         <div className="flex flex-col md:flex-row-reverse md:justify-between mx-auto w-[90%] md:w-[90%]">
-        <div className="bg-[#E4E4FF] mt-6  rounded-lg md:w-[35%] ">
+        <div className=" mt-6 h-auto rounded-lg md:w-[35%] ">
           <LecturerSection />
         </div>
         {/* Student-list-section */}
@@ -35,7 +35,7 @@ export default function BranchDetails() {
 
 export function TitleAndSearch({ onStaff }) {
   let { branch } = useParams();
-  const { AuthStore } = useStores();
+  const { UserStore } = useStores();
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg";
 
   const selectedBranch = Branches.find(
@@ -86,7 +86,7 @@ export function TitleAndSearch({ onStaff }) {
                 <PiBuildingsBold className="text-3xl ml-2 mt-2" />
               </div>
               <div
-                onClick={() => showlecturerprofile(AuthStore.user?.idno)}
+                onClick={() => showlecturerprofile(UserStore.user?.idno)}
                 className=" mx-2 pr-2"
               >
                 <div className="h-12 w-12 rounded-full overflow-hidden"
@@ -94,7 +94,7 @@ export function TitleAndSearch({ onStaff }) {
                 >
                   <img
                     className="object-cover rounded-full"
-                    src={AuthStore.user?.photo}
+                    src={UserStore.user?.photo}
                     alt=" "
                   />
                 </div>
@@ -149,8 +149,8 @@ export function LecturerSection() {
   };
 
   return useObserver(() => (
-    <>
-      <div className="flex w-[90%] justify-between items-center mt-2 mx-auto md:w-[75%]">
+    <div className="bg-secondary py-4 rounded-lg">
+      <div className=" flex w-[90%] justify-between items-center mt-2 mx-auto md:w-[75%]">
         <h2 className="text-2xl text-text_color1 font-semibold">Lecturers</h2>
         <button
           className="flex text-xs text-text_color1 items-center"
@@ -191,7 +191,7 @@ export function LecturerSection() {
           }
         </div>
       </div>
-    </>
+    </div>
   ));
 }
 
@@ -217,8 +217,8 @@ export function StudentSection({ onstaff }) {
 
   const navigate = useNavigate();
 
-  const showStudentDetails = (pin) => {
-    navigate(`/${branch}/${pin}`);
+  const showStudentDetails = (id) => {
+    navigate(`/${branch}/${id}`);
   };
 
   return useObserver(() => (
@@ -231,7 +231,7 @@ export function StudentSection({ onstaff }) {
             </h2>
             <button
               className="flex text-xs text-text_color1 items-center"
-            // onClick={() => addNewStaff(branch)}
+            onClick={() => navigate(`/${branch}/newstudent`)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Student
@@ -270,7 +270,7 @@ export function StudentSection({ onstaff }) {
                 <div className="flex">
                   <button
                     className="flex items-center justify-center"
-                    onClick={() => showStudentDetails(student?.pinno)}
+                    onClick={() => showStudentDetails(student?._id)}
                   >
                     view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
                   </button>

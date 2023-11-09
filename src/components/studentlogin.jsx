@@ -5,7 +5,7 @@
 // export default function StudentLogin({ role }) {
 //   const pinref = useRef(null);
 //   const passwordref = useRef(null);
-//   const { AuthStore } = useStores();
+//   const { UserStore } = useStores();
 //   const navigate = useNavigate();
 
 //   const handleSubmit2 = (e) => {
@@ -17,7 +17,7 @@
 //       const password = passwordref.current.value;
 //       console.log(pinno);
 //       console.log(password);
-//       AuthStore.callingStudentLoginApi(pinno, password);
+//       UserStore.callingStudentLoginApi(pinno, password);
 //       // const data = {
 //       //     username,
 //       //     password

@@ -10,7 +10,7 @@ import { getDownloadURL, ref, uploadBytes, uploadString } from "firebase/storage
 
 export const Profile = () => {
   const navigate = useNavigate();
-  const { AuthStore, CommonStore,UserStore } = useStores();
+  const { UserStore, CommonStore} = useStores();
   const [imageUrl, setImageUrl] = useState(); 
   const fileInputRef = useRef(null);
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
@@ -18,9 +18,9 @@ export const Profile = () => {
     if (CommonStore.role === "principal") {
       navigate("/principal");
     } else if (CommonStore.role === "hod" || CommonStore.role === "staff")  {
-      navigate(`/${AuthStore.user?.department.toUpperCase()}/staffpage`);
+      navigate(`/${UserStore.user?.department.toUpperCase()}/staffpage`);
     } else {
-      navigate(`/${AuthStore.user?.department}/${AuthStore.user?.pinno}`);
+      navigate(`/${UserStore.user?.department}/${UserStore.user?.pinno}`);
     }
   };
 
@@ -38,7 +38,10 @@ export const Profile = () => {
       console.log(imageURL);
 
       if (CommonStore.role === "principal") {
-       await AuthStore.updateImageofPrincipal(AuthStore.user?._id, imageURL);
+       await UserStore.updateImageofPrincipal(UserStore.user?._id, imageURL);
+      }
+      else if(CommonStore.role === "hod" || CommonStore.role === "staff"){
+        await UserStore.updateLecturerPhoto( imageURL,UserStore.user?._id);
       }
 
      } catch (error) {
@@ -61,10 +64,10 @@ export const Profile = () => {
 
   const logout = () => {
     localStorage.removeItem("user");
-    AuthStore.user = null;
-    AuthStore.setPrincipalAuth(false);
-    AuthStore.setHodAuth(false);
-    AuthStore.setStudentAuth(false);
+    UserStore.user = null;
+    UserStore.setPrincipalAuth(false);
+    UserStore.setHodAuth(false);
+    UserStore.setStudentAuth(false);
     CommonStore.setRole(null);
     navigate("/");
   };
@@ -86,7 +89,7 @@ export const Profile = () => {
       <div>
         <img
           className="relative w-[100%] rounded-md object-cover  h-60"
-          src={AuthStore.user?.coverImage}
+          src={UserStore.user?.coverImage}
           alt=""
         />
 
@@ -95,7 +98,7 @@ export const Profile = () => {
         >
           <img
             className="rounded-full object-cover "
-            src={AuthStore.user?.photo}
+            src={UserStore.user?.photo}
             alt=" "
           />
         </div>

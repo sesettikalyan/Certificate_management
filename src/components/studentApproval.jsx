@@ -6,10 +6,10 @@ import { Approvals } from "./Principal";
 import { useObserver } from "mobx-react";
 
 export default function StudentApproval() {
-  const { AuthStore } = useStores();
+  const { UserStore } = useStores();
   const navigate = useNavigate();
   const gotoStaffPage = () => {
-    navigate(`/${AuthStore.user?.department}/staffpage`);
+    navigate(`/${UserStore.user?.department}/staffpage`);
   };
   return useObserver(() => (
     <div>

@@ -11,12 +11,12 @@ export default function Principal() {
     UserStore.getStudentsfromapi();
   },[])
   return useObserver(() => (
-    <div className="w-[100%] my-1 h-screen flex flex-col no-scrollbar overflow-hidden">
+    <div className="w-[100%] my-1 h-screen flex flex-col no-scrollbar ">
       <div className="w-[90%] h-[12%] flex sticky flex-row mx-auto justify-between items-center">
         <Navbar />
       </div>
    
-      <div className="w-[100%] md:h-[85%] md:w-[95%] md:py-[3%] md:rounded-lg md:mx-auto md:bg-primary h-fit flex flex-col md:flex-row  overflow-y-auto ">
+      <div className="w-[100%]  no-scrollbar md:w-[95%] md:pt-[2%] md:my-[1%] md:rounded-lg md:mx-auto md:bg-primary  flex flex-col md:flex-row md:overflow-y-visible  overflow-y-auto ">
           <Branch />
           <Approvals />
         </div>
@@ -26,7 +26,7 @@ export default function Principal() {
 }
 
 export function Navbar() {
-  const { AuthStore } = useStores();
+  const { UserStore } = useStores();
   const now = new Date();
   const hours = now.getHours();
   const navigate = useNavigate();
@@ -56,13 +56,13 @@ export function Navbar() {
     <div className="flex flex-row justify-between md:justify-end w-[100%]">
       <div className="flex  flex-col items-start md:mr-[2%]">
         <p className="text-text_color2 text-xl">{greeting}..!</p>
-        <h1 className="text-2xl">{AuthStore?.user?.name}</h1>
+        <h1 className="text-2xl">{UserStore?.user?.name}</h1>
       </div>
       <div className="w-12 h-12 rounded-full overflow-hidden"
         style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
       >
         <img
-          src={AuthStore?.user?.photo}
+          src={UserStore?.user?.photo}
           onClick={goToProfile}
           className="w-12 h-12 rounded-full"
           alt=""
@@ -86,27 +86,27 @@ export function Branch() {
 
   return useObserver(() => (
     <div className="md:w-[55%] md:mx-auto">
-      <div className="w-[90%] h-fit flex flex-col mx-auto">
+      <div className="w-[85%] h-fit flex flex-col mx-auto">
         <div className="w-[100%] mt-[2%] flex flex-row mx-auto justify-between md:text-white items-center">
           <h1 className="text-2xl ">Select Branch</h1>
-          <AiOutlineSearch onClick={goToSearch} className="text-2xl " />
+          <AiOutlineSearch onClick={goToSearch} className="text-2xl cursor-pointer" />
         </div>
       </div>
-      <div className="w-full h-fit  my-3 flex flex-wrap mx-auto justify-between items-center">
+      <div className="w-full h-fit  my-3 flex flex-wrap  justify-between items-center">
         {Branches.map((item,index) => (
           <div
-            className="w-[45%] md:w-[35%] h-[100%]  mx-auto pl-4 shade-sh my-5 flex flex-col items-start py-5  rounded-lg bg-white"
+            className="w-[45%] md:w-[35%] h-[100%]  mx-auto pl-4  shade-sh my-5 flex flex-col items-start py-5  rounded-lg bg-white"
             onClick={() => goToSpecificBranch(item?.name)}
             key={index}
           >
-            <div className="w-16 h-16 md:w-20 md:h-20 flex justify-center items-center rounded-full bg-primary2 my-1">
+            <div className="w-16 h-16  flex justify-center items-center rounded-full bg-primary2 my-1">
               {item?.icon}
             </div>
-            <h1 className="text-lg pb-1 md:text-xl">{item?.name}</h1>
-            <p className="text-base md:text-lg text-text_color2">
+            <h1 className="text-lg pb-1 ">{item?.name}</h1>
+            <p className="text-base  text-text_color2">
               Total Staff :{UserStore?.lecturers.length}
             </p>
-            <p className="text-base md:text-lg pb-1 text-green-400">
+            <p className="text-base  pb-1 text-green-400">
               Total Students :{UserStore?.students.length}
             </p>
           </div>
@@ -141,7 +141,7 @@ export function Approvals() {
   const navigate = useNavigate();
   const [lecturerApprovals, setLecturerApprovals] = useState([]);
   const [studentApprovals, setStudentApprovals] = useState([]);
-  const { UserStore, CommonStore, AuthStore } = useStores();
+  const { UserStore, CommonStore} = useStores();
   const defaultprofile = "https://t3.ftcdn.net/jpg/00/64/67/80/240_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg";
 
 
@@ -181,7 +181,7 @@ export function Approvals() {
 
 
   const viewStudentDetails = (pin) => {
-    return navigate(`/${AuthStore.user?.department}/studentapproval/${pin}`);
+    return navigate(`/${UserStore.user?.department}/studentapproval/${pin}`);
   };
 
   return useObserver(() => (

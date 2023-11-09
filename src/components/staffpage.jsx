@@ -23,7 +23,7 @@ export default function StaffPage() {
 
   return useObserver(() => (
     <div>
-      <div className="w-[100%] h-screen flex flex-col bg-gray-100">
+      <div className="w-[100%]  flex flex-col bg-gray-100">
         {/* search box */}
         <TitleAndSearch onStaff={true} branch1={branch} />
         {/* Student-list-section */}
@@ -34,35 +34,3 @@ export default function StaffPage() {
     </div>
   ));
 }
-
-// export function StudentSection() {
-//     let { branch } = useParams();
-
-//     const selectedBranch = Branches.find((branchname) => branchname.name === branch);
-
-//     const navigate = useNavigate();
-
-//     const showStudentDetails = (branch, pin) => {
-//         navigate(`/${branch}/${pin}`);
-//     }
-
-//     return (
-//         <>
-//             <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl">Students</h1>
-//             {selectedBranch?.students.map((student) => (
-//                 <div className="w-[90%] p-2 border-b-2 border-[rgba(0, 0, 0, 1)] mx-auto my-2 flex flex-row items-end justify-between">
-//                     <div className="flex flex-row items-center">
-//                         <img src={student?.image} className="w-12 h-12 rounded-full" alt="" />
-//                         <div className="flex flex-col items-start ml-3">
-//                             <h1 className="text-lg">{student?.name}</h1>
-//                             <p className="text-base">{student?.pin}</p>
-//                         </div>
-//                     </div>
-//                     <div className="flex">
-//                         <button className="flex items-center justify-center" onClick={() => showStudentDetails(selectedBranch?.name, student?.pin)} >view details  <AiOutlineRight className="text-sm ml-1 mt-1" /> </button>
-//                     </div>
-//                 </div>
-//             ))}
-//         </>
-//     )
-// }
