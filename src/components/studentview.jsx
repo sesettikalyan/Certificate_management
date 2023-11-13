@@ -12,9 +12,11 @@ import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase";
+import Loader from "./reusable_Components/loader";
 
 export default function Studentview() {
   const { UserStore,CommonStore } = useStores();
+  const [loading, setLoading] = useState(false);
   const { branch, id } = useParams();
   const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
@@ -157,11 +159,13 @@ export default function Studentview() {
       const timeStamp = new Date().valueOf();
       const storageRef = ref(storage, `images/${timeStamp}-${file.name}`);
       try {
+        setLoading(true);
       await uploadBytes(storageRef, file);
       console.log('Image uploaded to Firebase Storage');
       const imageURL = await getDownloadURL(storageRef);
       console.log(imageURL);
       await UserStore.updateStudentImage(imageURL,UserStore.user?._id);
+      setLoading(false);
       } catch (error) {
 
       }
@@ -178,6 +182,7 @@ export default function Studentview() {
 
   return useObserver(() => (
     <div className="w-[100%] h-full">
+    {loading &&  <Loader loader={true} />}
       <div className="pb-10 pt-6 flex flex-col items-start w-full bg-primary rounded-b-2xl">
         <Navbar />
         <div className="pb-2 w-[85%] mx-auto items-center flex mt-4">
@@ -203,7 +208,7 @@ export default function Studentview() {
                     ? UserStore.user?.photo
                     : selectedStudent?.photo
                 }
-                className=" object-cover rounded-lg"
+                className="h-full w-full object-cover rounded-lg"
                 alt=""
               />
               <span onClick={openFiles} className="bg-primary w-6 absolute z-auto cursor-pointer left-[85%] top-0 h-6 rounded-full flex items-center justify-center">

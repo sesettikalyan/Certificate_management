@@ -6,6 +6,7 @@ import { useStores } from "../store/index";
 import { IoMdAdd } from "react-icons/io";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase";
+import Loader from "./reusable_Components/loader";
 
 export default function Certificateview2() {
     const {branch , id } = useParams();
@@ -19,6 +20,7 @@ export default function Certificateview2() {
     const [isMarklist , setIsMarklist] = useState(false);  
     const fileInputRef = useRef();  
     const [pdfurl, setPdfurl] = useState();
+    const [loading,setLoading] = useState(false);
     
     const handleTypeChange = () => {
         try {
@@ -41,11 +43,15 @@ export default function Certificateview2() {
         const timeStamp = new Date().valueOf();
         const storageRef = ref(storage, `pdfs/${timeStamp}-${file.name}`);
         try{
+            setLoading(true);
             await uploadBytes(storageRef, file);
+
             console.log("Uploaded");
+            
             const pdfurl = await getDownloadURL(storageRef);
             console.log(pdfurl);
             setPdfurl(pdfurl);
+            setLoading(false);
         }
         catch(error){
             console.log(error);
@@ -64,6 +70,7 @@ export default function Certificateview2() {
     const navigate = useNavigate();
     return (
         <form className="flex flex-col items-center">
+            {loading && <Loader loader={true}/> }
             <div className="w-[90%] my-2 mx-auto flex justify-between ">
                 <button onClick={() => navigate(`/${branch}/${id}`)} className="flex items-center">
                     <MdOutlineArrowBackIosNew className="mr-1"/>Back
