@@ -14,7 +14,10 @@ export default function NewStaff({onstaff}) {
   const navigate = useNavigate();
   const { UserStore } = useStores();
   const showBranch = () => {
-    navigate(`/${branch}`);
+    if(onstaff){
+      return navigate(`/${branch}/staffpage`);
+    }
+    return navigate(`/${branch}`);
   };
   const [showImage, setShowImage] = useState(false);
   const [imageUrl, setImageUrl] = useState();
