@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
-import { TiTickOutline } from "react-icons/ti";
+import { FaCircleCheck } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
 import { useStores } from "../store/index";
 import { IoMdAdd } from "react-icons/io";
@@ -21,6 +21,7 @@ export default function Certificateview2() {
     const fileInputRef = useRef();  
     const [pdfurl, setPdfurl] = useState();
     const [loading,setLoading] = useState(false);
+    const navigate = useNavigate();
     
     const handleTypeChange = () => {
         try {
@@ -66,16 +67,30 @@ export default function Certificateview2() {
         }
     }
 
+    const postCertificate = async (e) => {
+        e.preventDefault();
+        const name = nameref.current.value;
+        const type = typeref.current.value;
+        const semester = semref.current.value;
+        const percentage = percentageref.current.value;
+        const backlogs = backlogsref.current.value;
+        const fileUrl = pdfurl;
+        if(!fileUrl){
+            alert("Please upload the certificate");
+            return;
+        }
+        await UserStore.postStudentDocuments(name,type,fileUrl,semester,percentage,backlogs,id);
+        navigate(`/${branch}/${id}`);
+    }
     
-    const navigate = useNavigate();
     return (
-        <form className="flex flex-col items-center">
+        <form onSubmit={postCertificate} className="flex flex-col items-center">
             {loading && <Loader loader={true}/> }
             <div className="w-[90%] my-2 mx-auto flex justify-between ">
                 <button onClick={() => navigate(`/${branch}/${id}`)} className="flex items-center">
                     <MdOutlineArrowBackIosNew className="mr-1"/>Back
                 </button>
-                <button type="submit" className="bg-primary w-8 h-8 rounded-full flex justify-center items-center text-white text-3xl"><TiTickOutline/></button>
+                <button type="submit"><FaCircleCheck className="text-primary text-3xl"/></button>
             </div>
             
             {

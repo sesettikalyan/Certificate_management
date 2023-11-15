@@ -371,6 +371,40 @@ class UserStore {
     return false;
   } 
 
+  async postStudentDocuments(name,type,fileUrl,semester,percentage,backlogs,studentid) {
+    const url = "/fileUpload";
+    const body = {
+      studentId: studentid,
+      files : [
+        {
+          name: name,
+          certificateType: type,
+          fileUrl: fileUrl,
+          semister: semester,
+          semPercentage: percentage,
+          backlogs: backlogs,
+        }
+      ]
+    };
+    const response = await apiPostPut(body, url, "POST");
+    if (response.status === 200) {
+      const index = this.students.findIndex((student) => student?._id === studentid);
+      const studentUrl = `/students/${studentid}`;
+      const studentResponse = await apiGet(studentUrl);
+      if (studentResponse.status === 200) {
+        console.log(studentResponse?.body);
+        localStorage.setItem("user", JSON.stringify(studentResponse?.body));
+        this.setUser(studentResponse?.body);
+        if(index !== -1){
+          this.students[index] = studentResponse?.body;
+          localStorage.setItem("students", JSON.stringify(this.students));
+        }
+      }
+      return true;
+    }
+    alert(`failed to fetch students.`);
+    return false;
+  }
 
   async updateStudentImage(image, id) {
     const students = JSON.parse(localStorage.getItem("user"));
