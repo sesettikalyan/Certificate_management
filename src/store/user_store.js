@@ -150,6 +150,7 @@ class UserStore {
   }
 
   async postLecturers(name, idno, email, branch, password, role, phno) {
+    const lecturers = JSON.parse(localStorage.getItem("lecturers"));
     const url = "/register/hod";
     const body = {
       name: name,
@@ -163,22 +164,22 @@ class UserStore {
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {
       console.log(response?.body);
-      console.log(
-        this.lecturers.push({
-          ...response?.body,
-        })
-      );
       this.lecturers.push({
         ...response?.body,
       });
+      lecturers.push({
+        ...response?.body,
+      });
+      localStorage.setItem("lecturers", JSON.stringify(lecturers));
+      console.log(toJS(this.lecturers));
       return true;
     }
-    alert(`${response?.body}`);
+    alert(`failed to fetch lecturers.`);
     return false;
   }
 
   async updateLecturerPhoto(image, id) {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const lecturers = JSON.parse(localStorage.getItem("user"));
     const url = `/hod/${id}`;
     const body = {
       photo: image,
@@ -191,6 +192,8 @@ class UserStore {
       this.setUser(response?.body);
       if (index !== -1) {
         this.lecturers[index] = response?.body;
+        lecturers[index] = response?.body;
+        localStorage.setItem("lecturers", JSON.stringify(lecturers));
       }
       return true;
     }
@@ -199,6 +202,7 @@ class UserStore {
   }
 
   async approveLecturer(id) {
+    const lecturers = JSON.parse(localStorage.getItem("lecturers"));
     const url = `/hod/${id}`;
     const body = {
       isVerified: true,
@@ -209,6 +213,8 @@ class UserStore {
       const index = this.lecturers.findIndex((lecturer) => lecturer?._id === id);
       if (index !== -1) {
         this.lecturers[index].isVerified = true;
+        lecturers[index].isVerified = true;
+        localStorage.setItem("lecturers", JSON.stringify(lecturers));
       }
       return true;
     }
@@ -218,6 +224,7 @@ class UserStore {
 
 
   async updateLecturers(name, idno, email, branch, id) {
+    const lecturers = JSON.parse(localStorage.getItem("lecturers"));
     const url = `/hod/${id}`;
     const body = {
       name: name,
@@ -231,6 +238,8 @@ class UserStore {
       const index = this.lecturers.findIndex((lecturer) => lecturer?._id === id);
       if (index !== -1) {
         this.lecturers[index] = response?.body;
+        lecturers[index] = response?.body;
+        localStorage.setItem("lecturers", JSON.stringify(lecturers));
       }
       return true;
     }
@@ -239,6 +248,7 @@ class UserStore {
   }
 
   async deleteLecturers(id) {
+    const lecturers = JSON.parse(localStorage.getItem("lecturers"));
     const url = `/hod/${id}`;
     const response = await apiDelete(url);
     if (response.status === 200) {
@@ -246,6 +256,8 @@ class UserStore {
       const index = this.lecturers.findIndex((lecturer) => lecturer?._id === id);
       if (index !== -1) {
         this.lecturers.splice(index, 1);
+        lecturers.splice(index, 1);
+        localStorage.setItem("lecturers", JSON.stringify(lecturers));
       }
       return true;
     }
@@ -265,6 +277,7 @@ class UserStore {
   }
 
   async postStudents(image,name, pinno, email, phno,branch,password) {
+    const students = JSON.parse(localStorage.getItem("students"));
     const url = "/register/studentS";
     const body = {
       photo: image,
@@ -280,22 +293,22 @@ class UserStore {
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {
       console.log(response?.body);
-      //pushing this into students array
-      console.log(
-        this.students.push({
-          ...response?.body,
-        })
-      );
       this.students.push({
         ...response?.body,
       });
+      students.push({
+        ...response?.body,
+      });
+      localStorage.setItem("students", JSON.stringify(students));
+      console.log( toJS( this.students) );
       return true;
     }
-    alert(`${response?.body}`);
+    alert(`failed to fetch students.`);
     return false;
   }
 
   async approveStudent(id) {
+    const students = JSON.parse(localStorage.getItem("students"));
     const url = `/students/${id}`;
     const body = {
       isVerified: true,
@@ -306,6 +319,8 @@ class UserStore {
       const index = this.students.findIndex((student) => student?._id === id);
       if (index !== -1) {
         this.students[index].isVerified = true;
+        students[index].isVerified = true;
+        localStorage.setItem("students", JSON.stringify(students));
       }
       return true;
     }
@@ -314,6 +329,7 @@ class UserStore {
   }
 
   async updateStudents(name, pinno, email,mobile, branch, id) {
+    const students = JSON.parse(localStorage.getItem("students"));
     const url = `/students/${id}`;
     const body = {
       name: name,
@@ -328,6 +344,8 @@ class UserStore {
       const index = this.students.findIndex((student) => student?._id === id);
       if (index !== -1) {
         this.students[index] = response?.body;
+        students[index] = response?.body;
+        localStorage.setItem("students", JSON.stringify(students));
       }
       return true;
     }
@@ -336,6 +354,7 @@ class UserStore {
   }
 
   async deleteStudents(id) {
+    const students = JSON.parse(localStorage.getItem("students"));
     const url = `/students/${id}`;
     const response = await apiDelete(url);
     if (response.status === 200) {
@@ -343,6 +362,8 @@ class UserStore {
       const index = this.students.findIndex((student) => student?._id === id);
       if (index !== -1) {
         this.students.splice(index, 1);
+        students.splice(index, 1);
+        localStorage.setItem("students", JSON.stringify(students));
       }
       return true;
     }
@@ -352,7 +373,7 @@ class UserStore {
 
 
   async updateStudentImage(image, id) {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const students = JSON.parse(localStorage.getItem("user"));
     const url = `/students/${id}`;
     const body = {
       photo: image,
@@ -365,6 +386,8 @@ class UserStore {
       this.setUser(response?.body);
       if (index !== -1) {
         this.students[index] = response?.body;
+        students[index] = response?.body;
+        localStorage.setItem("students", JSON.stringify(students));
       }
       return true;
     }

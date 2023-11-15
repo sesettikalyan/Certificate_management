@@ -218,7 +218,7 @@ export default function NewStaff({onstaff}) {
          <div className="flex flex-col mt-1">
            <div className="flex justify-between">
             <label className="pb-2 ">Password</label>
-            <button onClick={autoGeneratePassword} className="pt-2 flex items-center"><RiLockPasswordLine className="mr-1"/> auto generate</button>
+            <button type="button" onClick={autoGeneratePassword} className="pt-2 flex items-center"><RiLockPasswordLine className="mr-1"/> auto generate</button>
            </div>
            <input
              required
@@ -296,7 +296,7 @@ export default function NewStaff({onstaff}) {
          <div className="flex flex-col mt-1">
          <div className="flex justify-between">
             <label className="pb-2 ">Password</label>
-            <button onClick={autoGeneratePassword} className="pt-2 flex items-center"><RiLockPasswordLine className="mr-1"/> auto generate</button>
+            <button type="button" onClick={autoGeneratePassword} className="pt-2 flex items-center"><RiLockPasswordLine className="mr-1"/> auto generate</button>
            </div>
            <input
              required
