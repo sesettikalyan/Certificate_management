@@ -2,7 +2,6 @@ import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import { useStores } from "../store";
 import { useEffect, useState } from "react";
-import { toJS } from "mobx";
 export default function Certificateview1() {
   const {branch,studentid,id}= useParams();
   const navigate = useNavigate();
