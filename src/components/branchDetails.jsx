@@ -5,27 +5,31 @@ import { IoMdAddCircle } from "react-icons/io";
 // import { MechStudents } from '../helpers/MechStudents';
 import { Branches } from "../helpers/Branches";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PiBuildingsBold } from "react-icons/pi";
 import { BsPersonCheck } from "react-icons/bs";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
 
 export default function BranchDetails() {
-  const { UserStore } = useStores();
+  const [searchvalue, setSearchvalue] = useState(null);
+
+  const handleSearchInputChange = (value) => {
+    setSearchvalue(value);
+  }
 
   return useObserver(() => (
     <>
       <div className="w-[100%]  flex flex-col bg-gray-100">
-        <TitleAndSearch />
+        <TitleAndSearch onSearchChange={handleSearchInputChange} />
         {/* Lecturers section */}
         <div className="flex flex-col md:flex-row-reverse md:justify-between mx-auto w-[90%] md:w-[90%]">
         <div className=" mt-6 h-auto rounded-lg md:w-[35%] ">
-          <LecturerSection />
+          <LecturerSection searchvalue={searchvalue}/>
         </div>
         {/* Student-list-section */}
         <div className="bg-white  drop-shadow-2xl my-6 shadow-lg md:w-[55%]  rounded-lg  ">
-          <StudentSection />
+          <StudentSection searchvalue={searchvalue} />
         </div>
         </div>
       </div>
@@ -33,9 +37,10 @@ export default function BranchDetails() {
   ));
 }
 
-export function TitleAndSearch({ onStaff }) {
+export function TitleAndSearch({ onStaff , onSearchChange}) {
   let { branch } = useParams();
   const { UserStore } = useStores();
+  const searchref = useRef(null);
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg";
 
   const selectedBranch = Branches.find(
@@ -58,6 +63,15 @@ export function TitleAndSearch({ onStaff }) {
   const showlecturerprofile = (id) => {
     navigate(`/${branch}/lecturer/${id}`);
   };
+
+  const handleSearch = () => {
+    const inputValue = searchref.current.value;
+    if (inputValue === "") {
+      onSearchChange(null);
+    } else {
+      onSearchChange(inputValue);
+    }
+  }
 
   return useObserver(() => (
     <div className="flex flex-col w-[90%] mx-auto md:w-[90%] md:flex-row md:justify-between">
@@ -105,9 +119,11 @@ export function TitleAndSearch({ onStaff }) {
       </div>
       <div className="mt-6  relative w-[90%]  md:w-[35%] ">
         <input
+          ref={searchref}
           type="text"
           placeholder="Search"
           className="pl-14 pr-4 py-4 w-full border-blue-400 border-2 rounded-full focus:outline-none"
+          onChange={handleSearch}
         />
         <span className="absolute left-2 top-5  mx-4  ">
           <FaSearch className="text-lg" />
@@ -117,7 +133,7 @@ export function TitleAndSearch({ onStaff }) {
   ));
 }
 
-export function LecturerSection() {
+export function LecturerSection({ searchvalue }) {
   const navigate = useNavigate();
   const { UserStore } = useStores();
   const [selectedBranchLecturers, setSelectedBranchLecturers] = useState([]);
@@ -129,14 +145,21 @@ export function LecturerSection() {
   //check verification
   useEffect(() => {
     try {
-      const verifiedLecturers = UserStore?.lecturers.filter(
-        (lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase() && lecturer?.isVerified === true
-      );
-      setSelectedBranchLecturers(verifiedLecturers);
-    } catch (error) {
+      if (searchvalue === null) {
+        const verifiedLecturers = UserStore?.lecturers.filter(
+          (lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase() && lecturer?.isVerified === true
+        );
+        setSelectedBranchLecturers(verifiedLecturers);
+      } else {
+        const verifiedLecturers = UserStore?.lecturers.filter(
+          (lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase() && lecturer?.isVerified === true && (lecturer?.name.toLowerCase().includes(searchvalue.toLowerCase())  || lecturer?.idno.toLowerCase().includes(searchvalue.toLowerCase()))
+        );
+        setSelectedBranchLecturers(verifiedLecturers);
+      }
+    } catch (error) { 
       console.log(error);
     }
-  }, [UserStore?.lecturers]);
+  }, [UserStore?.lecturers, searchvalue]);
 
 
 
@@ -195,7 +218,7 @@ export function LecturerSection() {
   ));
 }
 
-export function StudentSection({ onstaff }) {
+export function StudentSection({ onstaff,searchvalue }) {
   let { branch } = useParams();
   const [selectedBranchStudents, setSelectedBranchStudents] = useState([]);
   const { UserStore } = useStores();
@@ -205,15 +228,22 @@ export function StudentSection({ onstaff }) {
   //check verification 
   useEffect(() => {
     try {
+     if(searchvalue === null){
       const verifiedStudents = UserStore?.students.filter(
         (student) => student?.department.toUpperCase() === branch.toUpperCase() && student?.isVerified === true
       );
       setSelectedBranchStudents(verifiedStudents);
+      } else {
+        const verifiedStudents = UserStore?.students.filter(
+          (student) => student?.department.toUpperCase() === branch.toUpperCase() && student?.isVerified === true && (student?.name.toLowerCase().includes(searchvalue.toLowerCase()) || student?.pinno.toLowerCase().includes(searchvalue.toLowerCase()))
+        );
+        setSelectedBranchStudents(verifiedStudents);
+      }
     } catch (error) {
       console.log(error);
     }
   }
-    , [UserStore?.students]);
+    , [UserStore?.students, searchvalue]);
 
   const navigate = useNavigate();
 
