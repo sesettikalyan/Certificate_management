@@ -1,15 +1,17 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useStores } from "../store";
 import { useEffect, useRef, useState } from "react";
-import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { MdOutlineArrowBackIosNew, MdOutlineEdit } from "react-icons/md";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoMdAdd } from "react-icons/io";
 import Loader from "./reusable_Components/loader";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../firebase";
 
 export default function CertificateEdit() {
     const { UserStore } = useStores();
     const { branch, studentid, id } = useParams();
-    const [selectedCertificate, setSelectedCertificate] = useState(UserStore.students.find((student) => student?._id === studentid)?.documents.find((doc) => doc?._id === id));
+    const [selectedCertificate, setSelectedCertificate] = useState(UserStore?.students.find((student) => student?._id === studentid)?.documents.find((doc) => doc?._id === id));
 
     const nameref = useRef();
     const typeref = useRef();
@@ -17,7 +19,6 @@ export default function CertificateEdit() {
     const percentageref = useRef();
     const backlogsref = useRef();
     const [isMarklist, setIsMarklist] = useState(false);
-    const [showCertificate, setShowCertificate] = useState(true);
     const fileInputRef = useRef();
     const [pdfurl, setPdfurl] = useState(selectedCertificate?.fileUrl);
     const [loading, setLoading] = useState(false);
@@ -47,12 +48,62 @@ export default function CertificateEdit() {
 
     useEffect(() => {
         autofillref();
+        handleTypeChange();
     }, [selectedCertificate])
 
+    const openfiles = () => {
+        fileInputRef.current.click();
+    }
+
+    const uploadPdfToFirebase = async (file) => {
+        const timeStamp = new Date().valueOf();
+        const storageRef = ref(storage, `pdfs/${timeStamp}-${file.name}`);
+        try {
+            setLoading(true);
+            await uploadBytes(storageRef, file);
+            console.log("uploaded");
+            const pdf = await getDownloadURL(storageRef);
+            console.log(pdf);
+            setPdfurl(pdf);
+            setLoading(false);
+        } catch (error) {
+            
+        }
+    }
+
+
+    const changepdf = async (e) => {
+        const file = e.target.files[0];
+        if(file){
+          await  uploadPdfToFirebase(file);
+        }
+    }
+
+    const updateCertificate = async (e) => {
+        e.preventDefault();
+        try {
+        const name = nameref.current.value;
+        const type = typeref.current.value;
+        const sem = semref.current.value;
+        const percentage = percentageref.current.value;
+        const backlogs = backlogsref.current.value;
+        const fileUrl = pdfurl;
+        const student = studentid;
+        if(!pdfurl){
+            alert("please upload a pdf");
+            return;
+        }
+        await UserStore.updateStudentDocuments(name,type,fileUrl,sem,percentage,backlogs,student,id);
+        return navigate(`/${branch}/${studentid}`)
+        } catch (error) {
+            console.log(error);
+        }   
+    }
+        
 
     return (
         <form
-            // onSubmit={postCertificate}
+            onSubmit={updateCertificate}
             className="flex flex-col items-center">
             {loading && <Loader loader={true} />}
             <div className="w-[90%] my-2 mx-auto flex justify-between ">
@@ -62,29 +113,29 @@ export default function CertificateEdit() {
                 <button type="submit"><FaCircleCheck className="text-primary text-3xl" /></button>
             </div>
 
-            {
-                showCertificate ? (
-                    <div className="w-[80%] h-96">
-                        <iframe src={pdfurl}
-                            frameborder="0"
-                            className="w-full h-full"
-                            style={{ zoom: "150%" }}
-                        ></iframe>
-                    </div>
-                ) : (
-                    <div
-                        // onClick={openfiles}
-                        className="bg-primary w-[80%] h-96 rounded-lg m-2 flex flex-col items-center justify-center">
-                        <IoMdAdd className="text-white text-6xl" />
-                        <p className="text-white text-xl">Upload Certificate</p>
-                        <input ref={fileInputRef} type="file"
-                            // onChange={changeFile}
-                            className="hidden" />
-                    </div>
-                )
+            {!pdfurl ?
+                <div  onClick={openfiles} className="bg-primary w-[80%] h-96 rounded-lg m-2 flex flex-col items-center justify-center">
+                    <IoMdAdd className="text-white text-6xl"/>
+                    <p className="text-white text-xl">Upload Certificate</p>
+                    <input ref={fileInputRef} type="file" onChange={changepdf} className="hidden"  />
+                </div>
+                :
+                <div className="w-[80%] relative h-96 rounded-lg">
+                <iframe src={pdfurl}
+                 frameborder="0"
+                 className="w-full h-full  rounded-lg"
+                 style={{ zoom: "150%" }}
+                >
+                
+                </iframe>
+                <div  className="w-8 h-8 absolute bg-primary  rounded-full  text-xl text-white flex items-center justify-center right-0 bottom-0" onClick={openfiles}>
+                    <MdOutlineEdit />
+                <input type="file" className="hidden" ref={fileInputRef} onChange={changepdf} />
+                </div>
+            </div>  
 
             }
-
+               
             <div className="flex flex-col w-[90%] mx-auto ">
                 <h1 className="text-primary text-2xl">Certificate Details</h1>
                 <div className="flex flex-col mt-2">

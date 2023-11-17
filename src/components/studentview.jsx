@@ -217,7 +217,7 @@ export default function Studentview() {
               </span>
             </div>
           }
-          <div className="ml-6 text-white">
+          <div className="ml-6 text-white w-[50%] break-words">
             <h1 className="text-xl pb-1 ">
               {CommonStore.role === "student"
                 ? UserStore.user?.name

@@ -63,22 +63,27 @@ export default function Certificateview1() {
   return (
     <div className="flex flex-col items-center justify-between">
       <Navbar />
+      {!selectedCertificate?.fileUrl ? (
+        <p className="text-2xl font-semibold py-10">No Certificate Uploaded</p>
+      ):
       <div className='h-96 w-[80%] rounded-lg'>
         <iframe src={selectedCertificate?.fileUrl} className="w-full h-full my-2" style={{ zoom: "150%" }} frameborder="0"></iframe>
       </div>
+
+      }
 
       <div className="flex flex-col w-[90%] mx-auto">
         <h1 className=' text-2xl text-primary my-3'>Certificate Details</h1>
         <div className="flex flex-col  mt-2 items-start ">
           <label className="pb-2">Certificate Name</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-[border: 0.3px solid #000000]">
-            {selectedCertificate?.name}
+            {selectedCertificate?.name ?? "No Name Found"}
           </div>
         </div>
         <div className="flex flex-col mt-2 items-start ">
           <label className="pb-2">Certificate Type</label>
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-[border: 0.3px solid #000000]">
-            {selectedCertificate?.certificateType}
+            {selectedCertificate?.certificateType ?? "No CertificateType Found"}
           </div>
         </div>
       </div>
