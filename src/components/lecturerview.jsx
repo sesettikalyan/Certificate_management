@@ -28,6 +28,7 @@ export default function LecturerView() {
   const idref = useRef();
   const emailref = useRef();
   const branchref = useRef();
+  const phoneref = useRef();
 
   const autofillref = () => {
     try {
@@ -35,6 +36,7 @@ export default function LecturerView() {
       idref.current.value = selectedLecturer?.idno;
       emailref.current.value = selectedLecturer?.email;
       branchref.current.value = selectedLecturer?.department;
+      phoneref.current.value = selectedLecturer?.phoneNumber;
     } catch (error) { }
   };
 
@@ -60,9 +62,10 @@ export default function LecturerView() {
     const idno = idref.current.value;
     const email = emailref.current.value;
     const branch = branchref.current.value;
+    const phoneNumber = phoneref.current.value;
     console.log(name, idno, email, branch);
     console.log(id);
-    if (await UserStore.updateLecturers(name, idno, email, branch, id)) {
+    if (await UserStore.updateLecturers(name, idno, email, branch,phoneNumber, id)) {
       setEditForm(false);
     }
 
@@ -220,6 +223,15 @@ export default function LecturerView() {
               <input
                 required
                 ref={emailref}
+                type="text"
+                className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+              />
+            </div>
+            <div className="flex flex-col mt-1">
+              <label className="pb-2 text-white">phone number</label>
+              <input
+                required
+                ref={phoneref}
                 type="text"
                 className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
               />

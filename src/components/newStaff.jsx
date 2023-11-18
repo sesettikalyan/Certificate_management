@@ -175,7 +175,7 @@ export default function NewStaff({onstaff}) {
            <input
              required
              ref={emailref}
-             type="text"
+             type="email"
              className="bg-secondary my-1 px-1 text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
            />
          </div>
