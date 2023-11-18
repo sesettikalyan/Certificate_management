@@ -407,6 +407,38 @@ class UserStore {
     return false;
   }
 
+  async updateStudentDocuments(name,type,fileUrl,semester,percentage,backlogs,studentid,docid) {
+    const studentindex = this.students.findIndex((student) => student?._id === studentid);
+    const docindex =  this.students[studentindex]?.documents.findIndex((doc) => doc?._id === docid);
+    const url = `/fileUpdate`;
+    const body = {
+      studentId: studentid,
+      index : docindex,
+      files : [
+        {
+          name: name,
+          certificateType: type,
+          fileUrl: fileUrl,
+          semister: semester,
+          semPercentage: percentage,
+          backlogs: backlogs,
+        }
+      ]
+    };
+    const response = await apiPostPut(body, url, "PUT");
+    if(response.status === 200){
+      console.log(response?.body);
+      this.students[studentindex] = response?.body?.result ;
+      localStorage.setItem("students", JSON.stringify(this.students));
+     return alert(`${response?.body?.message}`)
+    }
+    else
+    {
+     return alert("failed to update documents");
+    }
+  }
+
+
   async updateStudentImage(image, id) {
     const students = JSON.parse(localStorage.getItem("user"));
     const url = `/students/${id}`;

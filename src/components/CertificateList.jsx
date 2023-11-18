@@ -19,8 +19,8 @@ export default function CertificateList() {
         <h1 className=" font-semibold w-[90%] text-lg py-10 mx-auto text-center">
             No Certificates Uploaded
           </h1>
-          : selectedStudent?.documents.map((item) => (
-            <div className="w-[90%] p-2 border-b-2 border-gray-400 mx-auto my-2 flex flex-row items-end justify-between">
+          : selectedStudent?.documents.map((item,index) => (
+            <div key={index} className="w-[90%] p-2 border-b-2 border-gray-400 mx-auto my-2 flex flex-row items-end justify-between">
               <div className="flex flex-row items-center">
                 <img src={item?.fileUrl} className="w-16 h-12 " alt="" />
                 <div className="flex flex-col items-start ml-3">
@@ -40,8 +40,8 @@ export default function CertificateList() {
         <h1 className=" font-semibold w-[90%] text-lg py-10 mx-auto text-center">
             No Certificates Uploaded
           </h1>
-          : UserStore?.user?.documents.map((item) => (
-            <div className="w-[90%] p-2 border-b-2 border-gray-400 mx-auto my-2 flex flex-row items-end justify-between">
+          : UserStore?.user?.documents.map((item,index) => (
+            <div key={index} className="w-[90%] p-2 border-b-2 border-gray-400 mx-auto my-2 flex flex-row items-end justify-between">
               <div className="flex flex-row items-center w-[70%]">
                 <img src={item?.fileUrl} className="w-20 h-12 " alt="" />
                 <div className="flex flex-col items-start ml-3">
