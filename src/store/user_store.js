@@ -9,7 +9,7 @@ class UserStore {
   lecturers = [];
   students = [];
   user = null;
-  principal = [];
+  principal = null;
   hodAuth = false;
   studentAuth = false;
   principalAuth = false;
@@ -117,6 +117,32 @@ class UserStore {
       return this.setPrincipal(response?.body);
     }
     return alert("failed to fetch principal.");
+  }
+
+  async updatePrincipal(name,mobile,image,coverImage,email,collegeName,collegeCode,collegeAddress,id) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const url = `/principal/${id}`;
+    const body = {
+      name: name,
+      phoneNumber: mobile,
+      photo: image,
+      coverImage: coverImage,
+      email: email,
+      photo: image,
+      college: collegeName,
+      collegeCode: collegeCode,
+      collegeAddress: collegeAddress,
+    };
+    const response = await apiPostPut(body, url, "PUT");
+    if (response.status === 200) {
+      console.log(response?.body);
+      this.setPrincipal(response?.body);
+      localStorage.setItem("user", JSON.stringify(response?.body));
+      this.setUser(response?.body);
+      return true;
+    }
+    alert("failed to fetch principal.");
+    return false;
   }
 
   async updateImageofPrincipal(id, image) {
