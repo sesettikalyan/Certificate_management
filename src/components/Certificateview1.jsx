@@ -2,12 +2,13 @@ import { MdDeleteOutline, MdOutlineArrowBackIosNew, MdOutlineEdit } from "react-
 import { useNavigate, useParams } from "react-router-dom";
 import { useStores } from "../store";
 import { useEffect, useState } from "react";
-import { AiOutlineLeft } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineLeft } from "react-icons/ai";
 export default function Certificateview1() {
   const { branch, studentid, id } = useParams();
   const navigate = useNavigate();
   const { UserStore, CommonStore } = useStores();
   const [selectedCertificate, setSelectedCertificate] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const Certificate = () => {
     if (CommonStore.role === "student") {
@@ -18,6 +19,13 @@ export default function Certificateview1() {
       const foundCerificate = UserStore.students.find((student) => student?._id === studentid)?.documents.find((doc) => doc?._id === id);
       setSelectedCertificate(foundCerificate);
     }
+  }
+
+  const removeCertificate = async (id) => {
+    setDeleteModal(false);
+    await UserStore.deleteStudentDocuments(studentid, id);
+    
+    navigate(`/${branch}/${studentid}`);
   }
 
   const Navbar = () => {
@@ -45,6 +53,7 @@ export default function Certificateview1() {
               <MdOutlineEdit />
             </button>
             <button
+              onClick={() => setDeleteModal(true)}
               className="w-10 h-10 bg-primary rounded-full mx-3 text-2xl text-white flex items-center justify-center"
             >
               <MdDeleteOutline />
@@ -87,6 +96,31 @@ export default function Certificateview1() {
           </div>
         </div>
       </div>
+
+      {deleteModal &&  (
+        <div className="fixed inset-0  w-[80%] m-auto h-[20%] flex flex-col z-50 py-4 px-2 rounded-2xl items-center  bg-primary">
+          <h1 className="text-center text-2xl text-white">Confirm to delete</h1>
+          <p className="text-white pt-1 text-2xl">{selectedCertificate?.name}</p>
+          {/* <AiOutlineClose onClick={() => setDeleteForm(false)} className="absolute text-white text-2xl cursor-pointer right-2 top-4" /> */}
+          <div className="w-[90%] mx-auto flex my-3  justify-between items-center">
+            <button
+              onClick={() => setDeleteModal(false)}
+              className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg  text-black items-center p-2"
+            >
+              Cancel
+              <AiOutlineClose className="mx-1" />
+            </button>
+            <button
+              onClick={() => removeCertificate(selectedCertificate?._id)}
+              className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg text-black items-center p-2">
+              Delete
+              <MdDeleteOutline className="mx-1" />
+            </button>
+          </div>
+        </div>
+      )}
+
+
     </div>
   )
 }

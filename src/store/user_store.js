@@ -454,6 +454,25 @@ class UserStore {
     }
   }
 
+  async deleteStudentDocuments(studentid,docid) {
+    const studentindex = this.students.findIndex((student) => student?._id === studentid);
+    const url = `/fileDelete`;
+    const body = {
+      studentId: studentid,
+      documentId: docid,
+    };
+    const response = await apiPostPut(body, url, "PUT");
+    if(response.status === 200){
+      console.log(response?.body);
+      this.students[studentindex] = response?.body?.result ;
+      localStorage.setItem("students", JSON.stringify(this.students));
+     return alert(`${response?.body?.message}`)
+    }
+    else
+    {
+     return alert("failed to delete documents");
+    }
+  }
 
   async updateStudentImage(image, id) {
     const students = JSON.parse(localStorage.getItem("user"));

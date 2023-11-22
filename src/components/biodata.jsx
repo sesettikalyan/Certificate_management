@@ -1,7 +1,6 @@
-import { MdArrowBackIosNew } from "react-icons/md";
 import { MdOutlineEdit } from "react-icons/md";
 import { BiArrowBack } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
@@ -9,6 +8,7 @@ import { storage } from "../firebase"
 import { getDownloadURL, ref, uploadBytes, uploadString } from "firebase/storage";
 
 export default function Biodata () {
+  const {id,branch} = useParams();
   const navigate = useNavigate();
   const { UserStore, CommonStore } = useStores();
   const [imageUrl, setImageUrl] = useState();
@@ -38,10 +38,11 @@ export default function Biodata () {
   const pincodeRef = useRef(null);
   const [editable, setEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
   const goToHomepage = () => {
     if (CommonStore.role === "principal") {
-      navigate("/principal");
+      navigate(`${branch}`);
     } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
       navigate(`/${UserStore.user?.department.toUpperCase()}/staffpage`);
     } else {
@@ -50,60 +51,9 @@ export default function Biodata () {
   };
 
   useEffect(() => {
-    autofillRef();
+    const student = UserStore.students.find((student) => student?._id === id);
+    setSelectedStudent(student);
   }, []);
-
-  const autofillRef = () => {
-    if (CommonStore.role === "principal") {
-      nameRef.current.value = UserStore.user?.name;
-      pinRef.current.value = UserStore.user?.pin;
-      fathernameRef.current.value = UserStore.user?.fathername;
-      mothernameRef.current.value = UserStore.user?.mothername;
-      parentnumberRef.current.value = UserStore.user?.parentnumber;
-      birthRef.current.value = UserStore.user?.birth;
-      polycetRef.current.value = UserStore.user?.polycet;
-      rationRef.current.value = UserStore.user?.ration;
-      genderRef.current.value = UserStore.user?.gender;
-      studentaadharRef.current.value = UserStore.user?.studentaadhar;
-      fatheraadharRef.current.value = UserStore.user?.fatheraadhar;
-      motheraadharRef.current.value = UserStore.user?.motheraadhar;
-      studentnumberRef.current.value = UserStore.user?.studentnumber;
-      categoryRef.current.value = UserStore.user?.category;
-      religionRef.current.value = UserStore.user?.religion;
-      studiedRef.current.value = UserStore.user?.studied;
-      polycetrankRef.current.value = UserStore.user?.polycetrank;
-      joiningRef.current.value = UserStore.user?.joining;
-      physicalRef.current.value = UserStore.user?.physical;
-      emailRef.current.value = UserStore.user?.email;
-      addressRef.current.value = UserStore.user?.address;
-      districtRef.current.value = UserStore.user?.district;
-      pincodeRef.current.value = UserStore.user?.pincode;
-    } else {
-      nameRef.current.value = UserStore.principal[0]?.name;
-      pinRef.current.value = UserStore.principal[0]?.pin;
-      fathernameRef.current.value = UserStore.principal[0]?.fathername;
-      mothernameRef.current.value = UserStore.principal[0]?.mothername;
-      parentnumberRef.current.value = UserStore.principal[0]?.parentnumber;
-      birthRef.current.value = UserStore.principal[0]?.birth;
-      polycetRef.current.value = UserStore.principal[0]?.polycet;
-      rationRef.current.value = UserStore.principal[0]?.ration;
-      genderRef.current.value = UserStore.principal[0]?.gender;
-      studentaadharRef.current.value = UserStore.principal[0]?.studentaadhar;
-      fatheraadharRef.current.value = UserStore.principal[0]?.fatheraadhar;
-      motheraadharRef.current.value = UserStore.principal[0]?.motheraadhar;
-      studentnumberRef.current.value = UserStore.principal[0]?.studentnumber;
-      categoryRef.current.value = UserStore.principal[0]?.category;
-      religionRef.current.value = UserStore.principal[0]?.religion;
-      studiedRef.current.value = UserStore.principal[0]?.studied;
-      polycetrankRef.current.value = UserStore.principal[0]?.polycetrank;
-      joiningRef.current.value = UserStore.principal[0]?.joining;
-      physicalRef.current.value = UserStore.principal[0]?.physical;
-      emailRef.current.value = UserStore.principal[0]?.email;
-      addressRef.current.value = UserStore.principal[0]?.address;
-      districtRef.current.value = UserStore.principal[0]?.district;
-      pincodeRef.current.value = UserStore.principal[0]?.pincode;
-    }
-  }
 
   const uploadImageToFirebase = async (file) => {
 
@@ -116,13 +66,6 @@ export default function Biodata () {
 
       setImageUrl(imageURL);
       console.log(imageURL);
-
-      if (CommonStore.role === "principal") {
-        await UserStore.updateImageofPrincipal(UserStore.user?._id, imageURL);
-      }
-      else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
-        await UserStore.updateLecturerPhoto(imageURL, UserStore.user?._id);
-      }
 
     } catch (error) {
 
@@ -142,45 +85,8 @@ export default function Biodata () {
     fileInputRef.current.click();
   }
 
-  const updateBiodata = async () => {
-    const name = nameRef.current.value;
-    const pin = pinRef.current.value;
-    const fathername = fathernameRef.current.value;
-    const mothername = mothernameRef.current.value;
-    const parentnumber = parentnumberRef.current.value;
-    const birth = birthRef.current.value;
-    const polycet = polycetRef.current.value;
-    const ration = rationRef.current.value;
-    const gender = genderRef.current.value;
-    const studentaadhar = studentaadharRef.current.value;
-    const fatheraadhar = fatheraadharRef.current.value;
-    const motheraadhar = motheraadharRef.current.value;
-    const studentnumber = studentnumberRef.current.value;
-    const category = categoryRef.current.value;
-    const religion = religionRef.current.value;
-    const studied = studiedRef.current.value;
-    const polycetrank = polycetrankRef.current.value;
-    const joining = joiningRef.current.value;
-    const physical = physicalRef.current.value;
-    const email = emailRef.current.value;
-    const address = addressRef.current.value;
-    const district = districtRef.current.value;
-    const pincode = pincodeRef.current.value;
-    const image = UserStore.user?.photo;
-    const coverImage = UserStore.user?.coverImage;
-    const id = UserStore.user?._id;
-    UserStore.updatePrincipal(name, pin, fathername,mothername,parentnumber,birth,polycet,ration,gender,studentaadhar,fatheraadhar,motheraadhar,studentnumber,category,religion,studied,polycetrank,joining,physical,email,address,district,pincode, image, coverImage, id);
-  }
 
-  const logout = () => {
-    UserStore.setUser(null);
-    localStorage.clear();
-    UserStore.setPrincipalAuth(false);
-    UserStore.setHodAuth(false);
-    UserStore.setStudentAuth(false);
-    CommonStore.setRole(null);
-    navigate("/");
-  };
+ 
 
   return useObserver(() => (
     <div className=" h-screen">
@@ -203,11 +109,11 @@ export default function Biodata () {
           >
             <img
               className="rounded-full object-cover "
-              src={CommonStore.role === "principal" ? UserStore.user?.photo : UserStore.principal[0]?.photo}
+              src={CommonStore.role === "student" ? UserStore.user?.photo : selectedStudent?.photo}
               alt=" "
             />
           </div>
-          {CommonStore.role === "principal" && (
+          {CommonStore.role === "hod" || CommonStore.role === "staff" && (
             <>
               <span onClick={openfiles} className="bg-blue-900 w-5 h-5 absolute left-[24%] top-[4%] rounded-full flex items-center justify-center">
                 <MdOutlineEdit className=" text-white" />
@@ -241,78 +147,79 @@ export default function Biodata () {
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Date Of Birth</label>
-            <textarea ref={birthRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={birthRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">POLYCET HT Number</label>
-            <textarea ref={polycetRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={polycetRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Ration Card Number</label>
-            <textarea ref={rationRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={rationRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Gender</label>
-            <textarea ref={genderRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={genderRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Student AADHAR Number</label>
-            <textarea ref={studentaadharRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={studentaadharRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Father AADHAR Number</label>
-            <textarea ref={fatheraadharRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={fatheraadharRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Mother AADHAR Number</label>
-            <textarea ref={motheraadharRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={motheraadharRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Student Mobile Number</label>
-            <textarea ref={studentnumberRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={studentnumberRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Category (Sub Caste) </label>
-            <textarea ref={categoryRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={categoryRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Religion</label>
-            <textarea ref={religionRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={religionRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Studied/Resided during SSC</label>
-            <textarea ref={studiedRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={studiedRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">POLYCET Rank</label>
-            <textarea ref={polycetrankRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={polycetrankRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Date of Joining</label>
-            <textarea ref={joiningRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={joiningRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Physically Challenged</label>
-            <textarea ref={physicalRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={physicalRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Email-id</label>
-            <textarea ref={emailRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={emailRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Address</label>
-            <textarea ref={addressRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={addressRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">District</label>
-            <textarea ref={districtRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={districtRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">PIN Code</label>
-            <textarea ref={pincodeRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={pincodeRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           {editable && (
-            <button onClick={updateBiodata} className="bg-primary w-full py-2  my-3 rounded-lg text-white ">Save</button>
+            <button 
+            className="bg-primary w-full py-2  my-3 rounded-lg text-white ">Save</button>
           )
           }
         </div>

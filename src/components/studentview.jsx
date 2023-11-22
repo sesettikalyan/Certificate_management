@@ -244,11 +244,9 @@ export default function Studentview() {
                 ? UserStore.user?.emailid
                 : selectedStudent?.emailid}
             </p>
-            {CommonStore.role === "staff" || CommonStore.role === "hod" ? (
-              <button className="bg-white text-black rounded-lg p-1">
-                View Biodata
-              </button>
-            ) : null}
+            <button onClick={() => navigate(`/biodata/${id}`)} className="bg-white text-black rounded-lg p-1">
+              View Biodata
+            </button>
           </div>
         </div>
       </div>
