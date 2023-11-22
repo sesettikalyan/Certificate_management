@@ -248,7 +248,7 @@ class UserStore {
   }
 
 
-  async updateLecturers(name, idno, email, branch, id) {
+  async updateLecturers(name, idno, email, branch,phoneNumber, id) {
     const lecturers = JSON.parse(localStorage.getItem("lecturers"));
     const url = `/hod/${id}`;
     const body = {
@@ -256,6 +256,7 @@ class UserStore {
       department: branch,
       idno: idno,
       email: email,
+      phoneNumber: phoneNumber,
     };
     const response = await apiPostPut(body, url, "PUT");
     if (response.status === 200) {
