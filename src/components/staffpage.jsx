@@ -24,6 +24,7 @@ export default function StaffPage() {
 
   useEffect(() => {
     UserStore.getStudentsfromapi();
+    UserStore.getPrincipalfromapi();
   });
 
   return useObserver(() => (

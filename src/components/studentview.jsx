@@ -50,6 +50,7 @@ export default function Studentview() {
 
   useEffect(() => {
     autofillref();
+    UserStore.getPrincipalfromapi();
   }, [editForm]);  
 
   const updateStudentDetails = async (id) => {
@@ -118,7 +119,7 @@ export default function Studentview() {
       return (
         <div className="flex justify-end w-[95%] items-center">
           <button
-            // onClick={() => setEditForm(true)}
+            onClick={() => navigate("/profile")}
             className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center"
           >
             {" "}
