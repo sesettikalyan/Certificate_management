@@ -55,6 +55,18 @@ export default function Biodata () {
     setSelectedStudent(student);
   }, []);
 
+  const autofillRef = () => {
+    if(CommonStore.role === "student"){
+      nameRef.current.value = UserStore.user?.name;
+      pinRef.current.value = UserStore.user?.pinno;
+      fathernameRef.current.value = UserStore.user?.fatherName;
+      mothernameRef.current.value = UserStore.user?.motherName;
+      parentnumberRef.current.value = UserStore.user?.parentmobile;
+      birthRef.current.value = UserStore.user?.dob;
+    }
+
+  }
+
   const uploadImageToFirebase = async (file) => {
 
     const timeStamp = new Date().valueOf();
