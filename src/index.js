@@ -68,6 +68,7 @@ root.render(
         <Route path="/:branch/staffpage" element={<StaffPage />} />
         <Route path="/:branch/studentapproval" element={<StudentApproval />} />
         <Route path="/biodata/:id" element={<Biodata />} />
+        <Route path="/:branch/:id/biodata" element={<Biodata />} />
         <Route
           path="/:branch/studentapproval/:pin"
           element={<StudentApprovalDetails />}
