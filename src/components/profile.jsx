@@ -102,6 +102,7 @@ export const Profile = () => {
     const coverImage = UserStore.user?.coverImage;
     const id = UserStore.user?._id;
     UserStore.updatePrincipal( name, mobile,image, coverImage, mail, collegeName, collegeCode, collegeAddress,id);
+    setEditable(false);
   }
 
   const logout = () => {

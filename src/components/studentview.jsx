@@ -172,7 +172,13 @@ export default function Studentview() {
       }
   };
     
-
+  const navigateToRoute = () => {
+    if (CommonStore.role === "student") {
+      navigate(`/biodata/${UserStore.user?._id}`);
+    } else {
+      navigate(`/${selectedStudent?.department}/${selectedStudent?._id}/biodata`);
+    }
+  };
 
   const changeImage = (event) => {
     const file = event.target.files[0];
@@ -244,7 +250,7 @@ export default function Studentview() {
                 ? UserStore.user?.emailid
                 : selectedStudent?.emailid}
             </p>
-            <button onClick={() => navigate(`/biodata/${id}`)} className="bg-white text-black rounded-lg p-1">
+            <button onClick={navigateToRoute} className="bg-white text-black rounded-lg p-1">
               View Biodata
             </button>
           </div>
