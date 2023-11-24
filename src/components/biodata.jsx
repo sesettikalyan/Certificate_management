@@ -6,9 +6,11 @@ import { useObserver } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
 import { storage } from "../firebase"
 import { getDownloadURL, ref, uploadBytes, uploadString } from "firebase/storage";
-import { toJS } from "mobx";
+import { set, toJS } from "mobx";
+import Loader from "./reusable_Components/loader"
 
 export default function Biodata () {
+  const [loading, setLoading] = useState(false);
   const {id,branch} = useParams();
   const navigate = useNavigate();
   const { UserStore, CommonStore } = useStores();
@@ -46,7 +48,6 @@ export default function Biodata () {
   const sschallticketRef = useRef(null);
   const [editable, setEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const selectedStudent = UserStore.students.find((student) => student?._id === id);
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
   const goToHomepage = () => {
     if (CommonStore.role === "principal") {
@@ -57,6 +58,18 @@ export default function Biodata () {
       navigate(`/${UserStore.user?.department}/${UserStore.user?._id}`);
     }
   };
+
+  const user = ()=>{
+    try {
+      
+    return UserStore.students.find((student)=>student?._id === id);
+    } catch (error) {
+      
+    }
+  }
+
+  
+  const selectedStudent = user();
 
   useEffect(() => {
     
@@ -74,7 +87,7 @@ export default function Biodata () {
       birthRef.current.value = UserStore?.user?.dateofbirth;
       polycetRef.current.value = UserStore?.user?.polycethtno;
       rationRef.current.value = UserStore?.user?.rationcardno;
-      genderRef.current.valie = UserStore?.user?.gender;
+      genderRef.current.value = UserStore?.user?.gender;
       studentaadharRef.current.value = UserStore?.user?.studentaadharno;
       fatheraadharRef.current.value = UserStore?.user?.fatheraadharno;
       motheraadharRef.current.value = UserStore?.user?.motheraadharno;
@@ -89,7 +102,6 @@ export default function Biodata () {
       addressRef.current.value = UserStore?.user?.address;
       districtRef.current.value = UserStore?.user?.district;
       pincodeRef.current.value = UserStore?.user?.pincode;
-      physicalRef.current.value = UserStore?.user?.physicallychallenged;
       emailRef.current.value = UserStore?.user?.emailid;
       moleRef.current.value = UserStore?.user?.moles;
       photoRef.current.value = UserStore?.user?.photo;
@@ -104,38 +116,38 @@ export default function Biodata () {
     }
     else if(selectedStudent){
       try {
-        pinRef.current.value = selectedStudent.pinno;
-      nameRef.current.value = selectedStudent.name;
-      fathernameRef.current.value = selectedStudent.fathername;
-      mothernameRef.current.value = selectedStudent.mothername;
-      parentnumberRef.current.value = selectedStudent.parentmobile;
-      birthRef.current.value = selectedStudent.dateofbirth;
-      polycetRef.current.value = selectedStudent.polycethtno;
-      rationRef.current.value = selectedStudent.rationcardno;
-      genderRef.current.valie = selectedStudent.gender;
-      studentaadharRef.current.value = selectedStudent.studentaadharno;
-      fatheraadharRef.current.value = selectedStudent.fatheraadharno;
-      motheraadharRef.current.value = selectedStudent.motheraadharno;
-      studentnumberRef.current.value = selectedStudent.studentmobile;
-      categoryRef.current.value = selectedStudent.category;
-      religionRef.current.value = selectedStudent.religion;
-      studiedRef.current.value = selectedStudent.resides;
-      polycetrankRef.current.value = selectedStudent.polycetrank;
-      joiningRef.current.value = selectedStudent.dateofjoining;
-      physicalRef.current.value = selectedStudent.physicallychallenged;
-      emailRef.current.value = selectedStudent.emailid;
-      addressRef.current.value = selectedStudent.address;
-      districtRef.current.value = selectedStudent.district;
-      pincodeRef.current.value = selectedStudent.pincode;
-      physicalRef.current.value = selectedStudent.physicallychallenged;
-      emailRef.current.value = selectedStudent.emailid;
-      moleRef.current.value = selectedStudent.moles;
-      photoRef.current.value = selectedStudent.photo;
-      roleRef.current.value = selectedStudent.role;
-      // documentsRef.current.value = selectedStudent.documents;
-      // isVerifiedRef.current.value = selectedStudent.isVerified;
-      departmentRef.current.value = selectedStudent.department;
-      sschallticketRef.current.value = selectedStudent.sschallticket;
+        pinRef.current.value = selectedStudent?.pinno;
+      nameRef.current.value = selectedStudent?.name;
+      fathernameRef.current.value = selectedStudent?.fathername;
+      mothernameRef.current.value = selectedStudent?.mothername;
+      parentnumberRef.current.value = selectedStudent?.parentmobile;
+      birthRef.current.value = selectedStudent?.dateofbirth;
+      polycetRef.current.value = selectedStudent?.polycethtno;
+      rationRef.current.value = selectedStudent?.rationcardno;
+      genderRef.current.value = selectedStudent?.gender;
+      studentaadharRef.current.value = selectedStudent?.studentaadharno;
+      fatheraadharRef.current.value = selectedStudent?.fatheraadharno;
+      motheraadharRef.current.value = selectedStudent?.motheraadharno;
+      studentnumberRef.current.value = selectedStudent?.studentmobile;
+      categoryRef.current.value = selectedStudent?.category;
+      religionRef.current.value = selectedStudent?.religion;
+      studiedRef.current.value = selectedStudent?.resides;
+      polycetrankRef.current.value = selectedStudent?.polycetrank;
+      joiningRef.current.value = selectedStudent?.dateofjoining;
+      physicalRef.current.value = selectedStudent?.physicallychallenged;
+      emailRef.current.value = selectedStudent?.emailid;
+      addressRef.current.value = selectedStudent?.address;
+      districtRef.current.value = selectedStudent?.district;
+      pincodeRef.current.value = selectedStudent?.pincode;
+      physicalRef.current.value = selectedStudent?.physicallychallenged;
+      emailRef.current.value = selectedStudent?.emailid;
+      moleRef.current.value = selectedStudent?.moles;
+      photoRef.current.value = selectedStudent?.photo;
+      roleRef.current.value = selectedStudent?.role;
+      // documentsRef.current.value = selectedStudent?.documents;
+      // isVerifiedRef.current.value = selectedStudent?.isVerified;
+      departmentRef.current.value = selectedStudent?.department;
+      sschallticketRef.current.value = selectedStudent?.sschallticket;
       } catch (error) {
         console.log(error);
       }
@@ -148,11 +160,16 @@ export default function Biodata () {
     const storageRef = ref(storage, `images/${timeStamp}-${file.name}`);
     try {
       await uploadBytes(storageRef, file);
+      setLoading(true);
       console.log('Image uploaded to Firebase Storage');
       const imageURL = await getDownloadURL(storageRef);
 
       setImageUrl(imageURL);
       console.log(imageURL);
+
+      await UserStore.updateStudentImage(imageURL, id);
+      console.log("Image URL updated in database");
+      setLoading(false);
 
     } catch (error) {
 
@@ -169,14 +186,60 @@ export default function Biodata () {
 
 
   const openfiles = () => {
-    fileInputRef.current.click();
+    if(editable){
+      fileInputRef.current.click();
+    }
+    else{
+      alert("Please click on edit details to edit details")
+    }
   }
 
+  const check = (e,ref) => {
+    console.log(ref.current)
+    console.log(!editable)
+    if(ref.current && ref.current.disabled && !editable){
+      alert(`Input ${ref.current.name} is disabled. Please click on edit details to edit details`)
+    }
+  }
+
+  const updateBioData = async () => {
+    const image = selectedStudent?.photo;
+    const name = nameRef.current.value;
+    const pinno = pinRef.current.value;
+    const fathername = fathernameRef.current.value;
+    const mothername = mothernameRef.current.value;
+    const parentmobile = parentnumberRef.current.value;
+    const dateofbirth = birthRef.current.value;
+    const polycethtno = polycetRef.current.value;
+    const rationcardno = rationRef.current.value;
+    const gender = genderRef.current.value;
+    const studentaadharno = studentaadharRef.current.value;
+    const fatheraadharno =fatheraadharRef.current.value;
+    const motheraadharno = motheraadharRef.current.value;
+    const studentmobile = studentnumberRef.current.value;
+    const category = categoryRef.current.value;
+    const religion = religionRef.current.value;
+    const resides = studiedRef.current.value;
+    const polycetrank = polycetrankRef.current.value;
+    const dateofjoining = joiningRef.current.value;
+    const physicallychallenged = physicalRef.current.value === "Yes" ? true : false ;
+    const emailid = emailRef.current.value;
+    const address = addressRef.current.value;
+    const district = districtRef.current.value;
+    const pincode = pincodeRef.current.value;
+    const id = selectedStudent?._id;
+    await UserStore.updateStudentBiodata(image,name,pinno,fathername,mothername,parentmobile,dateofbirth,polycethtno,
+      rationcardno,gender,studentaadharno,fatheraadharno,motheraadharno,studentmobile,category,religion,resides,polycetrank,dateofjoining,physicallychallenged,emailid,address,district,pincode,id);
+    setEditable(false);
+  }
 
  
 
   return useObserver(() => (
     <div className=" h-screen">
+     {
+        loading &&  <Loader loader={true} />
+     }
       <div className="flex pt-4 pb-4 justify-between bg-primary">
         <div onClick={goToHomepage} className="flex">
         <div className="bg-primary h-48 ">
@@ -201,22 +264,27 @@ export default function Biodata () {
               alt=" "
             />
           </div>
-          <MdOutlineEdit className=" text-white absolute bottom-1 p-[2px] right-6 border-4 border-white bg-blue-700 h-8 w-8  rounded-full" />
+          <span onClick={openfiles} className=" text-white flex justify-center items-center absolute bottom-1 p-[2px] right-6 border-4 border-white bg-primary h-8 w-8  rounded-full">
+          <MdOutlineEdit  />
+          <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
+          </span>
           </div>
           
-            
-              <span>
-                <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
-              </span>
-              <button onClick={() => setShowPopup(true)} className="flex items-center mx-4">Edit Details <MdOutlineEdit className="text-primary ml-1" /></button>
+            {
+              (CommonStore.role === "hod" || CommonStore.role === "staff") && (
+                <button onClick={() => setShowPopup(true)} className="flex items-center mx-4">Edit Details <MdOutlineEdit className="text-primary ml-1" /></button>
+              )
+            }
             
           
 
         </div>
         <div className="flex flex-col items-center w-[85%] mx-auto ">
-          <div className="flex flex-col mt-2 w-full items-start">
+          <div 
+              onClick={(e) => check(e,nameRef)} className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Student Name</label>
-            <input ref={nameRef} disabled={!editable}  type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <input ref={nameRef} disabled={!editable}
+            type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Pin Number</label>
@@ -288,7 +356,10 @@ export default function Biodata () {
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Physically Challenged</label>
-            <input ref={physicalRef} disabled={!editable}  className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" />
+            <select ref={physicalRef} disabled={!editable} placeholder="Select yes or no"  className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1" >
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
           </div>
           <div className="flex flex-col mt-2 w-full items-start">
             <label className="text-secondary2">Email-id</label>
@@ -308,6 +379,7 @@ export default function Biodata () {
           </div>
           {editable && (
             <button 
+            onClick={updateBioData}
             className="bg-primary w-full py-2  my-3 rounded-lg text-white ">Save</button>
           )
           }

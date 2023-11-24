@@ -497,6 +497,51 @@ class UserStore {
     return false;
   }
 
+  async updateStudentBiodata (image,name,pinno,fathername,mothername,parentmobile,dob,polycethtno,rationcardno,gender,studentaadharno,fatheraadharno,motheraadharno,studentmobile,category,religion,resides,polycetrank,dateofjoining,physicallychallenged,email,address,district,pincode,studentid) {
+    const url = `/students/${studentid}`;
+    const body ={
+      photo: image,
+      name: name,
+      pinno: pinno,
+      fathername: fathername,
+      mothername: mothername,
+      parentmobile: parentmobile,
+      dateofbirth: dob,
+      polycethtno: polycethtno,
+      rationcardno: rationcardno,
+      gender:gender,
+      studentaadharno: studentaadharno,
+      fatheraadharno: fatheraadharno,
+      motheraadharno: motheraadharno,
+      studentmobile: studentmobile,
+      category: category,
+      religion: religion,
+      resides: resides,
+      polycetrank: polycetrank,
+      dateofjoining: dateofjoining,
+      physicallychallenged: physicallychallenged,
+      emailid: email,
+      address: address,
+      district: district,
+      pincode: pincode,
+    }
+    const response = await apiPostPut(body, url, "PUT");
+    if(response.status === 200){
+      console.log(response?.body);
+      const index = this.students.findIndex((student) => student?._id === studentid);
+      if (index !== -1) {
+        this.students[index] = response?.body;
+        localStorage.setItem("students", JSON.stringify(this.students));
+        localStorage.setItem("user", JSON.stringify(response?.body));
+      }
+      return true;
+    }
+    else
+    {
+     return alert("failed to update biodata");
+    }
+  }
+
   setPrincipalAuth(bool) {
     this.principalAuth = bool;
   }
