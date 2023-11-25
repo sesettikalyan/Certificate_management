@@ -118,9 +118,9 @@ export default function Login() {
                 type="password"
               />
               {/* <link rel="stylesheet" href="" /> */}
-              <p className="text-white ml-auto mr-3 mt-3 mb-2">
+              <button type="button" onClick={()=> navigate(`/forgotPassword`)} className="text-white ml-auto mr-3 mt-3 mb-2">
                 Forgot Password ?
-              </p>
+              </button>
               <button
                 type="submit"
                 className=" w-[98%] py-4 rounded-full text-white border-[1px] mt-4 border-white"

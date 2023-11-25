@@ -77,7 +77,7 @@ export function Branch() {
   const { UserStore } = useStores();
 
   const goToSpecificBranch = (branch) => {
-    navigate(`/${branch}`);
+    navigate(`/principal/${branch}`);
   };
 
   const goToSearch = () => {

@@ -17,7 +17,7 @@ export default function NewStaff({onstaff}) {
     if(onstaff){
       return navigate(`/${branch}/staffpage`);
     }
-    return navigate(`/${branch}`);
+    return navigate(`/principal/${branch}`);
   };
   const [showImage, setShowImage] = useState(false);
   const [imageUrl, setImageUrl] = useState();
@@ -50,7 +50,7 @@ export default function NewStaff({onstaff}) {
         role,
         phone
       );
-      navigate(`/${branch}`);
+      navigate(`/principal/${branch}`);
       // const data = {
       //     name,
       //     id,

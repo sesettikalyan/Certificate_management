@@ -29,6 +29,8 @@ import Selectbranch from "./components/selectbranch";
 import NewStudent from "./components/newStudent";
 import CertificateEdit from "./components/certificateEdit";
 import Biodata from "./components/biodata";
+import OtpVerification from "./components/otpVerification";
+import NotFound from "./components/404";
 // import StudentRegister from "./components/studentregister";
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
@@ -49,13 +51,14 @@ root.render(
         <Route path="/:branch/:studentid/certificate/:id" element={<Certificateview1 />} />
         <Route path="/:branch/:id/certificate" element={<Certificateview2 />} />
         <Route path="/:branch/:studentid/certificateupdate/:id" element={<CertificateEdit />} />
+        <Route path="/forgotPassword" element={<OtpVerification />} />
         {/* <Route path="/staffcertificate1" element={<Staffcertificate1 />} /> */}
         {/* <Route path="/staffcertificate" element={<Staffcertificate />} /> */}
         <Route path="/profile" element={<Profile />} />
         {/* <Route path="/studentlogin" element={<StudentLogin />} />
         <Route path="/stafflogin" element={<StaffLogin />} /> */}
         {/* <Route path="/ece" element={<Branch />} /> */}
-        <Route path="/:branch" element={<BranchDetails />} />
+        <Route path="/principal/:branch" element={<BranchDetails />} />
         {/* <Route path="/electrical" element={<Electrical />} /> */}
         {/* <Route path="/civil" element={<Civil />} /> */}
         <Route path="/:branch/:id" element={<Studentview />} />
@@ -73,6 +76,7 @@ root.render(
           path="/:branch/studentapproval/:pin"
           element={<StudentApprovalDetails />}
         />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
     {/* <App /> */}

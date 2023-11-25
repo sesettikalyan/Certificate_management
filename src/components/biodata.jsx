@@ -228,9 +228,11 @@ export default function Biodata () {
     const district = districtRef.current.value;
     const pincode = pincodeRef.current.value;
     const id = selectedStudent?._id;
+    setLoading(true)
     await UserStore.updateStudentBiodata(image,name,pinno,fathername,mothername,parentmobile,dateofbirth,polycethtno,
       rationcardno,gender,studentaadharno,fatheraadharno,motheraadharno,studentmobile,category,religion,resides,polycetrank,dateofjoining,physicallychallenged,emailid,address,district,pincode,id);
     setEditable(false);
+    setLoading(false)
   }
 
  

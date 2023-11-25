@@ -145,7 +145,7 @@ export default function Studentview() {
 
   const showBranch = () => {
     if (CommonStore.role === "principal") {
-      navigate(`/${branch}`);
+      navigate(`/principal/${branch}`);
     } else {
       navigate(`/${branch}/staffpage`);
     }

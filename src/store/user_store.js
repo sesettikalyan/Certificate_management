@@ -87,7 +87,7 @@ class UserStore {
 
   async callingPrincipalLogin(username, password) {
     const url = "/principal/login";
-    const body = { id: username, password: password };
+    const body = { idno: username, password: password };
     const response = await apiPostPut(body, url, "POST");
 
     if (response.status === 200) {
@@ -497,6 +497,29 @@ class UserStore {
     return false;
   }
 
+  async updateLecturerImage(image, id) {
+    const lecturers = JSON.parse(localStorage.getItem("lecturers"));
+    const url = `/hod/${id}`;
+    const body = {
+      photo: image,
+    };
+    const response = await apiPostPut(body, url, "PUT");
+    if (response.status === 200) {
+      console.log(response?.body);
+      const index = this.lecturers.findIndex((lecturer) => lecturer?._id === id);
+      localStorage.setItem("user", JSON.stringify(response?.body));
+      this.setUser(response?.body);
+      if (index !== -1) {
+        this.lecturers[index] = response?.body;
+        lecturers[index] = response?.body;
+        localStorage.setItem("lecturers", JSON.stringify(lecturers));
+      }
+      return true;
+    }
+    alert("failed to fetch students.");
+    return false;
+  }
+
   async updateStudentBiodata (image,name,pinno,fathername,mothername,parentmobile,dob,polycethtno,rationcardno,gender,studentaadharno,fatheraadharno,motheraadharno,studentmobile,category,religion,resides,polycetrank,dateofjoining,physicallychallenged,email,address,district,pincode,studentid) {
     const url = `/students/${studentid}`;
     const body ={
@@ -533,6 +556,7 @@ class UserStore {
         this.students[index] = response?.body;
         localStorage.setItem("students", JSON.stringify(this.students));
         localStorage.setItem("user", JSON.stringify(response?.body));
+        alert("data save uccesfully")
       }
       return true;
     }
@@ -541,6 +565,46 @@ class UserStore {
      return alert("failed to update biodata");
     }
   }
+
+  async ResetStudentPassword(password){
+    const id = JSON.parse(localStorage.getItem("id"));
+    const url = `/students/${id}`
+    const body ={
+      password : password,
+    }
+    const response = await apiPostPut(body,url,"PUT")
+    if(response.status === 200 ){
+     return alert("Password changed succesfully");
+    }
+    return console.log(response?.body);
+  }
+
+  async ResetLecturerPassword(password){
+    const id = JSON.parse(localStorage.getItem("id"));
+    const url = `/hod/${id}`
+    const body ={
+      password : password,
+    }
+    const response = await apiPostPut(body,url,"PUT")
+    if(response.status === 200 ){
+     return alert("Password Changed Succesfully");
+    }
+    return console.log(response?.body);
+  }
+
+  async ResetPrincipalPassword(password){
+    const id = JSON.parse(localStorage.getItem("id"));
+    const url = `/principal/${id}`
+    const body ={
+      password : password,
+    }
+    const response = await apiPostPut(body,url,"PUT")
+    if(response.status === 200 ){
+     return alert("Password Changed Succesfully");
+    }
+    return console.log(response?.body);
+  }
+
 
   setPrincipalAuth(bool) {
     this.principalAuth = bool;
