@@ -40,7 +40,9 @@ export default function NewStaff({onstaff}) {
       const password = passwordref.current.value;
       const role = roleref.current.value;
       const phone = phnoref.current.value;
-
+      if(phone.length !== 10){
+        return alert("Enter valid mobile number");
+      }
       await UserStore.postLecturers(
         name,
         id,
@@ -109,6 +111,9 @@ export default function NewStaff({onstaff}) {
       const password = passwordref.current.value;
       const phone = phnoref.current.value;
       const image = imageUrl;
+      if(phone.length !== 10){
+        return alert("Enter valid mobile number")
+      }
       await UserStore.postStudents(image,name, id, email, phone, branch, password);
       navigate(`/${branch}/staffpage`);
     }
@@ -278,7 +283,7 @@ export default function NewStaff({onstaff}) {
            <input
              required
              ref={emailref}
-             type="text"
+             type="email"
              className="bg-secondary my-1 px-1 text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
            />
          </div>

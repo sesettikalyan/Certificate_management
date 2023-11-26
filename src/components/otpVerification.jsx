@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.jpeg";
 import { MdOutlineEdit } from "react-icons/md";
 import { useStores } from "../store";
 import { useNavigate } from "react-router-dom";

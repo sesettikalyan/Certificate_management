@@ -1,6 +1,6 @@
 // import Home from "./home";
 import { useEffect, useState } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.jpeg";
 import { PiStudentDuotone } from "react-icons/pi";
 import {
   GiBirdHouse,

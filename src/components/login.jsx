@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.jpeg";
 import { useStores } from "../store/index";
 import { useNavigate } from "react-router-dom";
 import { useObserver } from "mobx-react";
