@@ -173,7 +173,7 @@ export default function LecturerView() {
         >
           <img
             src={CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.photo : selectedLecturer?.photo}
-            className="w-48 rounded-lg object-cover"
+            className="w-full h-full rounded-lg object-cover"
             alt=""
           />
           {CommonStore.role === UserStore.user?.role && <span onClick={openFiles} className="bg-primary w-6 absolute z-auto cursor-pointer right-0 bottom-0 h-6 rounded-full flex items-center justify-center">

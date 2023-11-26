@@ -185,6 +185,7 @@ class UserStore {
       password: password,
       role: role,
       phoneNumber: phno,
+      isVerified:true
     };
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {
