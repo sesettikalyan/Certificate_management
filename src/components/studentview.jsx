@@ -145,7 +145,7 @@ export default function Studentview() {
 
   const showBranch = () => {
     if (CommonStore.role === "principal") {
-      navigate(`/${branch}`);
+      navigate(`/principal/${branch}`);
     } else {
       navigate(`/${branch}/staffpage`);
     }
@@ -165,7 +165,7 @@ export default function Studentview() {
       console.log('Image uploaded to Firebase Storage');
       const imageURL = await getDownloadURL(storageRef);
       console.log(imageURL);
-      await UserStore.updateStudentImage(imageURL,UserStore.user?._id);
+      await UserStore.updateStudentImage(imageURL,CommonStore.role === "student"? UserStore.user?._id:selectedStudent?._id);
       setLoading(false);
       } catch (error) {
 
@@ -218,10 +218,11 @@ export default function Studentview() {
                 className="h-full w-full object-cover rounded-lg"
                 alt=""
               />
+              { CommonStore.role !== "principal" &&
               <span onClick={openFiles} className="bg-primary w-6 absolute z-auto cursor-pointer left-[85%] top-0 h-6 rounded-full flex items-center justify-center">
                 <MdOutlineEdit className=" text-white" />
                 <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
-              </span>
+              </span>}
             </div>
           }
           <div className="ml-6 text-white w-[50%] break-words">

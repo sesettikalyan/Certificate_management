@@ -91,7 +91,8 @@ export const Profile = () => {
     fileInputRef.current.click();
   }
 
-  const updatePrincipal = async () => {
+  const updatePrincipal = async (e) => {
+    e.preventDefault();
     const name = nameRef.current.value;
     const mobile = mobileRef.current.value;
     const mail = mailRef.current.value;
@@ -101,6 +102,9 @@ export const Profile = () => {
     const image = UserStore.user?.photo;
     const coverImage = UserStore.user?.coverImage;
     const id = UserStore.user?._id;
+    if(mobile.length !== 10){
+     return alert("Enter valid number")
+    }
     UserStore.updatePrincipal( name, mobile,image, coverImage, mail, collegeName, collegeCode, collegeAddress,id);
     setEditable(false);
   }
@@ -157,36 +161,36 @@ export const Profile = () => {
           )}
           
         </div>
-        <div className="flex flex-col items-center w-[85%] mx-auto ">
-        <div className="flex flex-col mt-2 w-full items-start">
-            <label className="text-secondary2">Principal Name</label>
-            <input ref={nameRef} disabled={!editable} type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
-          </div>
+        <form onSubmit={updatePrincipal} className="flex flex-col items-center w-[85%] mx-auto ">
           <div className="flex flex-col mt-2 w-full items-start">
-            <label className="text-secondary2">Mobile Number</label>
-            <input ref={mobileRef} disabled={!editable} type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
-          </div>
-          <div className="flex flex-col mt-2 w-full items-start">
-            <label className="text-secondary2">Mail-ID</label>
-            <input ref={mailRef} disabled={!editable} type="email" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
-          </div>
-          <div className="flex flex-col mt-2 w-full items-start">
-            <label className="text-secondary2">College Name</label>
-            <input ref={collegeNameRef} disabled={!editable} type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
-          </div>
-          <div className="flex flex-col mt-2 w-full items-start">
-            <label className="text-secondary2">College Code</label>
-            <input ref={collegeCodeRef} disabled={!editable} type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
-          </div>
-          <div className="flex flex-col mt-2 w-full items-start">
-            <label className="text-secondary2">College Address</label>
-            <textarea ref={collegeAddressRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
-          </div>
-          {editable && (
-            <button onClick={updatePrincipal} className="bg-primary w-full py-2  my-3 rounded-lg text-white ">Save</button>
-          )
-          }
-        </div>
+              <label className="text-secondary2">Principal Name</label>
+              <input ref={nameRef} disabled={!editable} type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
+            </div>
+            <div className="flex flex-col mt-2 w-full items-start">
+              <label className="text-secondary2">Mobile Number</label>
+              <input ref={mobileRef} disabled={!editable} type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
+            </div>
+            <div className="flex flex-col mt-2 w-full items-start">
+              <label className="text-secondary2">Mail-ID</label>
+              <input ref={mailRef} disabled={!editable} type="email" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
+            </div>
+            <div className="flex flex-col mt-2 w-full items-start">
+              <label className="text-secondary2">College Name</label>
+              <input ref={collegeNameRef} disabled={!editable} type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
+            </div>
+            <div className="flex flex-col mt-2 w-full items-start">
+              <label className="text-secondary2">College Code</label>
+              <input ref={collegeCodeRef} disabled={!editable} type="text" className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
+            </div>
+            <div className="flex flex-col mt-2 w-full items-start">
+              <label className="text-secondary2">College Address</label>
+              <textarea ref={collegeAddressRef} disabled={!editable} className="focus:outline-none bg-primary3 w-full py-3 px-2 rounded-lg mt-1"  />
+            </div>
+            {editable && (
+              <button type="submit" className="bg-primary w-full py-2  my-3 rounded-lg text-white ">Save</button>
+            )
+            }
+          </form>
         </div>
 
         {showPopup && (

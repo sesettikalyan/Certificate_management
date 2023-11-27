@@ -1,6 +1,10 @@
 // import Home from "./home";
 import { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
+import principal from "../assets/principal.jpeg"
+import hod from "../assets/hod.jpeg"
+import staff from "../assets/staff.jpeg"
+import student from "../assets/student.jpeg"
 import { PiStudentDuotone } from "react-icons/pi";
 import { GiTeacher } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
@@ -61,26 +65,28 @@ export function Category() {
             className="w-[120px] h-[120px] md:w-[150px] md:h-[150px] lg:w-[200px] lg:h-[200px] md:mx-8  mx-4  my-10  flex flex-col items-center justify-center bg-white"
             onClick={goToLogin}
           >
+            <img src={principal} alt="" />
             <h1 className="text-base md:text-xl ">Principal</h1>
           </div>
           <div
             onClick={goToLogin1}
             className="w-[120px] h-[120px] md:w-[150px] md:h-[150px] md:mx-8 mx-4 my-10 flex flex-col items-center justify-center bg-white"
           >
+            <img src={hod} alt="" />
             <h1 className="text-base md:text-xl ">H.O.D</h1>
           </div>
           <div
             onClick={goToLogin2}
             className="w-[120px] h-[120px] md:w-[150px] md:h-[150px] md:mx-8 mx-4 my-10 flex flex-col items-center justify-center bg-white"
           >
-            <GiTeacher className="text-6xl md:text-8xl my-1 md:my-2 text-black" />
+            <img src={staff} alt="" />
             <h1 className="text-base md:text-xl ">Staff</h1>
           </div>
           <div
             onClick={goToLogin3}
             className="w-[120px] h-[120px] md:w-[150px] md:h-[150px] md:mx-8 mx-4 my-10 flex flex-col items-center justify-center bg-white"
           >
-            <PiStudentDuotone className="text-6xl md:text-8xl my-1 md:my-2 text-black" />
+            <img src={student} alt="" />
             <h1 className="text-base md:text-xl ">Student</h1>
           </div>
         </div>

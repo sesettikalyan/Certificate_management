@@ -203,7 +203,7 @@ export function LecturerSection({ searchvalue }) {
                     <img
                       src={lecturer?.photo}
                       alt=" "
-                      className=" rounded-full object-cover "
+                      className=" rounded-full object-cover w-full h-full"
                     />
                   </div>
 
@@ -288,7 +288,7 @@ export function StudentSection({ onstaff,searchvalue }) {
                   >
                     <img
                       src={student?.photo}
-                      className="object-cover rounded-full"
+                      className="object-cover rounded-full w-full h-full"
                       alt=""
                     />
                   </div>
