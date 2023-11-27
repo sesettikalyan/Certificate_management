@@ -131,6 +131,8 @@ export default function Certificateview2() {
                         >
                         <option value="OD">Original Diploma Certificate</option>
                         <option value="mark list">Mark list </option>
+                        <option value="allotment">Allotment Order </option>
+                        <option value="ssc mark list">SSC Mark list </option>
                     </select>
                 </div>
                 <div className="flex flex-col mt-2">
