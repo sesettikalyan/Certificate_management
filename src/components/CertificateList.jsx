@@ -10,7 +10,7 @@ export default function CertificateList() {
   const selectedStudent = UserStore?.students.find(
     (student) => student?._id === id
   );
-
+  const image = "https://static.vecteezy.com/system/resources/previews/008/089/248/non_2x/certificate-gold-appreciation-achievement-template-award-achievement-clean-creative-certificate-recognition-excellence-certificate-border-completion-template-certificate-design-template-vector.jpg"
   return (
     <>
     {
@@ -22,7 +22,7 @@ export default function CertificateList() {
           : selectedStudent?.documents.map((item,index) => (
             <div key={index} className="w-[90%] p-2 border-b-2 border-gray-400 mx-auto my-2 flex flex-row items-end justify-between">
               <div className="flex flex-row items-center">
-                <img src={item?.fileUrl} className="w-16 h-12 " alt="" />
+                <img src={image} className="w-16 h-12 " alt="" />
                 <div className="flex flex-col items-start ml-3">
                   <h1 className="text-lg">{item?.name}</h1>
                   {/* <p className="text-base">{student.pin}</p> */}
