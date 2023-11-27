@@ -84,6 +84,36 @@ export function Branch() {
     navigate("/search");
   };
 
+  const studentLength =(index)=>{
+    if(index === 0){
+      return UserStore.lengthOfMechStudents();
+    }
+    else if(index === 1){
+      return UserStore.lengthOfEEEStudents();
+    }
+    else if(index === 2){
+      return UserStore.lengthOfEceStudents();
+    }
+    else{
+      return UserStore.lengthOfCivilStudents();
+    }
+  }
+
+  const staffLength =(index)=>{
+    if(index === 0){
+      return UserStore.lengthOfMechStaff();
+    }
+    else if(index === 1){
+      return UserStore.lengthOfEEEStaff();
+    }
+    else if(index === 2){
+      return UserStore.lengthOfEceStaff();
+    }
+    else{
+      return UserStore.lengthOfCivilStaff();
+    }
+  }
+
   return useObserver(() => (
     <div className="md:w-[55%] md:mx-auto">
       <div className="w-[85%] h-fit flex flex-col mx-auto">
@@ -104,10 +134,10 @@ export function Branch() {
             </div>
             <h1 className="text-lg pb-1 ">{item?.name}</h1>
             <p className="text-base  text-text_color2">
-              Total Staff :{UserStore?.lecturers.length}
+              Total Staff :{staffLength(index)} 
             </p>
             <p className="text-base  pb-1 text-green-400">
-              Total Students :{UserStore?.students.length}
+              Total Students :{studentLength(index)}
             </p>
           </div>
         ))}

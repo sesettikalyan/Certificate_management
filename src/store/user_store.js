@@ -19,6 +19,72 @@ class UserStore {
     principal: false,
   };
 
+  lengthOfMechStudents(){
+    const students = JSON.parse(localStorage.getItem("students"))
+    if(students){
+      const mechStudents = students.filter((student) => student?.department === "Mech");
+      console.log("this is mech ", mechStudents);
+      return mechStudents.length;
+    }
+  }
+  lengthOfEceStudents(){
+    const students = JSON.parse(localStorage.getItem("students"))
+    if(students){
+      const ECEStudents = students.filter((student) => student?.department === "ECE");
+      console.log("this is ECE ", ECEStudents);
+      return ECEStudents.length;
+    }
+  }
+  lengthOfEEEStudents(){
+    const students = JSON.parse(localStorage.getItem("students"))
+    if(students){
+      const EEEStudents = students.filter((student) => student?.department === "EEE");
+      console.log("this is EEE ", EEEStudents);
+      return EEEStudents.length;
+    }
+  }
+  lengthOfCivilStudents(){
+    const students = JSON.parse(localStorage.getItem("students"))
+    if(students){
+      const civilStudents = students.filter((student) => student?.department === "Civil");
+      console.log("this is mech ", civilStudents);
+      return civilStudents.length;
+    }
+  }
+  lengthOfMechStaff(){
+    const staff = JSON.parse(localStorage.getItem("lecturers"))
+    if(staff){
+      const mechStaff = staff.filter((staff) => staff?.department === "Mech");
+      console.log("this is mech ", mechStaff);
+      return mechStaff.length;
+    }
+  }
+  lengthOfEceStaff(){
+    const staff = JSON.parse(localStorage.getItem("lecturers"))
+    if(staff){
+      const ECEStaff = staff.filter((staff) => staff?.department === "ECE");
+      console.log("this is mech ", ECEStaff);
+      return ECEStaff.length;
+    }
+  }
+  lengthOfEEEStaff(){
+    const staff = JSON.parse(localStorage.getItem("lecturers"))
+    if(staff){
+      const EEEStaff = staff.filter((staff) => staff?.department === "EEE");
+      console.log("this is mech ", EEEStaff);
+      return EEEStaff.length;
+    }
+  }
+  lengthOfCivilStaff(){
+    const staff = JSON.parse(localStorage.getItem("lecturers"))
+    if(staff){
+      const CivilStaff = staff.filter((staff) => staff?.department === "Civil");
+      console.log("this is mech ", CivilStaff);
+      return CivilStaff.length;
+    }
+  }
+    
+
   loadUserDataFromLocalStorage() {
     const lecturers = JSON.parse(localStorage.getItem("lecturers"));
     const students = JSON.parse(localStorage.getItem("students"));
