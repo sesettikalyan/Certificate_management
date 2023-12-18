@@ -11,8 +11,8 @@ import Register from "./components/register";
 // import Staffdetails from './components/staffdetails';
 import Certificateview1 from "./components/Certificateview1";
 import Certificateview2 from "./components/Certificateview2";
-import Staffcertificate1 from "./components/staffcertificate1";
-import Staffcertificate from "./components/staffcertificate";
+// import Staffcertificate1 from "./components/staffcertificate1";
+// import Staffcertificate from "./components/staffcertificate";
 // import Branch from './components/branch';
 import Studentview from "./components/studentview";
 import Principal from "./components/Principal";
@@ -29,6 +29,7 @@ import StudentApprovalDetails from "./components/studentDetails";
 // import StaffLogin from "./components/stafflogin";
 import Selectbranch from "./components/selectbranch";
 import NewStudent from "./components/newStudent";
+import MainPage from "./components/MainPage";
 // import StudentRegister from "./components/studentregister";
 // import Electrical from './components/electrical';
 // import Civil from './components/civil';
@@ -66,6 +67,7 @@ root.render(
         <Route path="/:branch/newstudent" element={<NewStudent />} />
         <Route path="/:branch/staffpage" element={<StaffPage />} />
         <Route path="/:branch/studentapproval" element={<StudentApproval />} />
+        <Route path="/MainPage" element={<MainPage />} />
         <Route
           path="/:branch/studentapproval/:pin"
           element={<StudentApprovalDetails />}
