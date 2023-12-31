@@ -9,6 +9,9 @@ import { useObserver } from "mobx-react";
 import { BiLogOut } from "react-icons/bi";
 import { IoMdAdd } from "react-icons/io";
 import { toJS } from "mobx";
+import Loader from "./reusable_Components/loader";
+import { storage } from "../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export default function LecturerView() {
   const [editForm, setEditForm] = useState(false);
@@ -19,6 +22,7 @@ export default function LecturerView() {
   const { branch, id } = useParams();
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
   const fileInputRef = useRef(null);
+  const [loading,setLoading] = useState(false)
 
   // const selectedLecturer = UserStore.lecturers.find(
   //   (lecturer) => lecturer?.idno === id
@@ -28,6 +32,7 @@ export default function LecturerView() {
   const idref = useRef();
   const emailref = useRef();
   const branchref = useRef();
+  const phoneref = useRef();
 
   const autofillref = () => {
     try {
@@ -35,12 +40,13 @@ export default function LecturerView() {
       idref.current.value = selectedLecturer?.idno;
       emailref.current.value = selectedLecturer?.email;
       branchref.current.value = selectedLecturer?.department;
+      phoneref.current.value = selectedLecturer?.phoneNumber;
     } catch (error) { }
   };
 
   const goBack = () => {
     if (CommonStore.role === "principal") {
-      navigate(`/${branch}`);
+      navigate(`/principal/${branch}`);
     } else {
       navigate(`/${branch}/staffpage`);
     }
@@ -60,9 +66,10 @@ export default function LecturerView() {
     const idno = idref.current.value;
     const email = emailref.current.value;
     const branch = branchref.current.value;
+    const phoneNumber = phoneref.current.value;
     console.log(name, idno, email, branch);
     console.log(id);
-    if (await UserStore.updateLecturers(name, idno, email, branch, id)) {
+    if (await UserStore.updateLecturers(name, idno, email, branch,phoneNumber, id)) {
       setEditForm(false);
     }
 
@@ -71,7 +78,7 @@ export default function LecturerView() {
   const removeLecturer = async (id) => {
     await UserStore.deleteLecturers(id);
     setDeleteForm(false);
-    navigate(`/${branch}`);
+    navigate(`/principal/${branch}`);
   }
 
   const logout = () => {
@@ -87,17 +94,36 @@ export default function LecturerView() {
     fileInputRef.current.click();
   };
 
+  const uploadImageToFirebase = async (file) => {
+    
+    const timeStamp = new Date().valueOf();
+    const storageRef = ref(storage, `images/${timeStamp}-${file.name}`);
+    try {
+      setLoading(true);
+    await uploadBytes(storageRef, file);
+    console.log('Image uploaded to Firebase Storage');
+    const imageURL = await getDownloadURL(storageRef);
+    console.log(imageURL);
+    await UserStore.updateLecturerImage(imageURL,UserStore.user?._id);
+    setLoading(false);
+    } catch (error) {
+
+    }
+};
+
   const changeImage = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Handle the selected file
-      console.log('Selected file: ' + file.name);
+      uploadImageToFirebase(file);
     }
   };
 
 
   return useObserver(() => (
     <div className="w-[100%] flex flex-col items-center py-4 h-full rounded-b-2xl bg-secondary">
+      {loading && 
+        <Loader loader={true}/>
+        }
       <div className="w-[90%] my-2 mx-auto flex items-center justify-between">
         <button className="flex items-center  text-lg" onClick={goBack}>
           <AiOutlineLeft className="mr-1" /> Back
@@ -142,14 +168,18 @@ export default function LecturerView() {
           />
         </div>
       ) : (
-        <div className="w-48 h-52 rounded-lg overflow-hidden"
+        <div className="w-48 h-52 rounded-lg relative overflow-hidden"
           style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
         >
           <img
             src={CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.photo : selectedLecturer?.photo}
-            className="w-48 rounded-lg object-cover"
+            className="w-full h-full rounded-lg object-cover"
             alt=""
           />
+          {CommonStore.role === UserStore.user?.role && <span onClick={openFiles} className="bg-primary w-6 absolute z-auto cursor-pointer right-0 bottom-0 h-6 rounded-full flex items-center justify-center">
+                <MdOutlineEdit className=" text-white" />
+                <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
+          </span> }
         </div>
       )}
 
@@ -220,6 +250,15 @@ export default function LecturerView() {
               <input
                 required
                 ref={emailref}
+                type="email"
+                className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+              />
+            </div>
+            <div className="flex flex-col mt-1">
+              <label className="pb-2 text-white">phone number</label>
+              <input
+                required
+                ref={phoneref}
                 type="text"
                 className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
               />

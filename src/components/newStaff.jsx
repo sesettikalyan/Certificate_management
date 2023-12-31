@@ -14,7 +14,10 @@ export default function NewStaff({onstaff}) {
   const navigate = useNavigate();
   const { UserStore } = useStores();
   const showBranch = () => {
-    navigate(`/${branch}`);
+    if(onstaff){
+      return navigate(`/${branch}/staffpage`);
+    }
+    return navigate(`/principal/${branch}`);
   };
   const [showImage, setShowImage] = useState(false);
   const [imageUrl, setImageUrl] = useState();
@@ -37,7 +40,9 @@ export default function NewStaff({onstaff}) {
       const password = passwordref.current.value;
       const role = roleref.current.value;
       const phone = phnoref.current.value;
-
+      if(phone.length !== 10){
+        return alert("Enter valid mobile number");
+      }
       await UserStore.postLecturers(
         name,
         id,
@@ -47,7 +52,7 @@ export default function NewStaff({onstaff}) {
         role,
         phone
       );
-      navigate(`/${branch}`);
+      navigate(`/principal/${branch}`);
       // const data = {
       //     name,
       //     id,
@@ -106,6 +111,9 @@ export default function NewStaff({onstaff}) {
       const password = passwordref.current.value;
       const phone = phnoref.current.value;
       const image = imageUrl;
+      if(phone.length !== 10){
+        return alert("Enter valid mobile number")
+      }
       await UserStore.postStudents(image,name, id, email, phone, branch, password);
       navigate(`/${branch}/staffpage`);
     }
@@ -172,7 +180,7 @@ export default function NewStaff({onstaff}) {
            <input
              required
              ref={emailref}
-             type="text"
+             type="email"
              className="bg-secondary my-1 px-1 text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
            />
          </div>
@@ -215,7 +223,7 @@ export default function NewStaff({onstaff}) {
          <div className="flex flex-col mt-1">
            <div className="flex justify-between">
             <label className="pb-2 ">Password</label>
-            <button onClick={autoGeneratePassword} className="pt-2 flex items-center"><RiLockPasswordLine className="mr-1"/> auto generate</button>
+            <button type="button" onClick={autoGeneratePassword} className="pt-2 flex items-center"><RiLockPasswordLine className="mr-1"/> auto generate</button>
            </div>
            <input
              required
@@ -275,7 +283,7 @@ export default function NewStaff({onstaff}) {
            <input
              required
              ref={emailref}
-             type="text"
+             type="email"
              className="bg-secondary my-1 px-1 text-lg text-opacity-80 focus:outline-none border-b-2 border-black"
            />
          </div>
@@ -293,7 +301,7 @@ export default function NewStaff({onstaff}) {
          <div className="flex flex-col mt-1">
          <div className="flex justify-between">
             <label className="pb-2 ">Password</label>
-            <button onClick={autoGeneratePassword} className="pt-2 flex items-center"><RiLockPasswordLine className="mr-1"/> auto generate</button>
+            <button type="button" onClick={autoGeneratePassword} className="pt-2 flex items-center"><RiLockPasswordLine className="mr-1"/> auto generate</button>
            </div>
            <input
              required

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Branches } from "../helpers/Branches";
 import { AiOutlineRight } from "react-icons/ai";
@@ -16,19 +16,25 @@ import { useObserver } from "mobx-react";
 export default function StaffPage() {
   const { UserStore } = useStores();
   const { branch } = useParams();
+  const [searchvalue, setSearchvalue] = useState(null);
+
+  const handleSearchInputChange = (value) => {
+    setSearchvalue(value);
+  }
 
   useEffect(() => {
     UserStore.getStudentsfromapi();
+    UserStore.getPrincipalfromapi();
   });
 
   return useObserver(() => (
     <div>
       <div className="w-[100%]  flex flex-col bg-gray-100">
         {/* search box */}
-        <TitleAndSearch onStaff={true} branch1={branch} />
+        <TitleAndSearch onStaff={true} branch1={branch} onSearchChange={handleSearchInputChange} />
         {/* Student-list-section */}
         <div className="bg-white  drop-shadow my-6 shadow-lg w-[90%] py-3 mx-auto rounded-lg">
-          <StudentSection onstaff={true} />
+          <StudentSection onstaff={true} searchvalue={searchvalue} />
         </div>
       </div>
     </div>

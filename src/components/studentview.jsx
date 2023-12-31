@@ -12,9 +12,11 @@ import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase";
+import Loader from "./reusable_Components/loader";
 
 export default function Studentview() {
   const { UserStore,CommonStore } = useStores();
+  const [loading, setLoading] = useState(false);
   const { branch, id } = useParams();
   const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
@@ -48,6 +50,7 @@ export default function Studentview() {
 
   useEffect(() => {
     autofillref();
+    UserStore.getPrincipalfromapi();
   }, [editForm]);  
 
   const updateStudentDetails = async (id) => {
@@ -116,7 +119,7 @@ export default function Studentview() {
       return (
         <div className="flex justify-end w-[95%] items-center">
           <button
-            // onClick={() => setEditForm(true)}
+            onClick={() => navigate("/profile")}
             className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center"
           >
             {" "}
@@ -142,7 +145,7 @@ export default function Studentview() {
 
   const showBranch = () => {
     if (CommonStore.role === "principal") {
-      navigate(`/${branch}`);
+      navigate(`/principal/${branch}`);
     } else {
       navigate(`/${branch}/staffpage`);
     }
@@ -157,17 +160,25 @@ export default function Studentview() {
       const timeStamp = new Date().valueOf();
       const storageRef = ref(storage, `images/${timeStamp}-${file.name}`);
       try {
+        setLoading(true);
       await uploadBytes(storageRef, file);
       console.log('Image uploaded to Firebase Storage');
       const imageURL = await getDownloadURL(storageRef);
       console.log(imageURL);
-      await UserStore.updateStudentImage(imageURL,UserStore.user?._id);
+      await UserStore.updateStudentImage(imageURL,CommonStore.role === "student"? UserStore.user?._id:selectedStudent?._id);
+      setLoading(false);
       } catch (error) {
 
       }
   };
     
-
+  const navigateToRoute = () => {
+    if (CommonStore.role === "student") {
+      navigate(`/biodata/${UserStore.user?._id}`);
+    } else {
+      navigate(`/${selectedStudent?.department}/${selectedStudent?._id}/biodata`);
+    }
+  };
 
   const changeImage = (event) => {
     const file = event.target.files[0];
@@ -178,6 +189,7 @@ export default function Studentview() {
 
   return useObserver(() => (
     <div className="w-[100%] h-full">
+    {loading &&  <Loader loader={true} />}
       <div className="pb-10 pt-6 flex flex-col items-start w-full bg-primary rounded-b-2xl">
         <Navbar />
         <div className="pb-2 w-[85%] mx-auto items-center flex mt-4">
@@ -203,16 +215,17 @@ export default function Studentview() {
                     ? UserStore.user?.photo
                     : selectedStudent?.photo
                 }
-                className=" object-cover rounded-lg"
+                className="h-full w-full object-cover rounded-lg"
                 alt=""
               />
+              { CommonStore.role !== "principal" &&
               <span onClick={openFiles} className="bg-primary w-6 absolute z-auto cursor-pointer left-[85%] top-0 h-6 rounded-full flex items-center justify-center">
                 <MdOutlineEdit className=" text-white" />
                 <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
-              </span>
+              </span>}
             </div>
           }
-          <div className="ml-6 text-white">
+          <div className="ml-6 text-white w-[50%] break-words">
             <h1 className="text-xl pb-1 ">
               {CommonStore.role === "student"
                 ? UserStore.user?.name
@@ -238,11 +251,9 @@ export default function Studentview() {
                 ? UserStore.user?.emailid
                 : selectedStudent?.emailid}
             </p>
-            {CommonStore.role === "staff" || CommonStore.role === "hod" ? (
-              <button className="bg-white text-black rounded-lg p-1">
-                View Biodata
-              </button>
-            ) : null}
+            <button onClick={navigateToRoute} className="bg-white text-black rounded-lg p-1">
+              View Biodata
+            </button>
           </div>
         </div>
       </div>
