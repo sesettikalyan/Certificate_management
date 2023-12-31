@@ -47,7 +47,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/category" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/selectbranch" element={<Selectbranch />} />
@@ -78,7 +78,7 @@ root.render(
         <Route path="/:branch/staffpage" element={<StaffPage />} />
         <Route path="/:branch/studentapproval" element={<StudentApproval />} />
 
-        <Route path="/MainPage" element={<MainPage />} />
+        <Route path="/" element={<MainPage />} />
 
         <Route path="/biodata/:id" element={<Biodata />} />
         <Route path="/:branch/:id/biodata" element={<Biodata />} />
@@ -87,7 +87,7 @@ root.render(
           path="/:branch/studentapproval/:pin"
           element={<StudentApprovalDetails />}
         />
-        <Route path="*" element={<NotFound/>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
     {/* <App /> */}

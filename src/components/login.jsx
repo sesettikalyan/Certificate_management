@@ -37,25 +37,25 @@ export default function Login() {
 
     if (CommonStore.role === "principal") {
       if (await UserStore.callingPrincipalLogin(username, password)) {
-       return navigate("/principal");
+        return navigate("/principal");
       }
     } else if (CommonStore.role === "hod" || CommonStore.role === "staff") {
       if (await UserStore.callingHodLoginApi(username, password)) {
-        if(UserStore.user?.isVerified === true){
-        return navigate("/selectbranch");
+        if (UserStore.user?.isVerified === true) {
+          return navigate("/selectbranch");
         }
-        else{
-         return alert("you don't have access to this page");
+        else {
+          return alert("you don't have access to this page");
         }
       }
     } else {
       if (await UserStore.callingStudentLoginApi(username, password)) {
-       if(UserStore.user?.isVerified === true){
-        return navigate(`/${UserStore.user?.department}/${UserStore.user?._id}`);
-       }
-       else{
-        return alert("you don't have access to this page");
-       }
+        if (UserStore.user?.isVerified === true) {
+          return navigate(`/${UserStore.user?.department}/${UserStore.user?._id}`);
+        }
+        else {
+          return alert("you don't have access to this page");
+        }
       }
     }
   };
@@ -77,18 +77,18 @@ export default function Login() {
   };
 
   const back = () => {
-    navigate("/");
+    navigate("/category");
   }
 
   return useObserver(() => (
     <>
       <div className="flex flex-col md:flex-row lg:flex-row w-[100%]  h-screen items-center">
-      <button
-        className="flex items-center w-[90%] mx-auto pt-4 text-lg"
-        onClick={back}
-      >
-        <AiOutlineLeft className="mr-1" /> Back
-      </button>
+        <button
+          className="flex items-center w-[90%] mx-auto pt-4 text-lg"
+          onClick={back}
+        >
+          <AiOutlineLeft className="mr-1" /> Back
+        </button>
         <div className="h-[30%] flex justify-center md:w-[30%] items-center  md:h-[100%] mt-[8%] md:mt-0">
           <Logo />
         </div>
@@ -118,7 +118,7 @@ export default function Login() {
                 type="password"
               />
               {/* <link rel="stylesheet" href="" /> */}
-              <button type="button" onClick={()=> navigate(`/forgotPassword`)} className="text-white ml-auto mr-3 mt-3 mb-2">
+              <button type="button" onClick={() => navigate(`/forgotPassword`)} className="text-white ml-auto mr-3 mt-3 mb-2">
                 Forgot Password ?
               </button>
               <button

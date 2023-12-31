@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import logo from "../assets/logo.png";
+import { useStores } from "../store/index"
+import { Logo } from "./category";
+import { useNavigate } from 'react-router-dom';
+import { useObserver } from 'mobx-react';
 
 const MainPage = () => {
-    const [selectedState, setSelectedState] = useState('');
-    const [selectedDistrict, setSelectedDistrict] = useState('');
-    const [selectedCollege, setSelectedCollege] = useState('');
+    const [showState, setShowState] = useState(true);
+    const [showDistrict, setShowDistrict] = useState(false);
+    const [showCollege, setShowCollege] = useState(false);
+    const { CommonStore } = useStores();
+    const navigate = useNavigate();
 
     const states = [
         'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttarakhand', 'Uttar Pradesh', 'West Bengal', 'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli', 'Daman and Diu', 'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry'
@@ -50,101 +56,157 @@ const MainPage = () => {
     };
 
     const handleStateChange = (state) => {
-        setSelectedState(state);
-        // Reset selected district when the state changes
-        setSelectedDistrict('');
+        CommonStore.setState(state);
+        console.log(CommonStore.state)
     };
 
-    const handleDistrictChange = (district) => {
-        setSelectedDistrict(district);
-        // Reset selected college when the district changes
-        setSelectedCollege('');
-    };
-
-    const handleCollegeChange = (college) => {
-        setSelectedCollege(college);
+    const statenext = () => {
+        if (CommonStore?.state) {
+            setShowDistrict(true);
+            setShowState(false);
+        }
+        else {
+            alert("Select State")
+        }
     }
 
-    return (
-        <div className='h-screen'>
-            <div className='flex justify-center m-4 py-8'>
-                <img src={logo} alt="" />
-            </div>
-            <div className="flex flex-col bg-primary h-[75%] rounded-t-2xl items-center ">
-                <label htmlFor="state" className="m-2 text-white mt-5">
-                    Select State:
-                </label>
-                <select
-                    id="state"
-                    name="state"
-                    className="border p-4 rounded-full w-[80%] mb-4"
-                    value={selectedState}
-                    onChange={(e) => handleStateChange(e.target.value)}
-                >
-                    <option value="">Select a state</option>
-                    {states.map((state) => (
-                        <option key={state} value={state}>
-                            {state}
-                        </option>
-                    ))}
-                </select>
+    const handleDistrictChange = (district) => {
+        CommonStore.setDistrict(district);
+    };
 
-                {selectedState && (
-                    <div className='flex flex-col w-full items-center'>
-                        <label htmlFor="district" className="m-2 text-white">
-                            Select District:
-                        </label>
-                        <select
-                            id="district"
-                            name="district"
-                            className="border p-4 rounded-full w-[80%] mb-4"
-                            value={selectedDistrict}
-                            onChange={(e) => handleDistrictChange(e.target.value)}
-                        >
-                            <option value="">Select a district</option>
-                            {districts[selectedState].map((district) => (
-                                <option key={district} value={district}>
-                                    {district}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+    const districtnext = () => {
+        if (CommonStore?.district) {
+            if (CommonStore?.district === "Vishakhapatnam") {
+                setShowCollege(true);
+                setShowDistrict(false);
+            }
+            else {
+                alert("Coming Soon...")
+            }
+        }
+        else {
+            alert("Select District")
+        }
+    }
+
+    const handleCollegeChange = (college) => {
+        CommonStore.setCollege(college);
+    }
+
+    const GoToCategory = () => {
+        if (CommonStore?.college) {
+            if (CommonStore?.college === "Government Polytechnic Pendurthi") {
+                navigate("/category")
+            }
+            else {
+                alert("Coming Soon...")
+            }
+        }
+        else {
+            alert("Select College")
+        }
+    }
+
+    return useObserver(() => (
+        <div className="flex flex-col w-[100%] h-screen justify-center items-center">
+            <div className=" flex justify-center md:w-[30%] items-center  md:h-[100%] ">
+                <Logo />
+            </div>
+            <div className="  flex flex-col w-[90%] items-center justify-center">
+                {showState &&
+                    <>
+                        <div className='flex flex-col items-start w-full'>
+                            <label htmlFor="state" className="ml-1 mt-10">
+                                Select State:
+                            </label>
+                            <select
+                                id="state"
+                                name="state"
+                                className="border p-4 rounded-full mt-1 w-full bg-primary text-white"
+                                value={CommonStore?.state}
+                                onChange={(e) => handleStateChange(e.target.value)}
+                            >
+                                <option value="">Select a state</option>
+                                {states.map((state, index) => (
+                                    <option key={index} value={state}>
+                                        {state}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <button onClick={statenext} className='px-4 py-2 border-2 border-primary hover:border-none hover:bg-primary hover:text-white mt-5 rounded-lg' >Next</button>
+                    </>
+                }
+
+                {CommonStore?.state && showDistrict && (
+                    <>
+                        <div className='flex flex-col w-full items-start'>
+                            <label htmlFor="district" className="ml-1 mt-10">
+                                Select District:
+                            </label>
+                            <select
+                                id="district"
+                                name="district"
+                                className="border p-4 rounded-full mt-1 w-full bg-primary text-white"
+                                value={CommonStore?.district}
+                                onChange={(e) => handleDistrictChange(e.target.value)}
+                            >
+                                <option value="">Select a district</option>
+                                {districts[CommonStore?.state].map((district, index) => (
+                                    <option key={index} value={district}>
+                                        {district}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='flex justify-around w-[80%] items-center'>
+                            <button onClick={districtnext} className='px-4 py-2 border-2 border-primary hover:border-none hover:bg-primary hover:text-white mt-5 rounded-lg' >Next</button>
+                            <button onClick={() => {
+                                setShowDistrict(false)
+                                setShowState(true)
+                            }} className='text-primary mt-5' >Change State</button>
+                        </div>
+
+                    </>
                 )}
                 {/* code for college selection */}
-                {selectedDistrict && (
-                    <div className='flex flex-col w-full items-center'>
-                        <label htmlFor="college" className="m-2 text-white">
-                            Select College:
-                        </label>
-                        <select
-                            id="college"
-                            name="college"
-                            className="border p-4 rounded-full w-[80%] mb-4"
-                            value={selectedCollege}
-                            onChange={(e) => handleCollegeChange(e.target.value)}
-                        >
-                            <option value="">Select a college</option>
-                            {colleges[selectedDistrict].map((college) => (
-                                <option key={college} value={college}>
-                                    {college}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                {CommonStore?.district && showCollege && (
+                    <>
+                        <div className='flex flex-col w-full items-start'>
+                            <label htmlFor="college" className="ml-1 mt-10">
+                                Select College:
+                            </label>
+                            <select
+                                id="college"
+                                name="college"
+                                className="border p-4 rounded-full mt-1 w-full bg-primary text-white"
+                                value={CommonStore?.college}
+                                onChange={(e) => handleCollegeChange(e.target.value)}
+                            >
+                                <option value="">Select a college</option>
+                                {colleges[CommonStore?.district].map((college, index) => (
+                                    <option key={index} value={college}>
+                                        {college}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='flex justify-around w-[80%] items-center'>
+                            <button onClick={GoToCategory} className='px-4 py-2 border-2 border-primary hover:border-none hover:bg-primary hover:text-white mt-5 rounded-lg'>
+                                Login
+                            </button>
+                            <button onClick={() => {
+                                setShowDistrict(true)
+                                setShowCollege(false)
+                            }} className='text-primary mt-5' >Change District</button>
+                        </div>
+                    </>
                 )}
-                {/* code for college selection ends */}
-                {/* after selecting the college login button */}
-                {selectedCollege && (
-                    <div className='flex flex-col w-full items-center'>
-                        <button className='bg-white text-primary rounded-xl w-[50%] p-4 m-4 hover:bg-blue-700 hover:text-white hover:border-white focus:bg-blue-700 focus:text-white focus:border-white font-bold'>
-                            Login
-                        </button>
-                    </div>
-                )}
+
                 {/* after selecting the college login button ends */}
             </div>
         </div>
-    );
+    ));
 };
 
 export default MainPage;

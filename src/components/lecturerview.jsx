@@ -22,7 +22,7 @@ export default function LecturerView() {
   const { branch, id } = useParams();
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
   const fileInputRef = useRef(null);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   // const selectedLecturer = UserStore.lecturers.find(
   //   (lecturer) => lecturer?.idno === id
@@ -69,7 +69,7 @@ export default function LecturerView() {
     const phoneNumber = phoneref.current.value;
     console.log(name, idno, email, branch);
     console.log(id);
-    if (await UserStore.updateLecturers(name, idno, email, branch,phoneNumber, id)) {
+    if (await UserStore.updateLecturers(name, idno, email, branch, phoneNumber, id)) {
       setEditForm(false);
     }
 
@@ -95,21 +95,21 @@ export default function LecturerView() {
   };
 
   const uploadImageToFirebase = async (file) => {
-    
+
     const timeStamp = new Date().valueOf();
     const storageRef = ref(storage, `images/${timeStamp}-${file.name}`);
     try {
       setLoading(true);
-    await uploadBytes(storageRef, file);
-    console.log('Image uploaded to Firebase Storage');
-    const imageURL = await getDownloadURL(storageRef);
-    console.log(imageURL);
-    await UserStore.updateLecturerImage(imageURL,UserStore.user?._id);
-    setLoading(false);
+      await uploadBytes(storageRef, file);
+      console.log('Image uploaded to Firebase Storage');
+      const imageURL = await getDownloadURL(storageRef);
+      console.log(imageURL);
+      await UserStore.updateLecturerImage(imageURL, UserStore.user?._id);
+      setLoading(false);
     } catch (error) {
 
     }
-};
+  };
 
   const changeImage = (event) => {
     const file = event.target.files[0];
@@ -121,9 +121,9 @@ export default function LecturerView() {
 
   return useObserver(() => (
     <div className="w-[100%] flex flex-col items-center py-4 h-full rounded-b-2xl bg-secondary">
-      {loading && 
-        <Loader loader={true}/>
-        }
+      {loading &&
+        <Loader loader={true} />
+      }
       <div className="w-[90%] my-2 mx-auto flex items-center justify-between">
         <button className="flex items-center  text-lg" onClick={goBack}>
           <AiOutlineLeft className="mr-1" /> Back
@@ -155,7 +155,7 @@ export default function LecturerView() {
           </div>
         )}
       </div>
-      {CommonStore.role === "hod" && !UserStore.user?.photo || CommonStore.role === "staff"  && !UserStore.user?.photo ? (
+      {CommonStore.role === "hod" && !UserStore.user?.photo || CommonStore.role === "staff" && !UserStore.user?.photo ? (
         <div onClick={openFiles} className="bg-primary text-white my-6 w-48 h-52 rounded-lg flex flex-col items-center justify-center">
           <IoMdAdd className="text-6xl" />
           <p className="py-1 text-lg">Add Image</p>
@@ -177,9 +177,9 @@ export default function LecturerView() {
             alt=""
           />
           {CommonStore.role === UserStore.user?.role && <span onClick={openFiles} className="bg-primary w-6 absolute z-auto cursor-pointer right-0 bottom-0 h-6 rounded-full flex items-center justify-center">
-                <MdOutlineEdit className=" text-white" />
-                <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
-          </span> }
+            <MdOutlineEdit className=" text-white" />
+            <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
+          </span>}
         </div>
       )}
 

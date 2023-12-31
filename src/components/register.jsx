@@ -29,7 +29,7 @@ export default function Register() {
       setPin(pinref.current.value);
       setBranch(branchref.current.value);
       setShowSetPassword(true);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const postDetails = (e) => {
@@ -72,7 +72,7 @@ export default function Register() {
           }
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   const back = () => {
     navigate("/login");
@@ -81,16 +81,15 @@ export default function Register() {
   return (
     <>
       <div className="flex flex-col w-[100%] h-screen items-center">
-      <button
-        className="flex items-center w-[90%] mx-auto pt-4 text-lg"
-        onClick={back}
-      >
-        <AiOutlineLeft className="mr-1" /> Back
-      </button>
+        <button
+          className="flex items-center w-[90%] mx-auto pt-4 text-lg"
+          onClick={back}
+        >
+          <AiOutlineLeft className="mr-1" /> Back
+        </button>
         <div
-          className={`h-[30%] ${
-            showSetPassword ? "mt-[20%]" : "mt-[2%]"
-          } md:mt-[2%]`}
+          className={`h-[30%] ${showSetPassword ? "mt-[20%]" : "mt-[2%]"
+            } md:mt-[2%]`}
         >
           <img src={logo} className="w-40 h-40" alt="" />
         </div>
