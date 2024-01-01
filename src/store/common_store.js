@@ -20,13 +20,13 @@ class CommonStore {
       this.setRole(savedRole);
     }
     if (savedState) {
-      this.setRole(savedState);
+      this.setState(savedState);
     }
     if (savedDistrict) {
-      this.setRole(savedDistrict);
+      this.setDistrict(savedDistrict);
     }
     if (savedCollege) {
-      this.setRole(savedCollege);
+      this.setCollege(savedCollege);
     }
 
   }

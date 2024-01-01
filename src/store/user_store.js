@@ -19,71 +19,71 @@ class UserStore {
     principal: false,
   };
 
-  lengthOfMechStudents(){
+  lengthOfMechStudents() {
     const students = JSON.parse(localStorage.getItem("students"))
-    if(students){
+    if (students) {
       const mechStudents = students.filter((student) => student?.department === "Mech");
       console.log("this is mech ", mechStudents);
       return mechStudents.length;
     }
   }
-  lengthOfEceStudents(){
+  lengthOfEceStudents() {
     const students = JSON.parse(localStorage.getItem("students"))
-    if(students){
+    if (students) {
       const ECEStudents = students.filter((student) => student?.department === "ECE");
       console.log("this is ECE ", ECEStudents);
       return ECEStudents.length;
     }
   }
-  lengthOfEEEStudents(){
+  lengthOfEEEStudents() {
     const students = JSON.parse(localStorage.getItem("students"))
-    if(students){
+    if (students) {
       const EEEStudents = students.filter((student) => student?.department === "EEE");
       console.log("this is EEE ", EEEStudents);
       return EEEStudents.length;
     }
   }
-  lengthOfCivilStudents(){
+  lengthOfCivilStudents() {
     const students = JSON.parse(localStorage.getItem("students"))
-    if(students){
+    if (students) {
       const civilStudents = students.filter((student) => student?.department === "Civil");
       console.log("this is mech ", civilStudents);
       return civilStudents.length;
     }
   }
-  lengthOfMechStaff(){
+  lengthOfMechStaff() {
     const staff = JSON.parse(localStorage.getItem("lecturers"))
-    if(staff){
+    if (staff) {
       const mechStaff = staff.filter((staff) => staff?.department === "Mech");
       console.log("this is mech ", mechStaff);
       return mechStaff.length;
     }
   }
-  lengthOfEceStaff(){
+  lengthOfEceStaff() {
     const staff = JSON.parse(localStorage.getItem("lecturers"))
-    if(staff){
+    if (staff) {
       const ECEStaff = staff.filter((staff) => staff?.department === "ECE");
       console.log("this is mech ", ECEStaff);
       return ECEStaff.length;
     }
   }
-  lengthOfEEEStaff(){
+  lengthOfEEEStaff() {
     const staff = JSON.parse(localStorage.getItem("lecturers"))
-    if(staff){
+    if (staff) {
       const EEEStaff = staff.filter((staff) => staff?.department === "EEE");
       console.log("this is mech ", EEEStaff);
       return EEEStaff.length;
     }
   }
-  lengthOfCivilStaff(){
+  lengthOfCivilStaff() {
     const staff = JSON.parse(localStorage.getItem("lecturers"))
-    if(staff){
+    if (staff) {
       const CivilStaff = staff.filter((staff) => staff?.department === "Civil");
       console.log("this is mech ", CivilStaff);
       return CivilStaff.length;
     }
   }
-    
+
 
   loadUserDataFromLocalStorage() {
     const lecturers = JSON.parse(localStorage.getItem("lecturers"));
@@ -185,7 +185,7 @@ class UserStore {
     return alert("failed to fetch principal.");
   }
 
-  async updatePrincipal(name,mobile,image,coverImage,email,collegeName,collegeCode,collegeAddress,id) {
+  async updatePrincipal(name, mobile, image, coverImage, email, collegeName, collegeCode, collegeAddress, id) {
     const user = JSON.parse(localStorage.getItem("user"));
     const url = `/principal/${id}`;
     const body = {
@@ -251,7 +251,36 @@ class UserStore {
       password: password,
       role: role,
       phoneNumber: phno,
-      isVerified:true
+      isVerified: true
+    };
+    const response = await apiPostPut(body, url, "POST");
+    if (response.status === 200) {
+      console.log(response?.body);
+      this.lecturers.push({
+        ...response?.body,
+      });
+      lecturers.push({
+        ...response?.body,
+      });
+      localStorage.setItem("lecturers", JSON.stringify(lecturers));
+      console.log(toJS(this.lecturers));
+      return true;
+    }
+    alert(`failed to fetch lecturers.`);
+    return false;
+  }
+
+  async signUpLecturer(name, idno, email, branch, password, role, phno) {
+    const lecturers = JSON.parse(localStorage.getItem("lecturers"));
+    const url = "/register/hod";
+    const body = {
+      name: name,
+      department: branch,
+      idno: idno,
+      email: email,
+      password: password,
+      role: role,
+      phoneNumber: phno,
     };
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {
@@ -315,7 +344,7 @@ class UserStore {
   }
 
 
-  async updateLecturers(name, idno, email, branch,phoneNumber, id) {
+  async updateLecturers(name, idno, email, branch, phoneNumber, id) {
     const lecturers = JSON.parse(localStorage.getItem("lecturers"));
     const url = `/hod/${id}`;
     const body = {
@@ -369,7 +398,7 @@ class UserStore {
     return alert("failed to fetch students.");
   }
 
-  async postStudents(image,name, pinno, email, phno,branch,password) {
+  async postStudents(image, name, pinno, email, phno, branch, password, year) {
     const students = JSON.parse(localStorage.getItem("students"));
     const url = "/register/studentS";
     const body = {
@@ -381,6 +410,7 @@ class UserStore {
       password: password,
       role: "student",
       studentmobile: phno,
+      semister: year,
       isVerified: true,
     };
     const response = await apiPostPut(body, url, "POST");
@@ -393,7 +423,37 @@ class UserStore {
         ...response?.body,
       });
       localStorage.setItem("students", JSON.stringify(students));
-      console.log( toJS( this.students) );
+      console.log(toJS(this.students));
+      return true;
+    }
+    alert(`failed to fetch students.`);
+    return false;
+  }
+
+  async signUpStudent(name, pinno, email, phno, branch, password, year) {
+    const students = JSON.parse(localStorage.getItem("students"));
+    const url = "/register/studentS";
+    const body = {
+      name: name,
+      department: branch,
+      pinno: pinno,
+      emailid: email,
+      password: password,
+      role: "student",
+      studentmobile: phno,
+      semister: year,
+    };
+    const response = await apiPostPut(body, url, "POST");
+    if (response.status === 200) {
+      console.log(response?.body);
+      this.students.push({
+        ...response?.body,
+      });
+      students.push({
+        ...response?.body,
+      });
+      localStorage.setItem("students", JSON.stringify(students));
+      console.log(toJS(this.students));
       return true;
     }
     alert(`failed to fetch students.`);
@@ -421,7 +481,7 @@ class UserStore {
     return false;
   }
 
-  async updateStudents(name, pinno, email,mobile, branch, id) {
+  async updateStudents(name, pinno, email, mobile, branch, id) {
     const students = JSON.parse(localStorage.getItem("students"));
     const url = `/students/${id}`;
     const body = {
@@ -462,14 +522,14 @@ class UserStore {
     }
     alert("failed to fetch students.");
     return false;
-  } 
+  }
 
-  async postStudentDocuments(name,type,fileUrl,semester,percentage,backlogs,studentid) {
+  async postStudentDocuments(name, type, fileUrl, semester, percentage, backlogs, studentid) {
     const studentIndex = this.students.findIndex((student) => student?._id === studentid);
     const url = "/fileUpload";
     const body = {
       studentId: studentid,
-      files : [
+      files: [
         {
           name: name,
           certificateType: type,
@@ -483,21 +543,21 @@ class UserStore {
     const response = await apiPostPut(body, url, "POST");
     if (response.status === 200) {
       console.log(response?.body);
-      this.students[studentIndex] = response?.body?.result ;
+      this.students[studentIndex] = response?.body?.result;
       localStorage.setItem("students", JSON.stringify(this.students));
       return alert(`${response?.body?.message}`);
     }
     return alert(`failed to fetch students.`);
   }
 
-  async updateStudentDocuments(name,type,fileUrl,semester,percentage,backlogs,studentid,docid) {
+  async updateStudentDocuments(name, type, fileUrl, semester, percentage, backlogs, studentid, docid) {
     const studentindex = this.students.findIndex((student) => student?._id === studentid);
-    const docindex =  this.students[studentindex]?.documents.findIndex((doc) => doc?._id === docid);
+    const docindex = this.students[studentindex]?.documents.findIndex((doc) => doc?._id === docid);
     const url = `/fileUpdate`;
     const body = {
       studentId: studentid,
-      index : docindex,
-      files : [
+      index: docindex,
+      files: [
         {
           name: name,
           certificateType: type,
@@ -509,19 +569,18 @@ class UserStore {
       ]
     };
     const response = await apiPostPut(body, url, "PUT");
-    if(response.status === 200){
+    if (response.status === 200) {
       console.log(response?.body);
-      this.students[studentindex] = response?.body?.result ;
+      this.students[studentindex] = response?.body?.result;
       localStorage.setItem("students", JSON.stringify(this.students));
-     return alert(`${response?.body?.message}`)
+      return alert(`${response?.body?.message}`)
     }
-    else
-    {
-     return alert("failed to update documents");
+    else {
+      return alert("failed to update documents");
     }
   }
 
-  async deleteStudentDocuments(studentid,docid) {
+  async deleteStudentDocuments(studentid, docid) {
     const studentindex = this.students.findIndex((student) => student?._id === studentid);
     const url = `/fileDelete`;
     const body = {
@@ -529,15 +588,14 @@ class UserStore {
       documentId: docid,
     };
     const response = await apiPostPut(body, url, "PUT");
-    if(response.status === 200){
+    if (response.status === 200) {
       console.log(response?.body);
-      this.students[studentindex] = response?.body?.result ;
+      this.students[studentindex] = response?.body?.result;
       localStorage.setItem("students", JSON.stringify(this.students));
-     return alert(`${response?.body?.message}`)
+      return alert(`${response?.body?.message}`)
     }
-    else
-    {
-     return alert("failed to delete documents");
+    else {
+      return alert("failed to delete documents");
     }
   }
 
@@ -587,9 +645,9 @@ class UserStore {
     return false;
   }
 
-  async updateStudentBiodata (image,name,pinno,fathername,mothername,parentmobile,dob,polycethtno,rationcardno,gender,studentaadharno,fatheraadharno,motheraadharno,studentmobile,category,religion,resides,polycetrank,dateofjoining,physicallychallenged,email,address,district,pincode,studentid) {
+  async updateStudentBiodata(image, name, pinno, fathername, mothername, parentmobile, dob, polycethtno, rationcardno, gender, studentaadharno, fatheraadharno, motheraadharno, studentmobile, category, religion, resides, polycetrank, dateofjoining, physicallychallenged, email, address, district, pincode, studentid, year) {
     const url = `/students/${studentid}`;
-    const body ={
+    const body = {
       photo: image,
       name: name,
       pinno: pinno,
@@ -599,7 +657,7 @@ class UserStore {
       dateofbirth: dob,
       polycethtno: polycethtno,
       rationcardno: rationcardno,
-      gender:gender,
+      gender: gender,
       studentaadharno: studentaadharno,
       fatheraadharno: fatheraadharno,
       motheraadharno: motheraadharno,
@@ -614,60 +672,60 @@ class UserStore {
       address: address,
       district: district,
       pincode: pincode,
+      semister: year,
     }
     const response = await apiPostPut(body, url, "PUT");
-    if(response.status === 200){
+    if (response.status === 200) {
       console.log(response?.body);
       const index = this.students.findIndex((student) => student?._id === studentid);
       if (index !== -1) {
         this.students[index] = response?.body;
         localStorage.setItem("students", JSON.stringify(this.students));
         localStorage.setItem("user", JSON.stringify(response?.body));
-        alert("data save uccesfully")
+        alert("data saved succesfully")
       }
       return true;
     }
-    else
-    {
-     return alert("failed to update biodata");
+    else {
+      return alert("failed to update biodata");
     }
   }
 
-  async ResetStudentPassword(password){
+  async ResetStudentPassword(password) {
     const id = JSON.parse(localStorage.getItem("id"));
     const url = `/students/${id}`
-    const body ={
-      password : password,
+    const body = {
+      password: password,
     }
-    const response = await apiPostPut(body,url,"PUT")
-    if(response.status === 200 ){
-     return alert("Password changed succesfully");
+    const response = await apiPostPut(body, url, "PUT")
+    if (response.status === 200) {
+      return alert("Password changed succesfully");
     }
     return console.log(response?.body);
   }
 
-  async ResetLecturerPassword(password){
+  async ResetLecturerPassword(password) {
     const id = JSON.parse(localStorage.getItem("id"));
     const url = `/hod/${id}`
-    const body ={
-      password : password,
+    const body = {
+      password: password,
     }
-    const response = await apiPostPut(body,url,"PUT")
-    if(response.status === 200 ){
-     return alert("Password Changed Succesfully");
+    const response = await apiPostPut(body, url, "PUT")
+    if (response.status === 200) {
+      return alert("Password Changed Succesfully");
     }
     return console.log(response?.body);
   }
 
-  async ResetPrincipalPassword(password){
+  async ResetPrincipalPassword(password) {
     const id = JSON.parse(localStorage.getItem("id"));
     const url = `/principal/${id}`
-    const body ={
-      password : password,
+    const body = {
+      password: password,
     }
-    const response = await apiPostPut(body,url,"PUT")
-    if(response.status === 200 ){
-     return alert("Password Changed Succesfully");
+    const response = await apiPostPut(body, url, "PUT")
+    if (response.status === 200) {
+      return alert("Password Changed Succesfully");
     }
     return console.log(response?.body);
   }

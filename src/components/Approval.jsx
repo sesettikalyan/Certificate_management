@@ -9,7 +9,7 @@ export default function Approval({ navigation }) {
   let { id, pin } = useParams();
   const navigate = useNavigate();
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
-  const { UserStore, CommonStore} = useStores();
+  const { UserStore, CommonStore } = useStores();
 
   const selectedLecturer = UserStore?.lecturers.find(
     (lecturer) => lecturer?._id === id
@@ -57,7 +57,7 @@ export default function Approval({ navigation }) {
     <>
       {!navigation ? (
         <div className="w-[100%] bg-secondary py-10 flex flex-col items-start">
-         <div  className="w-[90%] flex justify-between mx-auto ">
+          <div className="w-[90%] flex justify-between mx-auto ">
             <button
               className="flex items-center  text-lg"
               onClick={goToPrincipalHome}
@@ -65,19 +65,19 @@ export default function Approval({ navigation }) {
               <AiOutlineLeft className="mr-1" /> Back
             </button>
             <button onClick={() => Delete(selectedLecturer?._id)} className="w-10 h-10 bg-primary rounded-full  text-2xl text-white flex items-center justify-center">
-               <MdDeleteOutline />
+              <MdDeleteOutline />
             </button>
-         </div>
+          </div>
 
           <div className="w-[85%] mx-auto  flex mt-6">
             <div className="h-44 w-36 rounded-lg overflow-hidden"
-                style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+              style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
             >
-            <img
-              src={selectedLecturer?.photo}
-              className="object-cover rounded-lg"
-              alt=""
-            />
+              <img
+                src={selectedLecturer?.photo}
+                className="object-cover rounded-lg"
+                alt=""
+              />
             </div>
             <div className="ml-6">
               <h1 className="text-xl pb-1 ">{selectedLecturer?.name}</h1>
@@ -97,14 +97,14 @@ export default function Approval({ navigation }) {
       ) : (
         <div className="w-[100%] bg-secondary py-10 flex flex-col items-start">
           <div className="w-[90%] mx-auto flex justify-between">
-          <button
-            className="flex items-center  text-lg"
-            onClick={goToPrincipalHome}
-          >
-            <AiOutlineLeft className="mr-1" /> Back
-          </button>
-          <button onClick={() => Delete(selectedStudent?._id)} className="w-10 h-10 bg-primary rounded-full  text-2xl text-white flex items-center justify-center">
-               <MdDeleteOutline />
+            <button
+              className="flex items-center  text-lg"
+              onClick={goToPrincipalHome}
+            >
+              <AiOutlineLeft className="mr-1" /> Back
+            </button>
+            <button onClick={() => Delete(selectedStudent?._id)} className="w-10 h-10 bg-primary rounded-full  text-2xl text-white flex items-center justify-center">
+              <MdDeleteOutline />
             </button>
           </div>
 
@@ -117,7 +117,7 @@ export default function Approval({ navigation }) {
             <div className="ml-6">
               <h1 className="text-xl pb-1 ">{selectedStudent?.name}</h1>
               <p className="text-base ">{selectedStudent?.pinno}</p>
-              <p className="text-base">{selectedStudent?.department}</p>
+              <p className="text-base">{selectedStudent?.department},{selectedStudent?.semister}</p>
               <p className="text-base">{selectedStudent?.studentmobile}</p>
               <p className="text-base pb-1">{selectedStudent?.emailid}</p>
               <button

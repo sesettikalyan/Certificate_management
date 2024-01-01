@@ -11,6 +11,7 @@ export default function Register() {
   const [phone, setPhone] = useState(null);
   const [pin, setPin] = useState(null);
   const [branch, setBranch] = useState(null);
+  const [year, setYear] = useState(null);
   const nameref = useRef(null);
   const emailref = useRef(null);
   const phoneref = useRef(null);
@@ -18,6 +19,7 @@ export default function Register() {
   const cpassref = useRef(null);
   const pinref = useRef(null);
   const branchref = useRef(null);
+  const yearref = useRef(null);
   const navigate = useNavigate();
 
   const goToSetPassword = (e) => {
@@ -28,6 +30,9 @@ export default function Register() {
       setPhone(phoneref.current.value);
       setPin(pinref.current.value);
       setBranch(branchref.current.value);
+      if (CommonStore.role === "student") {
+        setYear(yearref.current.value);
+      }
       setShowSetPassword(true);
     } catch (error) { }
   };
@@ -44,7 +49,7 @@ export default function Register() {
       } else {
         if (CommonStore.role === "hod" || CommonStore.role === "staff") {
           if (
-            UserStore.postLecturers(
+            UserStore.signUpLecturer(
               name,
               pin,
               email,
@@ -58,14 +63,15 @@ export default function Register() {
           }
         } else {
           if (
-            UserStore.postStudents(
+            UserStore.signUpStudent(
               name,
               pin,
               email,
               branch,
               password,
               CommonStore.role,
-              phone
+              phone,
+              year
             )
           ) {
             return navigate("/login");
@@ -80,19 +86,23 @@ export default function Register() {
 
   return (
     <>
-      <div className="flex flex-col w-[100%] h-screen items-center">
-        <button
-          className="flex items-center w-[90%] mx-auto pt-4 text-lg"
-          onClick={back}
-        >
-          <AiOutlineLeft className="mr-1" /> Back
-        </button>
-        <div
-          className={`h-[30%] ${showSetPassword ? "mt-[20%]" : "mt-[2%]"
-            } md:mt-[2%]`}
-        >
-          <img src={logo} className="w-40 h-40" alt="" />
+      <div className="flex flex-col  relative w-[100%] h-screen items-center">
+        <div className="flex mt-2">
+          <button
+            className="flex items-center left-4 top-4 absolute text-lg"
+            onClick={back}
+          >
+            <AiOutlineLeft className="mr-1" /> Back
+
+          </button>
+          <div
+            className={`h-[30%] ${showSetPassword ? "mt-[20%]" : "mt-[2%]"
+              } md:mt-[2%]`}
+          >
+            <img src={logo} className="w-40 h-40" alt="" />
+          </div>
         </div>
+
         {!showSetPassword ? (
           <div className="bg-primary h-[100%] py-4 flex flex-col  w-[100%] rounded-tl-[100px] mt-[4%]  items-center justify-center">
             <h1 className="text-3xl text-center py-2 text-white">
@@ -156,6 +166,27 @@ export default function Register() {
                     Civil Engineering
                   </option>
                 </select>
+
+                {CommonStore.role === "student" &&
+                  <>
+                    <p className="text-white mt-3 ml-3">Year</p>
+                    <select
+                      ref={yearref}
+                      type="text"
+                      className="px-5 w-[100%] py-4 rounded-full  "
+                    >
+                      <option className="text-xs" value="1st Year">
+                        1
+                      </option>
+                      <option className="text-xs" value="2nd Year">
+                        2
+                      </option>
+                      <option className="text-xs" value="3rd Year">
+                        3
+                      </option>
+                    </select>
+                  </>
+                }
 
                 {/* <p className="text-white mt-4 ml-3">Password</p>
               <input

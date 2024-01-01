@@ -15,7 +15,7 @@ import { storage } from "../firebase";
 import Loader from "./reusable_Components/loader";
 
 export default function Studentview() {
-  const { UserStore,CommonStore } = useStores();
+  const { UserStore, CommonStore } = useStores();
   const [loading, setLoading] = useState(false);
   const { branch, id } = useParams();
   const [editForm, setEditForm] = useState(false);
@@ -39,32 +39,32 @@ export default function Studentview() {
   const autofillref = () => {
     try {
       nameref.current.value = selectedStudent?.name;
-    pinref.current.value = selectedStudent?.pinno;
-    emailref.current.value = selectedStudent?.emailid;
-    branchref.current.value = selectedStudent?.department;
-    phoneref.current.value = selectedStudent?.studentmobile;
+      pinref.current.value = selectedStudent?.pinno;
+      emailref.current.value = selectedStudent?.emailid;
+      branchref.current.value = selectedStudent?.department;
+      phoneref.current.value = selectedStudent?.studentmobile;
     } catch (error) {
-      
+
     }
   };
 
   useEffect(() => {
     autofillref();
     UserStore.getPrincipalfromapi();
-  }, [editForm]);  
+  }, [editForm]);
 
   const updateStudentDetails = async (id) => {
     try {
       const name = nameref.current.value;
-    const pinno = pinref.current.value;
-    const emailid = emailref.current.value;
-    const department = branchref.current.value;
-    const studentmobile = phoneref.current.value;
+      const pinno = pinref.current.value;
+      const emailid = emailref.current.value;
+      const department = branchref.current.value;
+      const studentmobile = phoneref.current.value;
 
-    await UserStore.updateStudents(name,pinno,emailid,studentmobile,department,id);
-    setEditForm(false);
+      await UserStore.updateStudents(name, pinno, emailid, studentmobile, department, id);
+      setEditForm(false);
     } catch (error) {
-      
+
     }
   };
 
@@ -156,22 +156,22 @@ export default function Studentview() {
   };
 
   const uploadImageToFirebase = async (file) => {
-    
-      const timeStamp = new Date().valueOf();
-      const storageRef = ref(storage, `images/${timeStamp}-${file.name}`);
-      try {
-        setLoading(true);
+
+    const timeStamp = new Date().valueOf();
+    const storageRef = ref(storage, `images/${timeStamp}-${file.name}`);
+    try {
+      setLoading(true);
       await uploadBytes(storageRef, file);
       console.log('Image uploaded to Firebase Storage');
       const imageURL = await getDownloadURL(storageRef);
       console.log(imageURL);
-      await UserStore.updateStudentImage(imageURL,CommonStore.role === "student"? UserStore.user?._id:selectedStudent?._id);
+      await UserStore.updateStudentImage(imageURL, CommonStore.role === "student" ? UserStore.user?._id : selectedStudent?._id);
       setLoading(false);
-      } catch (error) {
+    } catch (error) {
 
-      }
+    }
   };
-    
+
   const navigateToRoute = () => {
     if (CommonStore.role === "student") {
       navigate(`/biodata/${UserStore.user?._id}`);
@@ -189,7 +189,7 @@ export default function Studentview() {
 
   return useObserver(() => (
     <div className="w-[100%] h-full">
-    {loading &&  <Loader loader={true} />}
+      {loading && <Loader loader={true} />}
       <div className="pb-10 pt-6 flex flex-col items-start w-full bg-primary rounded-b-2xl">
         <Navbar />
         <div className="pb-2 w-[85%] mx-auto items-center flex mt-4">
@@ -218,11 +218,11 @@ export default function Studentview() {
                 className="h-full w-full object-cover rounded-lg"
                 alt=""
               />
-              { CommonStore.role !== "principal" &&
-              <span onClick={openFiles} className="bg-primary w-6 absolute z-auto cursor-pointer left-[85%] top-0 h-6 rounded-full flex items-center justify-center">
-                <MdOutlineEdit className=" text-white" />
-                <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
-              </span>}
+              {CommonStore.role !== "principal" &&
+                <span onClick={openFiles} className="bg-primary w-6 absolute z-auto cursor-pointer left-[85%] top-0 h-6 rounded-full flex items-center justify-center">
+                  <MdOutlineEdit className=" text-white" />
+                  <input type="file" id="fileinput" className="hidden" ref={fileInputRef} onChange={changeImage} />
+                </span>}
             </div>
           }
           <div className="ml-6 text-white w-[50%] break-words">
@@ -238,8 +238,8 @@ export default function Studentview() {
             </p>
             <p className="text-base">
               {CommonStore.role === "student"
-                ? UserStore.user?.department
-                : selectedStudent?.department}
+                ? `${UserStore.user?.department} , ${UserStore.user?.semister}`
+                : `${selectedStudent?.department} , ${selectedStudent?.semister}`}
             </p>
             <p className="text-base">
               {CommonStore.role === "student"
@@ -322,82 +322,82 @@ export default function Studentview() {
       {
         editForm ? (
           <div className="fixed inset-0 w-[90%] m-auto h-[80%] flex flex-col z-50 py-4 px-2 rounded-2xl justify-center  bg-primary">
-          <h1 className="text-center text-lg text-white">Edit Details </h1>
+            <h1 className="text-center text-lg text-white">Edit Details </h1>
 
-          <AiOutlineClose
-            onClick={() => setEditForm(false)}
-            className="absolute text-white text-2xl cursor-pointer right-2 top-4"
-          />
-          <div
-            className="flex flex-col w-[95%] mx-auto h-full"
-          >
-            <div className="flex flex-col mt-2">
-              <label className="pb-2 text-white">Name</label>
-              <input
-                required
-                ref={nameref}
-                type="text"
-                className="bg-primary mb-1 px-1 text-white text-opacity-80 text-lg focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
-              />
-            </div>
-            <div className="flex flex-col mt-1">
-              <label className="pb-2 text-white">Pin Number</label>
-              <input
-                required
-                ref={pinref}
-                type="text"
-                className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
-              />
-            </div>
-            <div className="flex flex-col mt-1">
-              <label className="pb-2 text-white">E-mail</label>
-              <input
-                required
-                ref={emailref}
-                type="text"
-                className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
-              />
-            </div>
-             <div className="flex flex-col mt-1">
-              <label className="pb-2 text-white">Phone Number</label>
-              <input
-                required
-                ref={phoneref}
-                type="text"
-                className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
-              />
-            </div>
-            <div className="flex flex-col mt-1">
-              <label className="pb-2 text-white">Branch</label>
-              <select
-                required
-                ref={branchref}
-                type="text"
-                className="w-[70%] mb-1 rounded-lg px-1 bg-white text-opacity-80  text-lg focus:outline-none  "
-              >
-                <option className="text-xs" value="Mech">
-                  Mechanical Engineering
-                </option>
-                <option className="text-xs" value="EEE">
-                  Electrical and Electronics Engineering
-                </option>
-                <option className="text-xs" value="ECE">
-                  Electronics and Communication Engineering
-                </option>
-                <option className="text-xs" value="Civil">
-                  Civil Engineering
-                </option>
-              </select>
-            </div>
-
-            <button
-              onClick={() => updateStudentDetails(selectedStudent?._id)}
-              className="absolute right-6 bottom-4 px-8 py-1 bg-black text-white rounded-lg text-base"
+            <AiOutlineClose
+              onClick={() => setEditForm(false)}
+              className="absolute text-white text-2xl cursor-pointer right-2 top-4"
+            />
+            <div
+              className="flex flex-col w-[95%] mx-auto h-full"
             >
-              Save
-            </button>
+              <div className="flex flex-col mt-2">
+                <label className="pb-2 text-white">Name</label>
+                <input
+                  required
+                  ref={nameref}
+                  type="text"
+                  className="bg-primary mb-1 px-1 text-white text-opacity-80 text-lg focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+                />
+              </div>
+              <div className="flex flex-col mt-1">
+                <label className="pb-2 text-white">Pin Number</label>
+                <input
+                  required
+                  ref={pinref}
+                  type="text"
+                  className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+                />
+              </div>
+              <div className="flex flex-col mt-1">
+                <label className="pb-2 text-white">E-mail</label>
+                <input
+                  required
+                  ref={emailref}
+                  type="text"
+                  className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+                />
+              </div>
+              <div className="flex flex-col mt-1">
+                <label className="pb-2 text-white">Phone Number</label>
+                <input
+                  required
+                  ref={phoneref}
+                  type="text"
+                  className="bg-primary mb-1 px-1 text-white text-lg text-opacity-80 focus:outline-none border-b-2 border-[rgba(255, 255, 255, 1)]"
+                />
+              </div>
+              <div className="flex flex-col mt-1">
+                <label className="pb-2 text-white">Branch</label>
+                <select
+                  required
+                  ref={branchref}
+                  type="text"
+                  className="w-[70%] mb-1 rounded-lg px-1 bg-white text-opacity-80  text-lg focus:outline-none  "
+                >
+                  <option className="text-xs" value="Mech">
+                    Mechanical Engineering
+                  </option>
+                  <option className="text-xs" value="EEE">
+                    Electrical and Electronics Engineering
+                  </option>
+                  <option className="text-xs" value="ECE">
+                    Electronics and Communication Engineering
+                  </option>
+                  <option className="text-xs" value="Civil">
+                    Civil Engineering
+                  </option>
+                </select>
+              </div>
+
+              <button
+                onClick={() => updateStudentDetails(selectedStudent?._id)}
+                className="absolute right-6 bottom-4 px-8 py-1 bg-black text-white rounded-lg text-base"
+              >
+                Save
+              </button>
+            </div>
           </div>
-        </div>
         ) : null
       }
     </div>

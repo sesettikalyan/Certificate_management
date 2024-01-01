@@ -147,11 +147,16 @@ export default function LecturerView() {
             </button>
           </div>
         ) : (
-          <div
-            onClick={logout}
-            className="bg-blue-900 cursor-pointer rounded-full text-white text-2xl h-10 w-10 flex items-center justify-center"
-          >
-            <BiLogOut className="mr-1" />
+          <div onClick={logout} className="flex items-center gap-2">
+            <p className="text-red-600">
+              Logout
+            </p>
+            <div
+
+              className="bg-primary cursor-pointer rounded-full text-white text-2xl h-10 w-10 flex items-center justify-center"
+            >
+              <BiLogOut className="mr-1" />
+            </div>
           </div>
         )}
       </div>

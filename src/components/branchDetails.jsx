@@ -24,20 +24,20 @@ export default function BranchDetails() {
         <TitleAndSearch onSearchChange={handleSearchInputChange} />
         {/* Lecturers section */}
         <div className="flex flex-col md:flex-row-reverse md:justify-between mx-auto w-[90%] md:w-[90%]">
-        <div className=" mt-6 h-auto rounded-lg md:w-[35%] ">
-          <LecturerSection searchvalue={searchvalue}/>
-        </div>
-        {/* Student-list-section */}
-        <div className="bg-white  drop-shadow-2xl my-6 shadow-lg md:w-[55%]  rounded-lg  ">
-          <StudentSection searchvalue={searchvalue} />
-        </div>
+          <div className=" mt-6 h-auto rounded-lg md:w-[35%] ">
+            <LecturerSection searchvalue={searchvalue} />
+          </div>
+          {/* Student-list-section */}
+          <div className="bg-white  drop-shadow-2xl my-6 shadow-lg md:w-[55%]  rounded-lg  ">
+            <StudentSection searchvalue={searchvalue} />
+          </div>
         </div>
       </div>
     </>
   ));
 }
 
-export function TitleAndSearch({ onStaff , onSearchChange}) {
+export function TitleAndSearch({ onStaff, onSearchChange }) {
   let { branch } = useParams();
   const { UserStore } = useStores();
   const searchref = useRef(null);
@@ -152,11 +152,11 @@ export function LecturerSection({ searchvalue }) {
         setSelectedBranchLecturers(verifiedLecturers);
       } else {
         const verifiedLecturers = UserStore?.lecturers.filter(
-          (lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase() && lecturer?.isVerified === true && (lecturer?.name.toLowerCase().includes(searchvalue.toLowerCase())  || lecturer?.idno.toLowerCase().includes(searchvalue.toLowerCase()))
+          (lecturer) => lecturer?.department.toUpperCase() === branch.toUpperCase() && lecturer?.isVerified === true && (lecturer?.name.toLowerCase().includes(searchvalue.toLowerCase()) || lecturer?.idno.toLowerCase().includes(searchvalue.toLowerCase()))
         );
         setSelectedBranchLecturers(verifiedLecturers);
       }
-    } catch (error) { 
+    } catch (error) {
       console.log(error);
     }
   }, [UserStore?.lecturers, searchvalue]);
@@ -218,9 +218,12 @@ export function LecturerSection({ searchvalue }) {
   ));
 }
 
-export function StudentSection({ onstaff,searchvalue }) {
+export function StudentSection({ onstaff, searchvalue }) {
   let { branch } = useParams();
   const [selectedBranchStudents, setSelectedBranchStudents] = useState([]);
+  const [firstYearStudents, setFirstYearStudents] = useState([]);
+  const [secondYearStudents, setSecondYearStudents] = useState([]);
+  const [thirdYearStudents, setThirdYearStudents] = useState([]);
   const { UserStore } = useStores();
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
 
@@ -228,11 +231,17 @@ export function StudentSection({ onstaff,searchvalue }) {
   //check verification 
   useEffect(() => {
     try {
-     if(searchvalue === null){
-      const verifiedStudents = UserStore?.students.filter(
-        (student) => student?.department.toUpperCase() === branch.toUpperCase() && student?.isVerified === true
-      );
-      setSelectedBranchStudents(verifiedStudents);
+      if (searchvalue === null) {
+        const verifiedStudents = UserStore?.students.filter(
+          (student) => student?.department.toUpperCase() === branch.toUpperCase() && student?.isVerified === true
+        );
+        setSelectedBranchStudents(verifiedStudents);
+        const firstYearStudents = verifiedStudents.filter((student) => student?.semister === "1st Year");
+        setFirstYearStudents(firstYearStudents);
+        const secondYearStudents = verifiedStudents.filter((student) => student?.semister === "2nd Year");
+        setSecondYearStudents(secondYearStudents);
+        const thirdYearStudents = verifiedStudents.filter((student) => student?.semister === "3rd Year");
+        setThirdYearStudents(thirdYearStudents);
       } else {
         const verifiedStudents = UserStore?.students.filter(
           (student) => student?.department.toUpperCase() === branch.toUpperCase() && student?.isVerified === true && (student?.name.toLowerCase().includes(searchvalue.toLowerCase()) || student?.pinno.toLowerCase().includes(searchvalue.toLowerCase()))
@@ -261,7 +270,7 @@ export function StudentSection({ onstaff,searchvalue }) {
             </h2>
             <button
               className="flex text-xs text-text_color1 items-center"
-            onClick={() => navigate(`/${branch}/newstudent`)}
+              onClick={() => navigate(`/${branch}/newstudent`)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Student
@@ -279,35 +288,99 @@ export function StudentSection({ onstaff,searchvalue }) {
             No Approved Students
           </h1>
         ) : (
-          selectedBranchStudents.map((student) => (
-            <>
-              <div className="w-[90%] p-2 border-b-2 border-[rgba(0, 0, 0, 1)] mx-auto my-2 flex flex-row items-end justify-between">
-                <div className="flex flex-row items-center">
-                  <div className="w-12 h-12 rounded-full overflow-hidden"
-                    style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
-                  >
-                    <img
-                      src={student?.photo}
-                      className="object-cover rounded-full w-full h-full"
-                      alt=""
-                    />
+          <>
+            {firstYearStudents.length === 0 ? null : <p className="text-primary font-bold w-[90%] mx-auto">Ⅰst Year</p>}
+            {firstYearStudents.map((student) => (
+              <>
+                <div className="w-[90%] p-2 border-b-2 border-[rgba(0, 0, 0, 1)] mx-auto my-2 flex flex-row items-end justify-between">
+                  <div className="flex flex-row items-center">
+                    <div className="w-12 h-12 rounded-full overflow-hidden"
+                      style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+                    >
+                      <img
+                        src={student?.photo}
+                        className="object-cover rounded-full w-full h-full"
+                        alt=""
+                      />
+                    </div>
+                    <div className="flex flex-col items-start ml-3">
+                      <h1 className="text-lg">{student?.name}</h1>
+                      <p className="text-base">{student?.pinno}</p>
+                    </div>
                   </div>
-                  <div className="flex flex-col items-start ml-3">
-                    <h1 className="text-lg">{student?.name}</h1>
-                    <p className="text-base">{student?.pinno}</p>
+                  <div className="flex">
+                    <button
+                      className="flex items-center justify-center"
+                      onClick={() => showStudentDetails(student?._id)}
+                    >
+                      view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
+                    </button>
                   </div>
                 </div>
-                <div className="flex">
-                  <button
-                    className="flex items-center justify-center"
-                    onClick={() => showStudentDetails(student?._id)}
-                  >
-                    view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
-                  </button>
+              </>
+            ))}
+            {secondYearStudents.length === 0 ? null : <p className="text-primary font-bold w-[90%] mx-auto">Ⅱnd Year</p>}
+            {secondYearStudents.map((student) => (
+              <>
+                <div className="w-[90%] p-2 border-b-2 border-[rgba(0, 0, 0, 1)] mx-auto my-2 flex flex-row items-end justify-between">
+                  <div className="flex flex-row items-center">
+                    <div className="w-12 h-12 rounded-full overflow-hidden"
+                      style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+                    >
+                      <img
+                        src={student?.photo}
+                        className="object-cover rounded-full w-full h-full"
+                        alt=""
+                      />
+                    </div>
+                    <div className="flex flex-col items-start ml-3">
+                      <h1 className="text-lg">{student?.name}</h1>
+                      <p className="text-base">{student?.pinno}</p>
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <button
+                      className="flex items-center justify-center"
+                      onClick={() => showStudentDetails(student?._id)}
+                    >
+                      view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </>
-          ))
+              </>
+            ))}
+            {thirdYearStudents.length === 0 ? null : <p className="text-primary font-bold w-[90%] mx-auto">Ⅲrd Year</p>}
+            {thirdYearStudents.map((student) => (
+              <>
+                <div className="w-[90%] p-2 border-b-2 border-[rgba(0, 0, 0, 1)] mx-auto my-2 flex flex-row items-end justify-between">
+                  <div className="flex flex-row items-center">
+                    <div className="w-12 h-12 rounded-full overflow-hidden"
+                      style={{ backgroundImage: `url(${defaultprofile})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+                    >
+                      <img
+                        src={student?.photo}
+                        className="object-cover rounded-full w-full h-full"
+                        alt=""
+                      />
+                    </div>
+                    <div className="flex flex-col items-start ml-3">
+                      <h1 className="text-lg">{student?.name}</h1>
+                      <p className="text-base">{student?.pinno}</p>
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <button
+                      className="flex items-center justify-center"
+                      onClick={() => showStudentDetails(student?._id)}
+                    >
+                      view details <AiOutlineRight className="text-sm ml-1 mt-1" />{" "}
+                    </button>
+                  </div>
+                </div>
+              </>
+            ))}
+          </>
+
         )
       }
     </>
