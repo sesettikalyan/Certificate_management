@@ -30,6 +30,7 @@ import StudentApprovalDetails from "./components/studentDetails";
 // import StaffLogin from "./components/stafflogin";
 import Selectbranch from "./components/selectbranch";
 import NewStudent from "./components/newStudent";
+import Welcome from "./components/Welcome";
 
 import MainPage from "./components/MainPage";
 
@@ -79,7 +80,7 @@ root.render(
         <Route path="/:branch/studentapproval" element={<StudentApproval />} />
 
         <Route path="/" element={<MainPage />} />
-
+        <Route path="/welcome" element={<Welcome />} />
         <Route path="/biodata/:id" element={<Biodata />} />
         <Route path="/:branch/:id/biodata" element={<Biodata />} />
 
@@ -88,6 +89,7 @@ root.render(
           element={<StudentApprovalDetails />}
         />
         <Route path="*" element={<NotFound />} />
+    
       </Routes>
     </BrowserRouter>
     {/* <App /> */}
