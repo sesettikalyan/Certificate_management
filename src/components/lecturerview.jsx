@@ -12,6 +12,7 @@ import { toJS } from "mobx";
 import Loader from "./reusable_Components/loader";
 import { storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { IoIosArrowDown } from "react-icons/io";
 
 export default function LecturerView() {
   const [editForm, setEditForm] = useState(false);
@@ -218,6 +219,14 @@ export default function LecturerView() {
           <div className="text-base px-4 py-2 w-full  border-2 rounded-lg border-black">
             {CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.email : selectedLecturer?.email}
           </div>
+        </div>
+        <div className="flex flex-col mt-2  items-start">
+        <button className="pb-2  ">Give Access</button>
+          <div className="flex w-full mx-auto items-center justify-between">
+          <input type="datetime-local" className="text-base px-4 py-2 w-[70%]  border-2 rounded-lg border-black" />
+          <button className="bg-primary text-white px-4 py-2 rounded-lg mt-1">Access</button>
+          </div>
+
         </div>
       </div>
 
