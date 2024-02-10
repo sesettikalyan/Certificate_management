@@ -225,6 +225,7 @@ export function StudentSection({ onstaff, searchvalue }) {
   const [secondYearStudents, setSecondYearStudents] = useState([]);
   const [thirdYearStudents, setThirdYearStudents] = useState([]);
   const { UserStore } = useStores();
+  const [showError, setShowError] = useState(false);
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
 
 
@@ -270,12 +271,14 @@ export function StudentSection({ onstaff, searchvalue }) {
             </h2>
             <button
               className="flex text-xs text-text_color1 items-center"
-              onClick={() => navigate(`/${branch}/newstudent`)}
+              onClick={() => UserStore.user?.access?.granted ? navigate(`/${branch}/newstudent`) : setShowError(true)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Student
             </button>
+
           </div>
+          {showError && <p className="text-red-500 font-semibold w-[90%] mx-auto mt-2">! You don't have access to edit the details</p>}
         </>
       ) : (
         <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl my-4">

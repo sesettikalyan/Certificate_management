@@ -18,12 +18,13 @@ export default function LecturerView() {
   const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
   const [selectedLecturer, setSelectedLecturer] = useState({});
-  const { UserStore, CommonStore } = useStores();
+  const { UserStore, CommonStore, AccessStore } = useStores();
   const navigate = useNavigate();
   const { branch, id } = useParams();
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false)
+  const expiryDateref = useRef(null);
 
   // const selectedLecturer = UserStore.lecturers.find(
   //   (lecturer) => lecturer?.idno === id
@@ -118,6 +119,16 @@ export default function LecturerView() {
       uploadImageToFirebase(file);
     }
   };
+
+  const giveAccess = async (id) => {
+    const dateString = expiryDateref.current.value;
+    const dateObject = new Date(dateString);
+    const timestamp = new Date(dateObject.getTime() - (dateObject.getTimezoneOffset() * 60000)).toISOString();
+
+    console.log('Converted Timestamp:', timestamp);
+
+    await AccessStore.AccessLecturers(timestamp, id);
+  }
 
 
   return useObserver(() => (
@@ -220,14 +231,16 @@ export default function LecturerView() {
             {CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.email : selectedLecturer?.email}
           </div>
         </div>
-        <div className="flex flex-col mt-2  items-start">
-        <button className="pb-2  ">Give Access</button>
-          <div className="flex w-full mx-auto items-center justify-between">
-          <input type="datetime-local" className="text-base px-4 py-2 w-[70%]  border-2 rounded-lg border-black" />
-          <button className="bg-primary text-white px-4 py-2 rounded-lg mt-1">Access</button>
-          </div>
+        {CommonStore.role === "principal" && (
+          <div className="flex flex-col mt-2  items-start">
+            <button className="pb-2">Give Access</button>
+            <div className="flex w-full mx-auto items-center justify-between">
+              <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 w-[70%]  border-2 rounded-lg border-black" />
+              <button onClick={() => giveAccess(selectedLecturer?._id)} className="bg-primary text-white px-4 py-2 rounded-lg mt-1">Access</button>
+            </div>
 
-        </div>
+          </div>
+        )}
       </div>
 
       {editForm ? (

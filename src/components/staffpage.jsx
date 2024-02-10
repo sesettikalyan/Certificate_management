@@ -31,6 +31,7 @@ export default function StaffPage() {
     <div>
       <div className="w-[100%]  flex flex-col bg-gray-100">
         {/* search box */}
+
         <TitleAndSearch onStaff={true} branch1={branch} onSearchChange={handleSearchInputChange} />
         {/* Student-list-section */}
         <div className="bg-white  drop-shadow my-6 shadow-lg w-[90%] py-3 mx-auto rounded-lg">

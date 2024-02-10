@@ -9,6 +9,7 @@ export default function Certificateview1() {
   const { UserStore, CommonStore } = useStores();
   const [selectedCertificate, setSelectedCertificate] = useState(null);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [showError, setShowError] = useState(false)
 
   const Certificate = () => {
     if (CommonStore.role === "student") {
@@ -24,7 +25,7 @@ export default function Certificateview1() {
   const removeCertificate = async (id) => {
     setDeleteModal(false);
     await UserStore.deleteStudentDocuments(studentid, id);
-    
+
     navigate(`/${branch}/${studentid}`);
   }
 
@@ -48,12 +49,12 @@ export default function Certificateview1() {
           <div className="flex">
             <button
               className="w-10 h-10 bg-primary  rounded-full mx-2 text-2xl text-white flex items-center justify-center"
-              onClick={() => navigate(`/${branch}/${studentid}/certificateupdate/${id}`)}
+              onClick={() => UserStore.user?.access?.granted ? navigate(`/${branch}/${studentid}/certificateupdate/${id}`) : setShowError(true)}
             >
               <MdOutlineEdit />
             </button>
             <button
-              onClick={() => setDeleteModal(true)}
+              onClick={() => UserStore.user?.access?.granted ? setDeleteModal(true) : setShowError(true)}
               className="w-10 h-10 bg-primary rounded-full mx-3 text-2xl text-white flex items-center justify-center"
             >
               <MdDeleteOutline />
@@ -72,12 +73,13 @@ export default function Certificateview1() {
   return (
     <div className="flex flex-col items-center justify-between">
       <Navbar />
+      {showError && <p className="text-red-500 font-semibold w-[90%] mx-auto mt-2">! You don't have access to edit the details</p>}
       {!selectedCertificate?.fileUrl ? (
         <p className="text-2xl font-semibold py-10">No Certificate Uploaded</p>
-      ):
-      <div className='h-96 w-[80%] rounded-lg'>
-        <iframe src={selectedCertificate?.fileUrl} className="w-full h-full my-2" style={{ zoom: "150%" }} frameborder="0"></iframe>
-      </div>
+      ) :
+        <div className='h-96 w-[80%] rounded-lg'>
+          <iframe src={selectedCertificate?.fileUrl} className="w-full h-full my-2" style={{ zoom: "150%" }} frameborder="0"></iframe>
+        </div>
 
       }
 
@@ -97,7 +99,7 @@ export default function Certificateview1() {
         </div>
       </div>
 
-      {deleteModal &&  (
+      {deleteModal && (
         <div className="fixed inset-0  w-[80%] m-auto h-[20%] flex flex-col z-50 py-4 px-2 rounded-2xl items-center  bg-primary">
           <h1 className="text-center text-2xl text-white">Confirm to delete</h1>
           <p className="text-white pt-1 text-2xl">{selectedCertificate?.name}</p>

@@ -27,6 +27,7 @@ export default function Studentview() {
   const emailref = useRef(null);
   const branchref = useRef(null);
   const phoneref = useRef(null);
+  const [showError, setShowError] = useState(false);
 
   // const selectedBranch = Branches.find(
   //   (branchname) => branchname.name === branch
@@ -80,6 +81,24 @@ export default function Studentview() {
     navigate("/");
   };
 
+  const editAccess = () => {
+    if (UserStore.user?.access?.granted) {
+      setEditForm(true)
+    }
+    else {
+      setShowError(true)
+    }
+  }
+
+  const deleteAccess = () => {
+    if (UserStore.user?.access?.granted) {
+      setDeleteForm(true)
+    }
+    else {
+      setShowError(true)
+    }
+  }
+
   const Navbar = () => {
     if (CommonStore.role === "principal") {
       return (
@@ -101,13 +120,13 @@ export default function Studentview() {
           </button>
           <div className="flex">
             <button
-              onClick={() => setEditForm(true)}
+              onClick={editAccess}
               className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center"
             >
               <MdOutlineEdit />
             </button>
             <button
-              onClick={() => setDeleteForm(true)}
+              onClick={deleteAccess}
               className="w-10 h-10 bg-white rounded-full mx-3 text-2xl text-black flex items-center justify-center"
             >
               <MdDeleteOutline />
@@ -192,6 +211,7 @@ export default function Studentview() {
       {loading && <Loader loader={true} />}
       <div className="pb-10 pt-6 flex flex-col items-start w-full bg-primary rounded-b-2xl">
         <Navbar />
+        {showError && <p className="text-red-500 font-semibold w-[90%] mx-auto mt-2">! You don't have access to edit the details</p>}
         <div className="pb-2 w-[85%] mx-auto items-center flex mt-4">
           {CommonStore.role === "student" && !UserStore.user?.photo ? (
             <div onClick={openFiles} className="bg-secondary cursor-pointer text-primary my-6 w-36 h-44 rounded-lg flex flex-col items-center justify-center">
@@ -284,7 +304,7 @@ export default function Studentview() {
             </h2>
             <button
               className="flex text-xs text-text_color1 items-center cursor-pointer"
-              onClick={() => navigate(`/${branch}/${CommonStore.role === "student" ? UserStore.user?._id : selectedStudent?._id}/certificate`)}
+              onClick={() => UserStore.user?.access?.granted ? navigate(`/${branch}/${CommonStore.role === "student" ? UserStore.user?._id : selectedStudent?._id}/certificate`) : setShowError(true)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Certificate
@@ -297,28 +317,30 @@ export default function Studentview() {
         )}
         <CertificateList />
       </div>
-      {deleteForm ? (
-        <div className="fixed inset-0  w-[80%] m-auto h-[20%] flex flex-col z-50 py-4 px-2 rounded-2xl items-center  bg-primary">
-          <h1 className="text-center text-2xl text-white">Confirm to delete</h1>
-          <p className="text-white pt-1 text-2xl">{selectedStudent?.name}</p>
-          {/* <AiOutlineClose onClick={() => setDeleteForm(false)} className="absolute text-white text-2xl cursor-pointer right-2 top-4" /> */}
-          <div className="w-[90%] mx-auto flex my-3  justify-between items-center">
-            <button
-              onClick={() => setDeleteForm(false)}
-              className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg  text-black items-center p-2"
-            >
-              Cancel
-              <AiOutlineClose className="mx-1" />
-            </button>
-            <button
-              onClick={() => removeStudent(selectedStudent?._id)}
-              className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg text-black items-center p-2">
-              Delete
-              <MdDeleteOutline className="mx-1" />
-            </button>
-          </div>
-        </div>
-      ) : null}
+      {
+        deleteForm ? (
+          <div className="fixed inset-0  w-[80%] m-auto h-[20%] flex flex-col z-50 py-4 px-2 rounded-2xl items-center  bg-primary" >
+            <h1 className="text-center text-2xl text-white">Confirm to delete</h1>
+            <p className="text-white pt-1 text-2xl">{selectedStudent?.name}</p>
+            {/* <AiOutlineClose onClick={() => setDeleteForm(false)} className="absolute text-white text-2xl cursor-pointer right-2 top-4" /> */}
+            <div className="w-[90%] mx-auto flex my-3  justify-between items-center" >
+              <button
+                onClick={() => setDeleteForm(false)}
+                className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg  text-black items-center p-2"
+              >
+                Cancel
+                <AiOutlineClose className="mx-1" />
+              </button>
+              <button
+                onClick={() => removeStudent(selectedStudent?._id)}
+                className="flex w-[40%] mx-auto text-xl justify-between bg-white rounded-lg text-black items-center p-2">
+                Delete
+                <MdDeleteOutline className="mx-1" />
+              </button>
+            </div>
+          </div >
+        ) : null
+      }
       {
         editForm ? (
           <div className="fixed inset-0 w-[90%] m-auto h-[80%] flex flex-col z-50 py-4 px-2 rounded-2xl justify-center  bg-primary">
@@ -400,6 +422,6 @@ export default function Studentview() {
           </div>
         ) : null
       }
-    </div>
+    </div >
   ));
 }
