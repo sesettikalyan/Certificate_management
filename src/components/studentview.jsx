@@ -15,7 +15,7 @@ import { storage } from "../firebase";
 import Loader from "./reusable_Components/loader";
 
 export default function Studentview() {
-  const { UserStore, CommonStore } = useStores();
+  const { UserStore, CommonStore, AccessStore } = useStores();
   const [loading, setLoading] = useState(false);
   const { branch, id } = useParams();
   const [editForm, setEditForm] = useState(false);
@@ -28,6 +28,8 @@ export default function Studentview() {
   const branchref = useRef(null);
   const phoneref = useRef(null);
   const [showError, setShowError] = useState(false);
+  const expiryDateref = useRef(null);
+  const [expiryDate, setExpiryDate] = useState(null)
 
   // const selectedBranch = Branches.find(
   //   (branchname) => branchname.name === branch
@@ -206,6 +208,24 @@ export default function Studentview() {
     }
   };
 
+  const giveAccess = async (id) => {
+    const dateString = expiryDateref.current.value;
+    const dateObject = new Date(dateString);
+    const timestamp = new Date(dateObject.getTime() - (dateObject.getTimezoneOffset() * 60000)).toISOString();
+
+    console.log('Converted Timestamp:', timestamp);
+
+    await AccessStore.AccessStudents(timestamp, id);
+    setExpiryDate(dateString)
+  }
+
+  useEffect(() => {
+    const date = new Date(selectedStudent?.access?.expiresAt).toLocaleString('en-US', {
+      timeZone: 'UTC',
+    });
+    setExpiryDate(date)
+  }, [selectedStudent])
+
   return useObserver(() => (
     <div className="w-[100%] h-full">
       {loading && <Loader loader={true} />}
@@ -296,6 +316,16 @@ export default function Studentview() {
           </p>
         </div>
       </div>
+      {(CommonStore.role === "hod" || CommonStore.role === "staff") && UserStore.user?.access?.granted &&
+        <div className="flex flex-col mt-2 w-[90%] mx-auto items-start">
+          <button className="pb-2">Grant Access</button>
+          <div className="flex w-full mx-auto items-center justify-between">
+            <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 w-[70%]  border-2 rounded-lg border-black" />
+            <button onClick={() => giveAccess(selectedStudent?._id)} className="bg-primary text-white px-4 py-2 rounded-lg mt-1">Access</button>
+          </div>
+          <p>Access granted till {expiryDate}</p>
+        </div>
+      }
       <div className="bg-white  drop-shadow my-6 shadow-lg w-[90%] py-3 mx-auto rounded-lg">
         {CommonStore.role !== "principal" ? (
           <div className="flex w-[90%] justify-between items-center mt-2 mx-auto">

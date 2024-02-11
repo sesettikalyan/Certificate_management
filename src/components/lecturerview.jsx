@@ -25,7 +25,7 @@ export default function LecturerView() {
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false)
   const expiryDateref = useRef(null);
-
+  const [expiryDate, setExpiryDate] = useState(null);
   // const selectedLecturer = UserStore.lecturers.find(
   //   (lecturer) => lecturer?.idno === id
   // );
@@ -43,6 +43,7 @@ export default function LecturerView() {
       emailref.current.value = selectedLecturer?.email;
       branchref.current.value = selectedLecturer?.department;
       phoneref.current.value = selectedLecturer?.phoneNumber;
+      expiryDateref.current.value = new Date(selectedLecturer?.access?.expiresAt)
     } catch (error) { }
   };
 
@@ -61,6 +62,25 @@ export default function LecturerView() {
     );
     setSelectedLecturer(lecturer);
   }, [editForm]);
+
+  const giveAccess = async (id) => {
+    const dateString = expiryDateref.current.value;
+    const dateObject = new Date(dateString);
+    const timestamp = new Date(dateObject.getTime() - (dateObject.getTimezoneOffset() * 60000)).toISOString();
+
+    console.log('Converted Timestamp:', timestamp);
+
+    await AccessStore.AccessLecturers(timestamp, id);
+    setExpiryDate(dateString)
+  }
+
+
+  useEffect(() => {
+    const date = new Date(selectedLecturer?.access?.expiresAt).toLocaleString('en-US', {
+      timeZone: 'UTC',
+    });
+    setExpiryDate(date)
+  }, [selectedLecturer])
 
 
   const updateLecturerDetails = async (id) => {
@@ -113,6 +133,8 @@ export default function LecturerView() {
     }
   };
 
+
+
   const changeImage = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -120,15 +142,6 @@ export default function LecturerView() {
     }
   };
 
-  const giveAccess = async (id) => {
-    const dateString = expiryDateref.current.value;
-    const dateObject = new Date(dateString);
-    const timestamp = new Date(dateObject.getTime() - (dateObject.getTimezoneOffset() * 60000)).toISOString();
-
-    console.log('Converted Timestamp:', timestamp);
-
-    await AccessStore.AccessLecturers(timestamp, id);
-  }
 
 
   return useObserver(() => (
@@ -238,7 +251,7 @@ export default function LecturerView() {
               <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 w-[70%]  border-2 rounded-lg border-black" />
               <button onClick={() => giveAccess(selectedLecturer?._id)} className="bg-primary text-white px-4 py-2 rounded-lg mt-1">Access</button>
             </div>
-
+            <p>Access granted till {expiryDate}</p>
           </div>
         )}
       </div>

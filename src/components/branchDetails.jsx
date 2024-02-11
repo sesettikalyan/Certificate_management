@@ -1,6 +1,6 @@
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
-import { IoMdAddCircle } from "react-icons/io";
+import { IoMdAddCircle, IoMdTime } from "react-icons/io";
 // import { Lectures } from '../helpers/lectures';
 // import { MechStudents } from '../helpers/MechStudents';
 import { Branches } from "../helpers/Branches";
@@ -10,6 +10,7 @@ import { PiBuildingsBold } from "react-icons/pi";
 import { BsPersonCheck } from "react-icons/bs";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
+import { MdOutlineTimerOff } from "react-icons/md";
 
 export default function BranchDetails() {
   const [searchvalue, setSearchvalue] = useState(null);
@@ -46,6 +47,33 @@ export function TitleAndSearch({ onStaff, onSearchChange }) {
   const selectedBranch = Branches.find(
     (branchname) => branchname.name === branch
   );
+
+  const [timeLeft, setTimeLeft] = useState('');
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date().getTime();
+      const targetDate = new Date(UserStore.user?.access?.expiresAt).getTime();
+
+      // Calculate the difference in milliseconds
+      const difference = targetDate - now;
+
+      if (difference > 0) {
+        const hours = Math.floor(difference / (60 * 60 * 1000));
+        const minutes = Math.floor((difference % (60 * 60 * 1000)) / (60 * 1000));
+        const seconds = Math.floor((difference % (60 * 1000)) / 1000);
+
+        setTimeLeft(` ${hours}h ${minutes}m ${seconds}s`);
+      } else {
+        // If the target time has passed, clear the interval and set timeLeft to a message
+        clearInterval(intervalId);
+        setTimeLeft("No access");
+      }
+    }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [UserStore.user?.access?.expiresAt]);
 
   const navigate = useNavigate();
   const gotoStudentApproval = () => {
@@ -117,7 +145,9 @@ export function TitleAndSearch({ onStaff, onSearchChange }) {
           </>
         )}
       </div>
-      <div className="mt-6  relative w-[90%]  md:w-[35%] ">
+      {onStaff && <p className="bg-black text-white flex items-center justify-center p-1 opacity-80 rounded-lg w-[40%] ml-auto mt-2 ">{timeLeft === "No access" ? <MdOutlineTimerOff className="mr-1" /> : <IoMdTime className="mr-1" />} {timeLeft}</p>}
+
+      <div className="mt-4  relative w-[90%]  md:w-[35%] ">
         <input
           ref={searchref}
           type="text"

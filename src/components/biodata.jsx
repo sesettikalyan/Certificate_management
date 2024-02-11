@@ -11,6 +11,7 @@ import Loader from "./reusable_Components/loader"
 
 export default function Biodata() {
   const [loading, setLoading] = useState(false);
+  const [showError, setShowError] = useState(false)
   const { id, branch } = useParams();
   const navigate = useNavigate();
   const { UserStore, CommonStore } = useStores();
@@ -239,6 +240,16 @@ export default function Biodata() {
     setLoading(false)
   }
 
+  const editAccess = () => {
+    if (UserStore.user?.access?.granted) {
+      setEditable(true)
+      setShowPopup(false)
+    }
+    else {
+      setShowPopup(false)
+      setShowError(true)
+    }
+  }
 
 
   return useObserver(() => (
@@ -285,6 +296,8 @@ export default function Biodata() {
 
 
         </div>
+        {showError && <p className="text-red-500 font-semibold w-[90%] mx-auto mt-2">! You don't have access to edit the details</p>}
+
         <div className="flex flex-col items-center w-[85%] mx-auto ">
           <div
             onClick={(e) => check(e, nameRef)} className="flex flex-col mt-2 w-full items-start">
@@ -405,13 +418,13 @@ export default function Biodata() {
           <div className="bg-white w-[80%] h-auto rounded-lg shade-sh flex flex-col items-center justify-center py-8">
             <p className="text-2xl text-center font-semibold">Edit Details</p>
             <div className="flex mt-6 w-[60%] justify-between">
-              <button onClick={() => { setEditable(true); setShowPopup(false) }} className="text-justify hover:bg-primary border border-primary hover:text-white py-1  px-4 rounded-lg">Yes</button>
+              <button onClick={editAccess} className="text-justify hover:bg-primary border border-primary hover:text-white py-1  px-4 rounded-lg">Yes</button>
               <button onClick={() => { setEditable(false); setShowPopup(false) }} className="text-justify py-1 hover:bg-primary border border-primary hover:text-white  px-4 rounded-lg">No</button>
             </div>
           </div>
         </div>
       )}
 
-    </div>
+    </div >
   ));
 };
