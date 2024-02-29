@@ -12,18 +12,20 @@ import { toJS } from "mobx";
 import Loader from "./reusable_Components/loader";
 import { storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { IoIosArrowDown } from "react-icons/io";
 
 export default function LecturerView() {
   const [editForm, setEditForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
   const [selectedLecturer, setSelectedLecturer] = useState({});
-  const { UserStore, CommonStore } = useStores();
+  const { UserStore, CommonStore, AccessStore } = useStores();
   const navigate = useNavigate();
   const { branch, id } = useParams();
   const defaultprofile = "https://t4.ftcdn.net/jpg/00/64/67/63/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false)
-
+  const expiryDateref = useRef(null);
+  const [expiryDate, setExpiryDate] = useState(null);
   // const selectedLecturer = UserStore.lecturers.find(
   //   (lecturer) => lecturer?.idno === id
   // );
@@ -41,6 +43,7 @@ export default function LecturerView() {
       emailref.current.value = selectedLecturer?.email;
       branchref.current.value = selectedLecturer?.department;
       phoneref.current.value = selectedLecturer?.phoneNumber;
+      expiryDateref.current.value = new Date(selectedLecturer?.access?.expiresAt)
     } catch (error) { }
   };
 
@@ -59,6 +62,25 @@ export default function LecturerView() {
     );
     setSelectedLecturer(lecturer);
   }, [editForm]);
+
+  const giveAccess = async (id) => {
+    const dateString = expiryDateref.current.value;
+    const dateObject = new Date(dateString);
+    const timestamp = new Date(dateObject.getTime() - (dateObject.getTimezoneOffset() * 60000)).toISOString();
+
+    console.log('Converted Timestamp:', timestamp);
+
+    await AccessStore.AccessLecturers(timestamp, id);
+    setExpiryDate(dateString)
+  }
+
+
+  useEffect(() => {
+    const date = new Date(selectedLecturer?.access?.expiresAt).toLocaleString('en-US', {
+      timeZone: 'UTC',
+    });
+    setExpiryDate(date)
+  }, [selectedLecturer])
 
 
   const updateLecturerDetails = async (id) => {
@@ -111,12 +133,15 @@ export default function LecturerView() {
     }
   };
 
+
+
   const changeImage = (event) => {
     const file = event.target.files[0];
     if (file) {
       uploadImageToFirebase(file);
     }
   };
+
 
 
   return useObserver(() => (
@@ -219,6 +244,16 @@ export default function LecturerView() {
             {CommonStore.role === "hod" || CommonStore.role === "staff" ? UserStore.user?.email : selectedLecturer?.email}
           </div>
         </div>
+        {CommonStore.role === "principal" && (
+          <div className="flex flex-col mt-2  items-start">
+            <button className="pb-2">Give Access</button>
+            <div className="flex w-full mx-auto items-center justify-between">
+              <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 w-[70%]  border-2 rounded-lg border-black" />
+              <button onClick={() => giveAccess(selectedLecturer?._id)} className="bg-primary text-white px-4 py-2 rounded-lg mt-1">Access</button>
+            </div>
+            <p>Access granted till {expiryDate}</p>
+          </div>
+        )}
       </div>
 
       {editForm ? (

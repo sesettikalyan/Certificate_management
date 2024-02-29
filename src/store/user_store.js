@@ -331,11 +331,15 @@ class UserStore {
     const response = await apiPostPut(body, url, "PUT");
     if (response.status === 200) {
       console.log(response?.body);
-      const index = this.lecturers.findIndex((lecturer) => lecturer?._id === id);
-      if (index !== -1) {
-        this.lecturers[index].isVerified = true;
-        lecturers[index].isVerified = true;
-        localStorage.setItem("lecturers", JSON.stringify(lecturers));
+      try {
+        const index = this.lecturers.findIndex((lecturer) => lecturer?._id === id);
+        if (index !== -1) {
+          this.lecturers[index].isVerified = true;
+          lecturers[index].isVerified = true;
+          localStorage.setItem("lecturers", JSON.stringify(lecturers));
+        }
+      } catch (error) {
+
       }
       return true;
     }
@@ -375,11 +379,15 @@ class UserStore {
     const response = await apiDelete(url);
     if (response.status === 200) {
       console.log(response?.body);
-      const index = this.lecturers.findIndex((lecturer) => lecturer?._id === id);
-      if (index !== -1) {
-        this.lecturers.splice(index, 1);
-        lecturers.splice(index, 1);
-        localStorage.setItem("lecturers", JSON.stringify(lecturers));
+      try {
+        const index = this.lecturers.findIndex((lecturer) => lecturer?._id === id);
+        if (index !== -1) {
+          this.lecturers.splice(index, 1);
+          lecturers.splice(index, 1);
+          localStorage.setItem("lecturers", JSON.stringify(lecturers));
+        }
+      } catch (error) {
+        console.log(error)
       }
       return true;
     }

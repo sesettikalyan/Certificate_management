@@ -1,6 +1,6 @@
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
-import { IoMdAddCircle } from "react-icons/io";
+import { IoMdAddCircle, IoMdTime } from "react-icons/io";
 // import { Lectures } from '../helpers/lectures';
 // import { MechStudents } from '../helpers/MechStudents';
 import { Branches } from "../helpers/Branches";
@@ -10,6 +10,7 @@ import { PiBuildingsBold } from "react-icons/pi";
 import { BsPersonCheck } from "react-icons/bs";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
+import { MdOutlineTimerOff } from "react-icons/md";
 
 export default function BranchDetails() {
   const [searchvalue, setSearchvalue] = useState(null);
@@ -46,6 +47,33 @@ export function TitleAndSearch({ onStaff, onSearchChange }) {
   const selectedBranch = Branches.find(
     (branchname) => branchname.name === branch
   );
+
+  const [timeLeft, setTimeLeft] = useState('');
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date().getTime();
+      const targetDate = new Date(UserStore.user?.access?.expiresAt).getTime();
+
+      // Calculate the difference in milliseconds
+      const difference = targetDate - now;
+
+      if (difference > 0) {
+        const hours = Math.floor(difference / (60 * 60 * 1000));
+        const minutes = Math.floor((difference % (60 * 60 * 1000)) / (60 * 1000));
+        const seconds = Math.floor((difference % (60 * 1000)) / 1000);
+
+        setTimeLeft(` ${hours}h ${minutes}m ${seconds}s`);
+      } else {
+        // If the target time has passed, clear the interval and set timeLeft to a message
+        clearInterval(intervalId);
+        setTimeLeft("No access");
+      }
+    }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [UserStore.user?.access?.expiresAt]);
 
   const navigate = useNavigate();
   const gotoStudentApproval = () => {
@@ -117,7 +145,9 @@ export function TitleAndSearch({ onStaff, onSearchChange }) {
           </>
         )}
       </div>
-      <div className="mt-6  relative w-[90%]  md:w-[35%] ">
+      {onStaff && <p className="bg-black text-white flex items-center justify-center p-1 opacity-80 rounded-lg w-[40%] ml-auto mt-2 ">{timeLeft === "No access" ? <MdOutlineTimerOff className="mr-1" /> : <IoMdTime className="mr-1" />} {timeLeft}</p>}
+
+      <div className="mt-4  relative w-[90%]  md:w-[35%] ">
         <input
           ref={searchref}
           type="text"
@@ -225,6 +255,7 @@ export function StudentSection({ onstaff, searchvalue }) {
   const [secondYearStudents, setSecondYearStudents] = useState([]);
   const [thirdYearStudents, setThirdYearStudents] = useState([]);
   const { UserStore } = useStores();
+  const [showError, setShowError] = useState(false);
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg"
 
 
@@ -270,12 +301,14 @@ export function StudentSection({ onstaff, searchvalue }) {
             </h2>
             <button
               className="flex text-xs text-text_color1 items-center"
-              onClick={() => navigate(`/${branch}/newstudent`)}
+              onClick={() => UserStore.user?.access?.granted ? navigate(`/${branch}/newstudent`) : setShowError(true)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Student
             </button>
+
           </div>
+          {showError && <p className="text-red-500 font-semibold w-[90%] mx-auto mt-2">! You don't have access to edit the details</p>}
         </>
       ) : (
         <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl my-4">
