@@ -54,14 +54,15 @@ export function TitleAndSearch({ onStaff, onSearchChange }) {
     const intervalId = setInterval(() => {
       const now = new Date().getTime();
       const targetDate = new Date(UserStore.user?.access?.expiresAt).getTime();
-
+      console.log(targetDate);
+      console.log(now)
       // Calculate the difference in milliseconds
       const difference = targetDate - now;
 
       if (difference > 0) {
-        const hours = Math.floor(difference / (60 * 60 * 1000));
-        const minutes = Math.floor((difference % (60 * 60 * 1000)) / (60 * 1000));
-        const seconds = Math.floor((difference % (60 * 1000)) / 1000);
+        const hours = Math.floor(difference / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
         setTimeLeft(` ${hours}h ${minutes}m ${seconds}s`);
       } else {

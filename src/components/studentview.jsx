@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineClose, AiOutlineLeft } from "react-icons/ai";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
-import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineEdit, MdOutlineAddToHomeScreen } from "react-icons/md";
 import { PiBuildingsBold } from "react-icons/pi";
 import { BiLogOut } from "react-icons/bi";
 import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase";
 import Loader from "./reusable_Components/loader";
+
 
 export default function Studentview() {
   const { UserStore, CommonStore, AccessStore } = useStores();
@@ -29,7 +30,8 @@ export default function Studentview() {
   const phoneref = useRef(null);
   const [showError, setShowError] = useState(false);
   const expiryDateref = useRef(null);
-  const [expiryDate, setExpiryDate] = useState(null)
+  const [expiryDate, setExpiryDate] = useState(null);
+  const [uploadForm, setUploadForm] = useState(null);
 
   // const selectedBranch = Branches.find(
   //   (branchname) => branchname.name === branch
@@ -54,7 +56,8 @@ export default function Studentview() {
   useEffect(() => {
     autofillref();
     UserStore.getPrincipalfromapi();
-  }, [editForm]);
+  }, [editForm][uploadForm]);
+
 
   const updateStudentDetails = async (id) => {
     try {
@@ -66,6 +69,7 @@ export default function Studentview() {
 
       await UserStore.updateStudents(name, pinno, emailid, studentmobile, department, id);
       setEditForm(false);
+      setUploadForm(false);
     } catch (error) {
 
     }
@@ -86,6 +90,15 @@ export default function Studentview() {
   const editAccess = () => {
     if (UserStore.user?.access?.granted) {
       setEditForm(true)
+    }
+    else {
+      setShowError(true)
+    }
+  }
+
+  const uploadFilesForm = () => {
+    if (UserStore.user?.access?.granted) {
+      setUploadForm(true)
     }
     else {
       setShowError(true)
@@ -121,6 +134,11 @@ export default function Studentview() {
             <AiOutlineLeft className="mr-1" /> Back
           </button>
           <div className="flex">
+            <button
+            onClick={uploadFilesForm}
+             className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center">
+            <MdOutlineAddToHomeScreen />
+            </button>
             <button
               onClick={editAccess}
               className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center"
@@ -217,6 +235,11 @@ export default function Studentview() {
 
     await AccessStore.AccessStudents(timestamp, id);
     setExpiryDate(dateString)
+    setUploadForm(false)
+  }
+
+  const falseUpload = () => {
+    setUploadForm(false)
   }
 
   useEffect(() => {
@@ -318,11 +341,7 @@ export default function Studentview() {
       </div>
       {(CommonStore.role === "hod" || CommonStore.role === "staff") && UserStore.user?.access?.granted &&
         <div className="flex flex-col mt-2 w-[90%] mx-auto items-start">
-          <button className="pb-2">Grant Access</button>
-          <div className="flex w-full mx-auto items-center justify-between">
-            <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 w-[70%]  border-2 rounded-lg border-black" />
-            <button onClick={() => giveAccess(selectedStudent?._id)} className="bg-primary text-white px-4 py-2 rounded-lg mt-1">Access</button>
-          </div>
+          
           <p>Access granted till {expiryDate}</p>
         </div>
       }
@@ -448,6 +467,21 @@ export default function Studentview() {
               >
                 Save
               </button>
+            </div>
+          </div>
+        ) : null
+      }
+      {
+       uploadForm ? (
+          <div className="fixed bg-white inset-0 w-[90%] m-auto h-[25%] flex flex-col z-50 py-4 px-2 shadow-2xl rounded-2xl  ">
+            <div className="w-[90%] h-full mx-auto flex flex-col items-center">
+              <h1 className="text-xl">Give Access</h1>
+            <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 mt-4  border-2 rounded-lg border-black" />
+          <p className="text-xs mt-6">By giving access the user can upload the certificates</p>
+          <div className="flex mt-1 w-[60%] justify-between">
+              <button onClick={() => giveAccess(selectedStudent?._id)} className="text-justify hover:bg-primary border border-primary hover:text-white py-1  px-6 rounded">Yes</button>
+              <button onClick={falseUpload}  className="text-justify py-1 hover:bg-primary border border-primary hover:text-white  px-6 rounded">No</button>
+            </div>
             </div>
           </div>
         ) : null
