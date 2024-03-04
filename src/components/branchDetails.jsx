@@ -52,17 +52,15 @@ export function TitleAndSearch({ onStaff, onSearchChange }) {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const now = new Date().getTime();
-      const targetDate = new Date(UserStore.user?.access?.expiresAt).getTime();
-      console.log(targetDate);
-      console.log(now)
+      const now = Math.floor(Date.now() / 1000);
+      const timestamp = UserStore.user?.access?.expiresAt
       // Calculate the difference in milliseconds
-      const difference = targetDate - now;
+      const difference = timestamp - now;
 
       if (difference > 0) {
-        const hours = Math.floor(difference / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        const hours = Math.floor(difference / 3600);
+        const minutes = Math.floor((difference % 3600) / 60);
+        const seconds = Math.floor(difference % 60);
 
         setTimeLeft(` ${hours}h ${minutes}m ${seconds}s`);
       } else {

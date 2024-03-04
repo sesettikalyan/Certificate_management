@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Branches } from "../helpers/Branches";
 import { AiOutlineClose, AiOutlineLeft } from "react-icons/ai";
-import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineAddToHomeScreen, MdOutlineEdit } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useEffect, useRef, useState } from "react";
 import { useStores } from "../store/index";
@@ -26,6 +26,7 @@ export default function LecturerView() {
   const [loading, setLoading] = useState(false)
   const expiryDateref = useRef(null);
   const [expiryDate, setExpiryDate] = useState(null);
+  const [uploadForm, setUploadForm] = useState(null);
   // const selectedLecturer = UserStore.lecturers.find(
   //   (lecturer) => lecturer?.idno === id
   // );
@@ -61,26 +62,45 @@ export default function LecturerView() {
       (lecturer) => lecturer?._id === id
     );
     setSelectedLecturer(lecturer);
-  }, [editForm]);
+  }, [editForm, uploadForm]);
 
   const giveAccess = async (id) => {
     const dateString = expiryDateref.current.value;
-    const dateObject = new Date(dateString);
-    const timestamp = new Date(dateObject.getTime() - (dateObject.getTimezoneOffset() * 60000)).toISOString();
+    // const dateObject = new Date(dateString);
+    const timestamp = Math.floor(Date.parse(dateString) / 1000);
 
     console.log('Converted Timestamp:', timestamp);
 
     await AccessStore.AccessLecturers(timestamp, id);
-    setExpiryDate(dateString)
+    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
+    setExpiryDate(formattedDate)
+    setUploadForm(false)
   }
 
 
   useEffect(() => {
-    const date = new Date(selectedLecturer?.access?.expiresAt).toLocaleString('en-US', {
-      timeZone: 'UTC',
-    });
-    setExpiryDate(date)
+    // const date = new Date(selectedLecturer?.access?.expiresAt).toLocaleString('en-US', {
+    //   timeZone: 'UTC',
+    // });
+    const timeStamp = selectedLecturer?.access?.expiresAt;
+    const date = new Date(timeStamp * 1000); // Convert seconds to milliseconds
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
+    setExpiryDate(formattedDate)
   }, [selectedLecturer])
+
+
+  const uploadFilesForm = () => {
+    setUploadForm(true)
+    setDeleteForm(false)
+    setEditForm(false)
+  }
+
+  const falseUpload = () => {
+    setUploadForm(false)
+  }
 
 
   const updateLecturerDetails = async (id) => {
@@ -93,6 +113,8 @@ export default function LecturerView() {
     console.log(id);
     if (await UserStore.updateLecturers(name, idno, email, branch, phoneNumber, id)) {
       setEditForm(false);
+
+      setUploadForm(false);
     }
 
   };
@@ -109,7 +131,7 @@ export default function LecturerView() {
     UserStore.setPrincipalAuth(false);
     UserStore.setHodAuth(false);
     UserStore.setStudentAuth(false);
-    navigate("/");
+    navigate("/welcome");
   };
 
   const openFiles = () => {
@@ -155,16 +177,29 @@ export default function LecturerView() {
         </button>
 
         {CommonStore.role === "principal" ? (
-          <div className="w-[25%] flex justify-between items-center">
+          <div className="w-[35%] flex justify-between items-center gap-2">
             <button
-              onClick={() => setEditForm(true)}
+              onClick={uploadFilesForm}
+              className="w-10 h-10 bg-primary rounded-full  text-2xl text-white flex items-center justify-center">
+              <MdOutlineAddToHomeScreen />
+            </button>
+            <button
+              onClick={() => {
+                setEditForm(true)
+                setDeleteForm(false)
+                setUploadForm(false)
+              }}
               className="w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center"
             >
               {" "}
               <MdOutlineEdit />
             </button>
             <button
-              onClick={() => setDeleteForm(true)}
+              onClick={() => {
+                setEditForm(false)
+                setDeleteForm(true)
+                setUploadForm(false)
+              }}
               className="w-10 h-10 bg-primary rounded-full text-2xl text-white flex items-center justify-center"
             >
               {" "}
@@ -245,18 +280,12 @@ export default function LecturerView() {
           </div>
         </div>
         {CommonStore.role === "principal" && (
-          <div className="flex flex-col mt-2  items-start">
-            <button className="pb-2">Give Access</button>
-            <div className="flex w-full mx-auto items-center justify-between">
-              <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 w-[70%]  border-2 rounded-lg border-black" />
-              <button onClick={() => giveAccess(selectedLecturer?._id)} className="bg-primary text-white px-4 py-2 rounded-lg mt-1">Access</button>
-            </div>
-            <p>Access granted till {expiryDate}</p>
-          </div>
+
+          <p>Access granted till {expiryDate}</p>
         )}
       </div>
 
-      {editForm ? (
+      {editForm && !uploadForm && !deleteForm ? (
         <div className="fixed inset-0 w-[90%] m-auto h-[80%] flex flex-col z-50 py-4 px-2 rounded-2xl justify-center  bg-primary">
           <h1 className="text-center text-lg text-white">Edit Details </h1>
 
@@ -336,7 +365,7 @@ export default function LecturerView() {
         </div>
       ) : null}
 
-      {deleteForm ? (
+      {deleteForm && !editForm && !uploadForm ? (
         <div className="fixed inset-0  w-[80%] m-auto h-[20%] flex flex-col z-50 py-4 px-2 rounded-2xl items-center  bg-primary">
           <h1 className="text-center text-2xl text-white">Confirm to delete</h1>
           <p className="text-white pt-1 text-2xl">
@@ -358,6 +387,21 @@ export default function LecturerView() {
           </div>
         </div>
       ) : null}
+      {
+        uploadForm && !editForm && !deleteForm ? (
+          <div className="fixed bg-primary text-white inset-0 w-[90%] m-auto h-[25%] flex flex-col z-50 py-4 px-2 shadow-2xl rounded-2xl  ">
+            <div className="w-[90%] h-full mx-auto flex flex-col items-center">
+              <h1 className="text-xl">Give Access</h1>
+              <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 mt-4 text-black  border-2 rounded-lg border-white" />
+              <p className="text-xs mt-6">By giving access the user can upload the certificates</p>
+              <div className="flex mt-1 w-[60%] justify-between">
+                <button onClick={() => giveAccess(selectedLecturer?._id)} className="text-justify hover:bg-white border border-white hover:text-black py-1  px-6 rounded">Yes</button>
+                <button onClick={falseUpload} className="text-justify py-1 hover:bg-white border border-white hover:text-black  px-6 rounded">No</button>
+              </div>
+            </div>
+          </div>
+        ) : null
+      }
     </div>
   ));
 }

@@ -5,10 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineClose, AiOutlineLeft } from "react-icons/ai";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
-import { MdDeleteOutline, MdOutlineEdit, MdOutlineAddToHomeScreen } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineEdit, MdOutlineAddToHomeScreen, MdOutlineTimerOff } from "react-icons/md";
 import { PiBuildingsBold } from "react-icons/pi";
 import { BiLogOut } from "react-icons/bi";
-import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
+import { IoMdAdd, IoMdAddCircle, IoMdTime } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase";
@@ -32,10 +32,36 @@ export default function Studentview() {
   const expiryDateref = useRef(null);
   const [expiryDate, setExpiryDate] = useState(null);
   const [uploadForm, setUploadForm] = useState(null);
+  const [timeLeft, setTimeLeft] = useState('');
 
   // const selectedBranch = Branches.find(
   //   (branchname) => branchname.name === branch
   // );
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = Math.floor(Date.now() / 1000);
+      const timestamp = UserStore.user?.access?.expiresAt
+      // Calculate the difference in milliseconds
+      const difference = timestamp - now;
+
+      if (difference > 0) {
+        const hours = Math.floor(difference / 3600);
+        const minutes = Math.floor((difference % 3600) / 60);
+        const seconds = Math.floor(difference % 60);
+
+        setTimeLeft(` ${hours}h ${minutes}m ${seconds}s`);
+      } else {
+        // If the target time has passed, clear the interval and set timeLeft to a message
+        clearInterval(intervalId);
+        setTimeLeft("No access");
+      }
+    }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [UserStore.user?.access?.expiresAt]);
+
 
   const selectedStudent = UserStore?.students.find(
     (student) => student?._id === id
@@ -56,7 +82,7 @@ export default function Studentview() {
   useEffect(() => {
     autofillref();
     UserStore.getPrincipalfromapi();
-  }, [editForm][uploadForm]);
+  }, [editForm, uploadForm]);
 
 
   const updateStudentDetails = async (id) => {
@@ -84,7 +110,7 @@ export default function Studentview() {
     UserStore.setHodAuth(false);
     UserStore.setStudentAuth(false);
     CommonStore.setRole(null);
-    navigate("/");
+    navigate("/welcome");
   };
 
   const editAccess = () => {
@@ -135,9 +161,9 @@ export default function Studentview() {
           </button>
           <div className="flex">
             <button
-            onClick={uploadFilesForm}
-             className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center">
-            <MdOutlineAddToHomeScreen />
+              onClick={uploadFilesForm}
+              className="w-10 h-10 bg-white rounded-full mx-2 text-2xl text-black flex items-center justify-center">
+              <MdOutlineAddToHomeScreen />
             </button>
             <button
               onClick={editAccess}
@@ -228,13 +254,16 @@ export default function Studentview() {
 
   const giveAccess = async (id) => {
     const dateString = expiryDateref.current.value;
-    const dateObject = new Date(dateString);
-    const timestamp = new Date(dateObject.getTime() - (dateObject.getTimezoneOffset() * 60000)).toISOString();
+    // const dateObject = new Date(dateString);
+    const timestamp = Math.floor(Date.parse(dateString) / 1000);
 
     console.log('Converted Timestamp:', timestamp);
 
     await AccessStore.AccessStudents(timestamp, id);
-    setExpiryDate(dateString)
+    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
+    setExpiryDate(formattedDate)
     setUploadForm(false)
   }
 
@@ -243,9 +272,11 @@ export default function Studentview() {
   }
 
   useEffect(() => {
-    const date = new Date(selectedStudent?.access?.expiresAt).toLocaleString('en-US', {
-      timeZone: 'UTC',
-    });
+    const timestamp = selectedStudent?.access?.expiresAt;
+    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
+    setExpiryDate(formattedDate)
     setExpiryDate(date)
   }, [selectedStudent])
 
@@ -341,11 +372,13 @@ export default function Studentview() {
       </div>
       {(CommonStore.role === "hod" || CommonStore.role === "staff") && UserStore.user?.access?.granted &&
         <div className="flex flex-col mt-2 w-[90%] mx-auto items-start">
-          
+
           <p>Access granted till {expiryDate}</p>
         </div>
       }
+
       <div className="bg-white  drop-shadow my-6 shadow-lg w-[90%] py-3 mx-auto rounded-lg">
+
         {CommonStore.role !== "principal" ? (
           <div className="flex w-[90%] justify-between items-center mt-2 mx-auto">
             <h2 className="text-2xl text-text_color1 font-semibold">
@@ -364,6 +397,8 @@ export default function Studentview() {
             Certificates
           </h1>
         )}
+        {CommonStore.role === "student" && <p className="bg-black text-white flex items-center justify-center p-1 opacity-80 rounded-lg w-[40%] ml-auto mr-4 mt-2 ">{timeLeft === "No access" ? <MdOutlineTimerOff className="mr-1" /> : <IoMdTime className="mr-1" />} {timeLeft}</p>}
+
         <CertificateList />
       </div>
       {
@@ -472,16 +507,16 @@ export default function Studentview() {
         ) : null
       }
       {
-       uploadForm ? (
+        uploadForm ? (
           <div className="fixed bg-white inset-0 w-[90%] m-auto h-[25%] flex flex-col z-50 py-4 px-2 shadow-2xl rounded-2xl  ">
             <div className="w-[90%] h-full mx-auto flex flex-col items-center">
               <h1 className="text-xl">Give Access</h1>
-            <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 mt-4  border-2 rounded-lg border-black" />
-          <p className="text-xs mt-6">By giving access the user can upload the certificates</p>
-          <div className="flex mt-1 w-[60%] justify-between">
-              <button onClick={() => giveAccess(selectedStudent?._id)} className="text-justify hover:bg-primary border border-primary hover:text-white py-1  px-6 rounded">Yes</button>
-              <button onClick={falseUpload}  className="text-justify py-1 hover:bg-primary border border-primary hover:text-white  px-6 rounded">No</button>
-            </div>
+              <input ref={expiryDateref} type="datetime-local" className="text-base px-4 py-2 mt-4  border-2 rounded-lg border-black" />
+              <p className="text-xs mt-6">By giving access the user can upload the certificates</p>
+              <div className="flex mt-1 w-[60%] justify-between">
+                <button onClick={() => giveAccess(selectedStudent?._id)} className="text-justify hover:bg-primary border border-primary hover:text-white py-1  px-6 rounded">Yes</button>
+                <button onClick={falseUpload} className="text-justify py-1 hover:bg-primary border border-primary hover:text-white  px-6 rounded">No</button>
+              </div>
             </div>
           </div>
         ) : null

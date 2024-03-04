@@ -116,7 +116,7 @@ export const Profile = () => {
     UserStore.setHodAuth(false);
     UserStore.setStudentAuth(false);
     CommonStore.setRole(null);
-    navigate("/");
+    navigate("/welcome");
   };
 
   return useObserver(() => (
