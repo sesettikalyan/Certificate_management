@@ -67,28 +67,35 @@ export default function LecturerView() {
   const giveAccess = async (id) => {
     const dateString = expiryDateref.current.value;
     // const dateObject = new Date(dateString);
-    const timestamp = Math.floor(Date.parse(dateString) / 1000);
+    console.log(dateString)
+    const date1 = new Date(dateString);
+
+   
+    const timestamp =  date1.toISOString();
 
     console.log('Converted Timestamp:', timestamp);
 
     await AccessStore.AccessLecturers(timestamp, id);
-    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
-    setExpiryDate(formattedDate)
+    // const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+    // const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    // const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
+    date1.setHours(date1.getHours() + 5);
+    date1.setMinutes(date1.getMinutes() + 30);
+    const timestamp1 = date1.toISOString();
+    setExpiryDate(timestamp1)
     setUploadForm(false)
   }
 
 
   useEffect(() => {
-    // const date = new Date(selectedLecturer?.access?.expiresAt).toLocaleString('en-US', {
-    //   timeZone: 'UTC',
-    // });
-    const timeStamp = selectedLecturer?.access?.expiresAt;
-    const date = new Date(timeStamp * 1000); // Convert seconds to milliseconds
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
-    setExpiryDate(formattedDate)
+    const date = new Date(selectedLecturer?.access?.expiresAt).toLocaleString('en-US', {
+      timeZone: 'UTC',
+    });
+    // const timeStamp = selectedLecturer?.access?.expiresAt;
+    // const date = new Date(timeStamp * 1000); // Convert seconds to milliseconds
+    // const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    // const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
+    // setExpiryDate(formattedDate)
   }, [selectedLecturer])
 
 
