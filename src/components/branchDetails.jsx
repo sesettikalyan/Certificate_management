@@ -40,7 +40,7 @@ export default function BranchDetails() {
 
 export function TitleAndSearch({ onStaff, onSearchChange }) {
   let { branch } = useParams();
-  const { UserStore } = useStores();
+  const { UserStore,AccessStore } = useStores();
   const searchref = useRef(null);
   const defaultprofile = "https://ih1.redbubble.net/image.1046392278.3346/pp,504x498-pad,600x600,f8f8f8.jpg";
 
@@ -52,21 +52,24 @@ export function TitleAndSearch({ onStaff, onSearchChange }) {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const now = Math.floor(Date.now() / 1000);
+      const now = new Date();;
       const timestamp = UserStore.user?.access?.expiresAt
+      const targetTime = new Date(timestamp)
       // Calculate the difference in milliseconds
-      const difference = timestamp - now;
+      const difference = targetTime - now;
 
       if (difference > 0) {
-        const hours = Math.floor(difference / 3600);
-        const minutes = Math.floor((difference % 3600) / 60);
-        const seconds = Math.floor(difference % 60);
+        const hours = Math.floor(difference / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
         setTimeLeft(` ${hours}h ${minutes}m ${seconds}s`);
+        AccessStore.setAccessTime(`${hours}h ${minutes}m ${seconds}s`)
       } else {
         // If the target time has passed, clear the interval and set timeLeft to a message
         clearInterval(intervalId);
         setTimeLeft("No access");
+        AccessStore.setAccessTime("No access")
       }
     }, 1000);
 

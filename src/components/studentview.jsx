@@ -40,15 +40,16 @@ export default function Studentview() {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const now = Math.floor(Date.now() / 1000);
+      const now = new Date();;
       const timestamp = UserStore.user?.access?.expiresAt
+      const targetTime = new Date(timestamp)
       // Calculate the difference in milliseconds
-      const difference = timestamp - now;
+      const difference = targetTime - now;
 
       if (difference > 0) {
-        const hours = Math.floor(difference / 3600);
-        const minutes = Math.floor((difference % 3600) / 60);
-        const seconds = Math.floor(difference % 60);
+        const hours = Math.floor(difference / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
         setTimeLeft(` ${hours}h ${minutes}m ${seconds}s`);
       } else {
@@ -255,15 +256,20 @@ export default function Studentview() {
   const giveAccess = async (id) => {
     const dateString = expiryDateref.current.value;
     // const dateObject = new Date(dateString);
-    const timestamp = Math.floor(Date.parse(dateString) / 1000);
+    console.log(dateString)
+    const date1 = new Date(dateString);
+
+   
+    const timestamp =  date1.toISOString();
 
     console.log('Converted Timestamp:', timestamp);
 
+
     await AccessStore.AccessStudents(timestamp, id);
-    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
-    setExpiryDate(formattedDate)
+    date1.setHours(date1.getHours() + 5);
+    date1.setMinutes(date1.getMinutes() + 30);
+    const timestamp1 = date1.toISOString();
+    setExpiryDate(timestamp1)
     setUploadForm(false)
   }
 
@@ -272,12 +278,9 @@ export default function Studentview() {
   }
 
   useEffect(() => {
-    const timestamp = selectedStudent?.access?.expiresAt;
-    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    const formattedDate = date.toLocaleString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
-    setExpiryDate(formattedDate)
-    setExpiryDate(date)
+    const date = new Date(selectedStudent?.access?.expiresAt).toLocaleString('en-US', {
+      timeZone: 'UTC',
+    });
   }, [selectedStudent])
 
   return useObserver(() => (
@@ -384,13 +387,13 @@ export default function Studentview() {
             <h2 className="text-2xl text-text_color1 font-semibold">
               Certificates
             </h2>
-            <button
+           {timeLeft === "No access" ? null : <button
               className="flex text-xs text-text_color1 items-center cursor-pointer"
               onClick={() => UserStore.user?.access?.granted ? navigate(`/${branch}/${CommonStore.role === "student" ? UserStore.user?._id : selectedStudent?._id}/certificate`) : setShowError(true)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Certificate
-            </button>
+            </button>}
           </div>
         ) : (
           <h1 className="text-text_color1 font-semibold w-[90%] mx-auto text-2xl">

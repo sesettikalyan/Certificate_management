@@ -5,6 +5,21 @@ class AccessStore {
   constructor() {
     makeAutoObservable(this);
   }
+  hodAccessTime = null;
+
+
+  loadRoleFromLocalStorage() {
+    const savedTime = localStorage.getItem("time");
+    if (savedTime) {
+      this.setAccessTime(savedTime);
+    }
+
+  }
+
+  setAccessTime(time) {
+    this.hodAccessTime = time;
+    localStorage.setItem("time", time);
+  }
 
   async AccessLecturers(expiresAt, id) {
     const url = `/setAccessExpirationHOD/${id}`
