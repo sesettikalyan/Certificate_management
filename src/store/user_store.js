@@ -294,10 +294,8 @@ class UserStore {
       });
       localStorage.setItem("lecturers", JSON.stringify(lecturers));
       console.log(toJS(this.lecturers));
-      return true;
     }
     alert(`failed to fetch lecturers.`);
-    return false;
   }
 
   async updateLecturerPhoto(image, id) {
@@ -439,7 +437,7 @@ class UserStore {
     return false;
   }
 
-  async signUpStudent(name, pinno, email, phno, branch, password, year) {
+  async signUpStudent(name, pinno, email,  branch, password,role,phno, year) {
     const students = JSON.parse(localStorage.getItem("students"));
     const url = "/register/studentS";
     const body = {
@@ -448,7 +446,7 @@ class UserStore {
       pinno: pinno,
       emailid: email,
       password: password,
-      role: "student",
+      role: role,
       studentmobile: phno,
       semister: year,
     };

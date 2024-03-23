@@ -37,7 +37,7 @@ export default function Register() {
     } catch (error) { }
   };
 
-  const postDetails = (e) => {
+  const postDetails = async (e) => {
     e.preventDefault();
     try {
       console.log(name, email, phone, branch, pin, CommonStore.role);
@@ -48,8 +48,7 @@ export default function Register() {
         return;
       } else {
         if (CommonStore.role === "hod" || CommonStore.role === "staff") {
-          if (
-            UserStore.signUpLecturer(
+           await  UserStore.signUpLecturer(
               name,
               pin,
               email,
@@ -58,12 +57,9 @@ export default function Register() {
               CommonStore.role,
               phone
             )
-          ) {
             return navigate("/login");
-          }
         } else {
-          if (
-            UserStore.signUpStudent(
+            await UserStore.signUpStudent(
               name,
               pin,
               email,
@@ -73,9 +69,7 @@ export default function Register() {
               phone,
               year
             )
-          ) {
             return navigate("/login");
-          }
         }
       }
     } catch (error) { }
