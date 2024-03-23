@@ -11,9 +11,12 @@ import { BsPersonCheck } from "react-icons/bs";
 import { useStores } from "../store/index";
 import { useObserver } from "mobx-react";
 import { MdOutlineTimerOff } from "react-icons/md";
+import AccessStore from "../store/access_store";
 
 export default function BranchDetails() {
   const [searchvalue, setSearchvalue] = useState(null);
+        const storageTime = localStorage.getItem("time");
+
 
   const handleSearchInputChange = (value) => {
     setSearchvalue(value);
@@ -277,7 +280,7 @@ export function StudentSection({ onstaff, searchvalue }) {
         setThirdYearStudents(thirdYearStudents);
       } else {
         const verifiedStudents = UserStore?.students.filter(
-          (student) => student?.department.toUpperCase() === branch.toUpperCase() && student?.isVerified === true && (student?.name.toLowerCase().includes(searchvalue.toLowerCase()) || student?.pinno.toLowerCase().includes(searchvalue.toLowerCase()))
+          (student) => (student?.department.toUpperCase() === branch.toUpperCase()) && (student?.isVerified === true) && (student?.name.toLowerCase().includes(searchvalue.toLowerCase()) || student?.pinno.toLowerCase().includes(searchvalue.toLowerCase()))
         );
         setSelectedBranchStudents(verifiedStudents);
       }
@@ -293,6 +296,9 @@ export function StudentSection({ onstaff, searchvalue }) {
     navigate(`/${branch}/${id}`);
   };
 
+  const storageTime = localStorage.getItem("time");
+
+
   return useObserver(() => (
     <>
       {onstaff ? (
@@ -301,14 +307,15 @@ export function StudentSection({ onstaff, searchvalue }) {
             <h2 className="text-2xl text-text_color1 font-semibold">
               Students
             </h2>
-            <button
+            {storageTime === "No access" ? null : <button
               className="flex text-xs text-text_color1 items-center"
               onClick={() => UserStore.user?.access?.granted ? navigate(`/${branch}/newstudent`) : setShowError(true)}
             >
               <IoMdAddCircle className="text-base" />
               Add new Student
             </button>
-
+ }
+          
           </div>
           {showError && <p className="text-red-500 font-semibold w-[90%] mx-auto mt-2">! You don't have access to edit the details</p>}
         </>
